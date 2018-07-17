@@ -54,20 +54,39 @@ def flash_all(n):
     return
 
 
+
+
 # Verify if user input matches value in expected sequence
 def correct_input(value):
-    # hier wellicht een aanpassing maken dat hij wel even wacht op een input voordat hij doorgaat.
-    if iobus1.read_pin(2) == 0:
-        ledchoise = 0
-    elif iobus1.read_pin(4) == 0:
-        ledchoise = 1
-    elif iobus1.read_pin(6) == 0:
-        ledchoise = 2
-    elif iobus1.read_pin(8) == 0:
-        ledchoise = 3
-    else:
-        return 0
 
+    while True:
+        # hier moet nog wel een timer in
+        # en wellicht een change state detector. want nu werkt het met een time.sleep en dat is niet ideaal. je kan niet sneller dan de wait
+        buttonstate2 = iobus1.read_pin(2)
+        buttonstate4 = iobus1.read_pin(4)
+        buttonstate6 = iobus1.read_pin(6)
+        buttonstate8 = iobus1.read_pin(8)
+
+        if buttonstate2 == 0:
+            ledchoise = 0
+            print("led1")
+            break
+        
+        elif buttonstate4 == 0:
+            ledchoise = 1
+            print("led2")
+            break
+        
+        elif buttonstate6 == 0: 
+            ledchoise = 2
+            print("led3")
+            break
+        
+        elif buttonstate8 == 0: 
+            ledchoise = 3
+            print("led4")
+            break
+         
     if ledchoise == value:
         return 1
     else:
@@ -88,14 +107,16 @@ def main():
         new_value = random.randint(0, 3)
         sequence.append(new_value)
         for i in range(0, len(sequence)):
+            print (sequence[i])
             flash(sequence[i], 0.4)
             time.sleep(0.1)
         for i in range(0, len(sequence)):
             status = correct_input(sequence[i])  # misschien gaat hier wel iets fout, dat er te snel door het programma geskipt wordt
+            time.sleep(0.1)
             if status == 1:
                 flash(sequence[i], 0.1)
             else:
-                flash_all(5)
+                flash_all(3)
                 break
         else:
             count += 1
