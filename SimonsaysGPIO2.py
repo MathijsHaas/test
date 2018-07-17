@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, print_function, \
     unicode_literals
 import time
 import random
+import pygame
 try:
     from IOPi import IOPi
 except ImportError:
@@ -97,11 +98,13 @@ def correct_input(value):
 #####################################
 
 
+
 def main():
     random.seed()   # Different seed for every game
     count = 0  # Keeps track of player score
     sequence = []  # Will contain the sequence of light for the simon says
-
+    countahhh = 0 # gewoon maar even ergens tellen. gebeurd verder niet zoveel mee
+    
     while True:
         time.sleep(1)
         new_value = random.randint(0, 3)
@@ -111,8 +114,10 @@ def main():
             flash(sequence[i], 0.4)
             time.sleep(0.1)
         for i in range(0, len(sequence)):
+            while iobus1.read_pin(2) == 0 or iobus1.read_pin(4) == 0 or iobus1.read_pin(6) == 0 or iobus1.read_pin(8) == 0:
+                countahhh += 1 # hier kan wel iets van een timer in gezet worden die checkt of je niet te laat bent
             status = correct_input(sequence[i])  # misschien gaat hier wel iets fout, dat er te snel door het programma geskipt wordt
-            time.sleep(0.1)
+            time.sleep(0.05)
             if status == 1:
                 flash(sequence[i], 0.1)
             else:
