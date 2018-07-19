@@ -43,6 +43,8 @@ led_pins = [2,4,6,8] #van bus 2
 press_time = 2 #seconds
 levels = 6
 
+game_won = False
+
 def flash_all(n):
     """flash all leds for n times"""
     for i in range(0, n):
@@ -108,6 +110,7 @@ def main():
             if count == levels:
                 time.sleep(1)
                 pygame.mixer.Sound.play(good_sound)
+                game_won = True
                 print ("gewonnen")
                 break
             continue

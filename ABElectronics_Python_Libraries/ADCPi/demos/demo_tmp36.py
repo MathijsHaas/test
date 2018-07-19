@@ -37,14 +37,14 @@ def main():
     Main program function
     '''
 
-    adc = ADCPi(0x68, 0x69, 18)
+    adc = ADCPi(0x6C, 0x6D, 18)
 
     while True:
         # Calculate the temperature
         # TMP36 returns 0.01 volts per C - -40C to +125C
         # 750mV = 25C and 500mV = 0C.  The temperature is (voltage / 0.01) - 50
 
-        temperature = (adc.read_voltage(1)/0.01)-50
+        temperature = (adc.read_voltage(1))
 
         # read from adc channels and print to screen
         print("Temperature on channel 1: %0.02f°C" % temperature)

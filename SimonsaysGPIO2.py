@@ -22,6 +22,7 @@ except ImportError:
 levels = 2
 pattern_speed = 0.1
 
+game_won = False
 
 pygame.mixer.init()
 bleep1 = pygame.mixer.Sound("bleep1.ogg")
@@ -152,6 +153,7 @@ def main():
             count += 1
             if count == levels:
                 #WON
+                game_won = True
                 pygame.mixer.Sound.play(good_sound)
                 for i in [2,4,6,8]:
                     iobus2.write_pin(i, 1)
