@@ -58,15 +58,11 @@ def flash(l, n):
 def flash_all(n):
     """flash all leds for n times"""
     for i in range(0, n):
-        iobus2.write_pin(2, 1)
-        iobus2.write_pin(4, 1)
-        iobus2.write_pin(6, 1)
-        iobus2.write_pin(8, 1)
-        time.sleep(0.3)
-        iobus2.write_pin(2, 0)
-        iobus2.write_pin(4, 0)
-        iobus2.write_pin(6, 0)
-        iobus2.write_pin(8, 0)
+        for i in [2,4,6,8]: # de pins op het IO PI PLUS bord waar de ledjes op zijn aangesloten
+            iobus2.write_pin(i, 1)
+        time.sleep(0.3) 
+        for i in [2,4,6,8]:
+            iobus2.write_pin(i, 0)
         time.sleep(0.3)
     return
 
@@ -157,15 +153,11 @@ def main():
             if count == levels:
                 #WON
                 pygame.mixer.Sound.play(good_sound)
-                iobus2.write_pin(2, 1)
-                iobus2.write_pin(4, 1)
-                iobus2.write_pin(6, 1)
-                iobus2.write_pin(8, 1)
+                for i in [2,4,6,8]:
+                    iobus2.write_pin(i, 1)
                 time.sleep(3) # TIJDELIJK, mag uiteindelijk weg, maar is nu zodat de lampjes niet aan blijven staan
-                iobus2.write_pin(2, 0)
-                iobus2.write_pin(4, 0)
-                iobus2.write_pin(6, 0)
-                iobus2.write_pin(8, 0)
+                for i in [2,4,6,8]:
+                    iobus2.write_pin(i, 0)
                 break
             continue
         break
