@@ -17,6 +17,20 @@ except ImportError:
         raise ImportError(
             "Failed to import library from parent folder")
 
+#pygame.init()
+#bleep1 = pygame.mixer.Sound("bleep1.wav")
+#bleep2 = pygame.mixer.Sound("bleep2.wav")
+#bleep3 = pygame.mixer.Sound("bleep3.wav")
+#bleep4 = pygame.mixer.Sound("bleep4.wav")
+
+pygame.mixer.init()
+bleep1 = pygame.mixer.Sound("bleep1.ogg")
+bleep2 = pygame.mixer.Sound("bleep2.ogg")
+bleep3 = pygame.mixer.Sound("bleep3.ogg")
+bleep4 = pygame.mixer.Sound("bleep4.ogg")
+
+
+## IO PI PLUS shield setup
 
 iobus1 = IOPi(0x20)  # bus 1 will be inputs
 iobus2 = IOPi(0x21)  # bus 2 will be outputs
@@ -28,19 +42,19 @@ iobus1.set_port_pullups(0, 0xFF)
 # Outputs op bus 2
 iobus2.set_port_direction(0, 0x00)
 iobus2.write_port(0, 0x00)
-# Flash a LED n seconds
+
 
 
 def flash(l, n):
+    """flash led l for n times"""
     iobus2.write_pin((2 + 2 * l), 1)  # deze rekensom omdat de eerste ledjes op 2,4,6,8 zitten
     time.sleep(n)
     iobus2.write_pin((2 + 2 * l), 0)
     return
 
-# Flash the LEDs n times
-
 
 def flash_all(n):
+    """flash all leds for n times"""
     for i in range(0, n):
         iobus2.write_pin(2, 1)
         iobus2.write_pin(4, 1)
@@ -55,14 +69,10 @@ def flash_all(n):
     return
 
 
-
-
-# Verify if user input matches value in expected sequence
 def correct_input(value):
-
+    """check if the input is correct"""
     while True:
         # hier moet nog wel een timer in
-        # en wellicht een change state detector. want nu werkt het met een time.sleep en dat is niet ideaal. je kan niet sneller dan de wait
         buttonstate2 = iobus1.read_pin(2)
         buttonstate4 = iobus1.read_pin(4)
         buttonstate6 = iobus1.read_pin(6)
@@ -71,21 +81,26 @@ def correct_input(value):
         if buttonstate2 == 0:
             ledchoise = 0
             print("led1")
+            pygame.mixer.Sound.play(bleep1)
+            pygame.mixer.Sound.play(bleep2)
             break
         
         elif buttonstate4 == 0:
             ledchoise = 1
             print("led2")
+            pygame.mixer.Sound.play(bleep2)
             break
         
         elif buttonstate6 == 0: 
             ledchoise = 2
             print("led3")
+            pygame.mixer.Sound.play(bleep3)
             break
         
-        elif buttonstate8 == 0: 
+        elif buttonstate8 == 0:  
             ledchoise = 3
             print("led4")
+            pygame.mixer.Sound.play(bleep4)
             break
          
     if ledchoise == value:
