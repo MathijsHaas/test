@@ -28,6 +28,8 @@ bleep1 = pygame.mixer.Sound("bleep1.ogg")
 bleep2 = pygame.mixer.Sound("bleep2.ogg")
 bleep3 = pygame.mixer.Sound("bleep3.ogg")
 bleep4 = pygame.mixer.Sound("bleep4.ogg")
+wrong_sound = pygame.mixer.Sound("wrong_sound.ogg")
+good_sound = pygame.mixer.Sound("good_sound.ogg")
 
 
 ## IO PI PLUS shield setup
@@ -82,7 +84,6 @@ def correct_input(value):
             ledchoise = 0
             print("led1")
             pygame.mixer.Sound.play(bleep1)
-            pygame.mixer.Sound.play(bleep2)
             break
         
         elif buttonstate4 == 0:
@@ -126,6 +127,15 @@ def main():
         sequence.append(new_value)
         for i in range(0, len(sequence)):
             print (sequence[i])
+            if sequence[i] == 0:
+                bleep = bleep1
+            elif sequence[i] == 1:
+                bleep = bleep2
+            elif sequence[i] == 2:
+                bleep = bleep3
+            elif sequence[i] == 3:
+                bleep = bleep4
+            pygame.mixer.Sound.play(bleep)
             flash(sequence[i], 0.4)
             time.sleep(0.1)
         for i in range(0, len(sequence)):
@@ -136,6 +146,7 @@ def main():
             if status == 1:
                 flash(sequence[i], 0.1)
             else:
+                pygame.mixer.Sound.play(wrong_sound)
                 flash_all(3)
                 break
         else:
