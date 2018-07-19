@@ -17,11 +17,11 @@ except ImportError:
         raise ImportError(
             "Failed to import library from parent folder")
 
-#pygame.init()
-#bleep1 = pygame.mixer.Sound("bleep1.wav")
-#bleep2 = pygame.mixer.Sound("bleep2.wav")
-#bleep3 = pygame.mixer.Sound("bleep3.wav")
-#bleep4 = pygame.mixer.Sound("bleep4.wav")
+
+##################### PARAMETERS
+levels = 2
+pattern_speed = 0.1
+
 
 pygame.mixer.init()
 bleep1 = pygame.mixer.Sound("bleep1.ogg")
@@ -109,17 +109,26 @@ def correct_input(value):
     else:
         return 0
 
-#####################################
-# MAIN PROGRAM, a game of simon says#
-#####################################
+def chose_sound(i):
+    """plays the right sound with the sequence"""
+    if i == 0:
+        return bleep1
+    elif i == 1:
+        return bleep2
+    elif i == 2:
+        return bleep3
+    elif i == 3:
+        return bleep4    
 
+############
+# The Game #
+############
 
 
 def main():
     random.seed()   # Different seed for every game
     count = 0  # Keeps track of player score
     sequence = []  # Will contain the sequence of light for the simon says
-    countahhh = 0 # gewoon maar even ergens tellen. gebeurd verder niet zoveel mee
     
     while True:
         time.sleep(1)
@@ -127,38 +136,41 @@ def main():
         sequence.append(new_value)
         for i in range(0, len(sequence)):
             print (sequence[i])
-            if sequence[i] == 0:
-                bleep = bleep1
-            elif sequence[i] == 1:
-                bleep = bleep2
-            elif sequence[i] == 2:
-                bleep = bleep3
-            elif sequence[i] == 3:
-                bleep = bleep4
+            bleep = chose_sound(sequence[i]) 
             pygame.mixer.Sound.play(bleep)
             flash(sequence[i], 0.4)
-            time.sleep(0.1)
+            time.sleep(pattern_speed)
         for i in range(0, len(sequence)):
             while iobus1.read_pin(2) == 0 or iobus1.read_pin(4) == 0 or iobus1.read_pin(6) == 0 or iobus1.read_pin(8) == 0:
-                countahhh += 1 # hier kan wel iets van een timer in gezet worden die checkt of je niet te laat bent
-            status = correct_input(sequence[i])  # misschien gaat hier wel iets fout, dat er te snel door het programma geskipt wordt
+                pass #stops the program until you release the button again.
+            status = correct_input(sequence[i])
             time.sleep(0.05)
             if status == 1:
                 flash(sequence[i], 0.1)
             else:
+                #LOST
                 pygame.mixer.Sound.play(wrong_sound)
                 flash_all(3)
                 break
         else:
             count += 1
+            if count == levels:
+                #WON
+                pygame.mixer.Sound.play(good_sound)
+                iobus2.write_pin(2, 1)
+                iobus2.write_pin(4, 1)
+                iobus2.write_pin(6, 1)
+                iobus2.write_pin(8, 1)
+                time.sleep(3) # TIJDELIJK, mag uiteindelijk weg, maar is nu zodat de lampjes niet aan blijven staan
+                iobus2.write_pin(2, 0)
+                iobus2.write_pin(4, 0)
+                iobus2.write_pin(6, 0)
+                iobus2.write_pin(8, 0)
+                break
             continue
         break
 
-    # End with lights off
-    iobus2.write_pin(2, 0)
-    iobus2.write_pin(4, 0)
-    iobus2.write_pin(6, 0)
-    iobus2.write_pin(8, 0)
+
     print ("Your score is", count)
     return 0
 
