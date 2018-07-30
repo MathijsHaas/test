@@ -24,6 +24,9 @@ def main():
         if pluggenspel.game_won is True:
             RGB_process = multiprocessing.Process(target=RGB_game.main)
             RGB_process.start()
+        if RGB_game.game_won is True:
+            simon_says_process = multiprocessing.Process(target=simon_says.main)
+            simon_says_process.start()           
         if simon_says.game_won is True:
             first_half = 2
 

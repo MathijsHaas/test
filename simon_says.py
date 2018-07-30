@@ -128,9 +128,11 @@ def chose_sound(i):
 
 def attract_mode():
     ''' attracting the atention of the player to push a button and start the game'''
+    iobus2.write_pin(2, 1)
     while True:
         # knipper met lampjes
         if iobus1.read_pin(2) == 0 or iobus1.read_pin(4) == 0 or iobus1.read_pin(6) == 0 or iobus1.read_pin(8) == 0:
+            iobus2.write_pin(2, 0)
             return True  # start the game
 
 
@@ -164,6 +166,7 @@ def main():
                     else:
                         # LOST
                         pygame.mixer.Sound.play(wrong_sound)
+                        print("Simon Says Wrong")
                         flash_all(3)
                         break
                 else:
@@ -177,7 +180,7 @@ def main():
                         time.sleep(3)  # TIJDELIJK, mag uiteindelijk weg, maar is nu zodat de lampjes niet aan blijven staan
                         for i in [2, 4, 6, 8]:
                             iobus2.write_pin(i, 0)
-                        print ("you won")
+                        print ("Simon Says gewonnen")
                         return True  # spel gewonnen
                         break
                     continue
@@ -186,3 +189,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
+
