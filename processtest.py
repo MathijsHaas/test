@@ -17,7 +17,7 @@ def main():
             slidetest_process = multiprocessing.Process(target=slidetest.main)
             slidetest_process.start()
             slidetest_begonnen = True
-        if slidetest.game_won or slidetest_won:
+        if slidetest_process:
             print("ss start")
             simon_says_process = multiprocessing.Process(target=simon_says.main)
             simon_says_process.start()

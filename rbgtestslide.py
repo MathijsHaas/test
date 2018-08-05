@@ -2,6 +2,7 @@
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 import time
+import opc
 try:
     from ADCPi import ADCPi
 except ImportError:
@@ -15,28 +16,29 @@ except ImportError:
         raise ImportError(
             "Failed to import library from parent folder")
 
-# pins on ADC Pi Plus board
-connected_pin_1 = 1
-
+#for communication with the fadecandy server
+client = opc.Client('localhost:7890')
+numLEDs = 35
 
 game_won = False
 
 
 adc = ADCPi(0x6C, 0x6D, 12)
 
+def makecolor():
+    r = adc.read_voltage(1)*50
+    g = adc.read_voltage(2)*50
+    b = 50
+    pixels = [(r, g, b)] * numLEDs
+    client.put_pixels(pixels)
+    time.sleep(0.3)
+
+
+
 
 def main():
-    print ("we beginnen met schuiven")
     while True:
-        if adc.read_voltage(connected_pin_1) > 5:
-            print("schuifding gaat uit")
-            processtest.slidetest_won = True #trying to set a boolean either here or in processtest.py
-            global game_won
-            game_won = True
-            print ("game_won in slidetest: {}".format(game_won))
-            print ("slidetest_won in processtest: {}".format(processtest.slidetest_won))
-            return True
-            break
+        makecolor()
 
 import processtest
      
@@ -59,3 +61,4 @@ if __name__ == "__main__":
     
     
     
+

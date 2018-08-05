@@ -4,8 +4,7 @@ from __future__ import absolute_import, division, print_function, \
 import time
 import random
 import pygame
-import opc  # nog niet geinstalleerd
-from neopixel import *
+import opc
 try:
     from ADCPi import ADCPi
 except ImportError:
@@ -23,9 +22,9 @@ pygame.mixer.init()
 good_sound = pygame.mixer.Sound("good_sound.ogg")
 wrong_sound = pygame.mixer.Sound("wrong_sound.ogg")
 
-numLEDs = 512
+#for communication with the fadecandy server
 client = opc.Client('localhost:7890')
-
+numLEDs = 35
 
 
 # pins on ADC Pi Plus board
