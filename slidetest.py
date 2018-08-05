@@ -19,8 +19,7 @@ except ImportError:
 connected_pin_1 = 1
 
 
-game_won = False
-
+game_won = multiprocessing.Value('i', 0)
 
 adc = ADCPi(0x6C, 0x6D, 12)
 
@@ -31,31 +30,16 @@ def main():
         if adc.read_voltage(connected_pin_1) > 5:
             time.sleep(1)
             print("schuifding gaat uit")
-            processtest.slidetest_won = True #trying to set a boolean either here or in processtest.py
+            processtest.slidetest_won = True  # trying to set a boolean either here or in processtest.py
             global game_won
-            game_won = True
+            game_won.value = 1
             print ("game_won in slidetest: {}".format(game_won))
             print ("slidetest_won in processtest: {}".format(processtest.slidetest_won))
             break
 
+
 import processtest
-     
+
 if __name__ == "__main__":
     main()
     print ("game won global: {}".format(game_won))
-
-
-    
-     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
