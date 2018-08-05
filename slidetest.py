@@ -2,6 +2,7 @@
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 import time
+import multiprocessing
 try:
     from ADCPi import ADCPi
 except ImportError:
@@ -30,10 +31,7 @@ def main():
         if adc.read_voltage(connected_pin_1) > 5:
             print("schuifding gaat uit")
             processtest.slidetest_won = True  # trying to set a boolean either here or in processtest.py
-            global game_won
             game_won.value = 1
-            print ("game_won in slidetest: {}".format(game_won))
-            print ("slidetest_won in processtest: {}".format(processtest.slidetest_won))
             return True
             break
 
