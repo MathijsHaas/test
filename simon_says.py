@@ -16,7 +16,7 @@ except ImportError:
 
 import time
 import random
-import pygame
+from pygame import mixer
 import multiprocessing
 
 # PARAMETERS
@@ -26,6 +26,7 @@ time_to_press = 4
 
 game_won = multiprocessing.Value('i', 0)
 
+#SOUND
 pygame.mixer.init()
 bleep1 = pygame.mixer.Sound("bleep1.ogg")
 bleep2 = pygame.mixer.Sound("bleep2.ogg")
@@ -84,6 +85,7 @@ def correct_input(value):
         if buttonstate2 == 0:
             ledchoise = 0
             print("led1")
+
             pygame.mixer.Sound.play(bleep1)
             break
 

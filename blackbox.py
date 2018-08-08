@@ -38,6 +38,8 @@ def main():
             pluggenspel_process = multiprocessing.Process(target=pluggenspel.main)
             pluggenspel_process.start()
             pluggenspel_started = True
+            ### START TIMER
+            ### TURN ON BACKLIGHT
 
         # Start the RGB game after all 6 plugs are connected correctly
         if pluggenspel.game_won.value == 1 and pluggenspel_started == False:
@@ -52,7 +54,7 @@ def main():
             simon_says_started = True
 
         if simon_says.game_won.value == 1:
-            first_half = 2
+            top_buttons.RGB_half_status.value = 1
 
         # start the big turning knobs at the same time as the plug game.
         if top_buttons.top_status.value == 1 and draaiknoppen_started == False:
@@ -71,7 +73,7 @@ def main():
             draaiknoppen_started = True
 
         if color_follow.game_won.value == 1:
-            second_half = 2
+            top_buttons.sinus_half_status.value = 1
 
 
 if __name__ == "__main__":

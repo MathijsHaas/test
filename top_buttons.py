@@ -16,6 +16,11 @@ except ImportError:
 import multiprocessing
 import buttonlayout
 import datetime
+from pygame import mixer
+
+# SOUND
+pygame.mixer.init()
+deep_button_sound = pygame.mixer.Sound("deep_button_sound.ogg")
 
 # top_status keeps track of the top buttons and what they have to do.
 # 0 = not started, 1 = started, 2 = ended
@@ -23,7 +28,7 @@ top_status = multiprocessing.Value('i', 0)
 
 # becomes one when either of the halves of the box is completed.
 RGB_half_status = multiprocessing.Value('i', 0)
-Sinus_half_status = multiprocessing.Value('i', 0)
+sinus_half_status = multiprocessing.Value('i', 0)
 
 # PARAMETERS
 presstime = 50000  # microseconds to press. 1.000.000 microseconds per second
@@ -59,22 +64,23 @@ def pushtogheter():
     # put all six lights on
     iobus2.write_pin(top_led123, 1)
     iobus2.write_pin(top_led456, 1)
-    
-    pt = datetime.timedelta(microseconds=presstime) 
-    bs = [0,0,0,0,0,0]
-    buttonpressed = [0,0,0,0,0,0]  # gets filled with ones if all buttons are pressed
-    count = [0,0,0,0,0,0]  # keeps track of when the buttons are pressed
+
+    pt = datetime.timedelta(microseconds=presstime)
+    bs = [0, 0, 0, 0, 0, 0]
+    buttonpressed = [0, 0, 0, 0, 0, 0]  # gets filled with ones if all buttons are pressed
+    count = [0, 0, 0, 0, 0, 0]  # keeps track of when the buttons are pressed
 
     while sum(buttonpressed) < buttons_to_win:
-        bs[0]= iobus1.read_pin(button1)
-        bs[1]= iobus1.read_pin(button2)
-        bs[2]= iobus1.read_pin(button3)
-        bs[3]= iobus1.read_pin(button4)
-        bs[4]= iobus1.read_pin(button5)
-        bs[5]= iobus1.read_pin(button6)
+        bs[0] = iobus1.read_pin(button1)
+        bs[1] = iobus1.read_pin(button2)
+        bs[2] = iobus1.read_pin(button3)
+        bs[3] = iobus1.read_pin(button4)
+        bs[4] = iobus1.read_pin(button5)
+        bs[5] = iobus1.read_pin(button6)
         for i in range(6):
             if bs[i] == 0 and count[i] == 0:
                 print ("start time", i)
+                pygame.mixer.Sound.play(deep_button_sound)
                 count[i] = datetime.datetime.now()
                 buttonpressed[i] = 1
             elif bs[i] == 0 and datetime.datetime.now() < count[i] + pt:
@@ -98,16 +104,25 @@ def main():
             pushtogheter()
 
         if top_status.value == 1:
-            # start timer
-            # put on backlight
-            # start sound
             print ("we zijn los hoor")
             pass
-        
-        if RGB_half_status.value == 1 and Sinus_half_status.value == 1:  # meaning both sides are completed
+
+        if RGB_half_status.value == 1:
+            iobus2.write_pin(top_led123, 1)
+            # helft 1 geluidje
+            RGB_half_status.value = 2
+
+        if sinus_half_status.value == 1:
+            # helft 2 geluidje
+            iobus2.write_pin(top_led456, 1)
+            sinus_half_status.value = 2
+
+        if RGB_half_status.value == 2 and Sinus_half_status.value == 2:  # meaning both sides are completed
+            top_status.value = 2
             pushtogheter()
+            # win animation?
             # stop timer
-            # play win sound 
+            # play win sound
 
 
 if __name__ == "__main__":
