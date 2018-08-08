@@ -15,7 +15,7 @@ except ImportError:
 
 import multiprocessing
 import buttonlayout
-import time
+import datetime
 
 # top_status keeps track of the top buttons and what they have to do.
 # 0 = not started, 1 = started, 2 = ended
@@ -26,8 +26,8 @@ RGB_half_status = multiprocessing.Value('i', 0)
 Sinus_half_status = multiprocessing.Value('i', 0)
 
 # PARAMETERS
-presstime = 1  # seconds to press
-buttons_to_win = 5
+presstime = 50000  # microseconds to press. 1.000.000 microseconds per second
+buttons_to_win = 3
 
 # check in de layout welke knop of led bij welke pin hoort.
 button1 = buttonlayout.top_button1
@@ -59,28 +59,29 @@ def pushtogheter():
     # put all six lights on
     iobus2.write_pin(top_led123, 1)
     iobus2.write_pin(top_led456, 1)
-
-    bs = [
-        iobus1.read_pin(button1),
-        iobus1.read_pin(button2),
-        iobus1.read_pin(button3),
-        iobus1.read_pin(button4),
-        iobus1.read_pin(button5),
-        iobus1.read_pin(button6),
-    ]
-
-    buttonpressed = []  # gets filled with ones if all buttons are pressed
-    count = []  # keeps track of how long the buttons are pressed
+    
+    pt = datetime.timedelta(microseconds=presstime) 
+    bs = [0,0,0,0,0,0]
+    buttonpressed = [0,0,0,0,0,0]  # gets filled with ones if all buttons are pressed
+    count = [0,0,0,0,0,0]  # keeps track of when the buttons are pressed
 
     while sum(buttonpressed) < buttons_to_win:
+        bs[0]= iobus1.read_pin(button1)
+        bs[1]= iobus1.read_pin(button2)
+        bs[2]= iobus1.read_pin(button3)
+        bs[3]= iobus1.read_pin(button4)
+        bs[4]= iobus1.read_pin(button5)
+        bs[5]= iobus1.read_pin(button6)
         for i in range(6):
             if bs[i] == 0 and count[i] == 0:
-                count[i] = time.time()
+                print ("start time", i)
+                count[i] = datetime.datetime.now()
                 buttonpressed[i] = 1
-            elif bs[i] == 0 and time.time() < count[i] + presstime:
+            elif bs[i] == 0 and datetime.datetime.now() < count[i] + pt:
                 buttonpressed[i] = 1
-            elif bs[i] == 0 and time.time() >= count[i] + presstime:
+            elif bs[i] == 0 and datetime.datetime.now() >= count[i] + pt:
                 buttonpressed[i] = 0
+                # count keeps going
             else:
                 count[i] = 0
                 buttonpressed[i] = 0
@@ -88,11 +89,11 @@ def pushtogheter():
     # put out the leds after you press the correc number togheter
     iobus2.write_pin(top_led123, 0)
     iobus2.write_pin(top_led456, 0)
-    top_status.value = 1  # started the game
+    top_status.value += 1  # turns 1 from 0 to start the game. turns 2 from 1 to end the game
 
 
 def main():
-    while top_status.value < 2:  # when the game is ended you exit this loop.
+    while top_status.value < 1:  # when the game is ended you exit this loop.
         if top_status.value == 0:
             pushtogheter()
 
@@ -100,6 +101,14 @@ def main():
             # start timer
             # put on backlight
             # start sound
-
+            print ("we zijn los hoor")
+            pass
+        
         if RGB_half_status.value == 1 and Sinus_half_status.value == 1:  # meaning both sides are completed
-            top_status.value = 2
+            pushtogheter()
+            # stop timer
+            # play win sound 
+
+
+if __name__ == "__main__":
+    main()
