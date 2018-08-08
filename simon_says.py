@@ -1,9 +1,6 @@
 
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
-import time
-import random
-import pygame
 try:
     from IOPi import IOPi
 except ImportError:
@@ -17,13 +14,17 @@ except ImportError:
         raise ImportError(
             "Failed to import library from parent folder")
 
+import time
+import random
+import pygame
+import multiprocessing
 
 # PARAMETERS
 levels = 2
 pattern_speed = 0.1
 time_to_press = 4
 
-game_won = False
+game_won = multiprocessing.Value('i', 0)
 
 pygame.mixer.init()
 bleep1 = pygame.mixer.Sound("bleep1.ogg")
@@ -189,5 +190,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
-

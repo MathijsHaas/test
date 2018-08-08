@@ -1,4 +1,11 @@
-list = ((1,2,3), (21,22,23), (31,32,33))
+for i in range(6):
+    print ("button" + str(i))
 
-print (list[2][2])
-print (list[0][0])
+list = [
+    1,
+    2,
+    3,
+    4,
+]
+
+print (sum(list))

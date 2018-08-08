@@ -1,9 +1,6 @@
 
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
-import time
-import random
-import pygame
 try:
     from IOPi import IOPi
 except ImportError:
@@ -16,6 +13,11 @@ except ImportError:
     except ImportError:
         raise ImportError(
             "Failed to import library from parent folder")
+import time
+import random
+import pygame
+import multiprocessing
+
 
 pygame.mixer.init()
 bleep1 = pygame.mixer.Sound("bleep2.ogg")
@@ -24,8 +26,8 @@ bleep3 = pygame.mixer.Sound("bleep2.ogg")
 bleep4 = pygame.mixer.Sound("bleep2.ogg")
 wrong_sound = pygame.mixer.Sound("wrong_sound.ogg")
 good_sound = pygame.mixer.Sound("good_sound.ogg")
-   
-## IO PI PLUS shield setup
+
+# IO PI PLUS shield setup
 
 iobus1 = IOPi(0x20)  # bus 1 will be inputs
 iobus2 = IOPi(0x21)  # bus 2 will be outputs
@@ -38,23 +40,25 @@ iobus1.set_port_pullups(0, 0xFF)
 iobus2.set_port_direction(0, 0x00)
 iobus2.write_port(0, 0x00)
 
-############## PARAMETERS
-led_pins = [2,4,6,8] #van bus 2
-press_time = 2 #seconds
+# PARAMETERS
+led_pins = [2, 4, 6, 8]  # van bus 2
+press_time = 2  # seconds
 levels = 6
 
-game_won = False
+game_won = multiprocessing.Value('i', 0)
+
 
 def flash_all(n):
     """flash all leds for n times"""
     for i in range(0, n):
-        for i in [2,4,6,8]: # de pins op het IO PI PLUS bord waar de ledjes op zijn aangesloten
+        for i in [2, 4, 6, 8]:  # de pins op het IO PI PLUS bord waar de ledjes op zijn aangesloten
             iobus2.write_pin(i, 1)
-        time.sleep(0.3) 
-        for i in [2,4,6,8]:
+        time.sleep(0.3)
+        for i in [2, 4, 6, 8]:
             iobus2.write_pin(i, 0)
         time.sleep(0.3)
     return
+
 
 def correct_input(value):
     """check if the input is correct within the time"""
@@ -70,39 +74,39 @@ def correct_input(value):
             print("led1")
             pygame.mixer.Sound.play(bleep1)
             break
-        
+
         elif buttonstate4 == 0:
             ledchoise = 4
             print("led2")
             pygame.mixer.Sound.play(bleep2)
             break
-        
-        elif buttonstate6 == 0: 
+
+        elif buttonstate6 == 0:
             ledchoise = 6
             print("led3")
             pygame.mixer.Sound.play(bleep3)
             break
-        
-        elif buttonstate8 == 0:  
+
+        elif buttonstate8 == 0:
             ledchoise = 8
             print("led4")
             pygame.mixer.Sound.play(bleep4)
             break
-         
+
     if ledchoise == value:
         return True
     else:
         return False
-    
+
 
 def main():
     random.seed()
     count = 0
-    
+
     while True:
         time.sleep(1)
         new_led = random.choice(led_pins)
-        iobus2.write_pin(new_led, 1) #zet lampje aan
+        iobus2.write_pin(new_led, 1)  # zet lampje aan
         status = correct_input(new_led)
         iobus2.write_pin(new_led, 0)
         if status == True:
@@ -119,14 +123,12 @@ def main():
             flash_all(3)
             print("verloren")
         break
-            
-        #zet lampje aan
-        #tijd geven om goeie knopje in te drukken
-        #als goeie knopje count +1 & continieu 
-        #als te laat Break
+
+        # zet lampje aan
+        # tijd geven om goeie knopje in te drukken
+        # als goeie knopje count +1 & continieu
+        # als te laat Break
+
 
 if __name__ == "__main__":
-    main()       
-        
-        
-        
+    main()

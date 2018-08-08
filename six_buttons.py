@@ -1,3 +1,3 @@
+import multiprocessing
 
-
-game_won = False
+game_won = multiprocessing.Value('i', 0)

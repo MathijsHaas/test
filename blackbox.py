@@ -11,32 +11,66 @@ import RGB_game
 # 1 = started
 # 2 = finished
 
-first_half = 0
-second_half = 0
+'''
+Every game is it's own process in its seperate file.
+Each game has a game_won variable that is an multiprocessing value we can acces.
+This game_won value turns 1 when the game is won and thus the next game can start.
+
+Each game also has its own variable in the main loop to make sure the process only starts once.
+
+'''
 
 
 def main():
-    while True:
+    # at the start, no games ar started.
+    six_buttons_started = False
+    pluggenspel_started = False
+    RGB_game_started = False
+    simon_says_started = False
+    draaiknoppen_started = False
+    sinusspel_started = False
+    color_follow_started = False
 
-        if six_buttons.game_won is True:
+    # this while loop keeps running to manage the game progression
+    while True:
+        # start plug game after the six buttons are pushed togheter
+        if top_buttons.top_status.value == 1 and pluggenspel_started == False:
             pluggenspel_process = multiprocessing.Process(target=pluggenspel.main)
             pluggenspel_process.start()
-        if pluggenspel.game_won is True:
+            pluggenspel_started = True
+
+        # Start the RGB game after all 6 plugs are connected correctly
+        if pluggenspel.game_won.value == 1 and pluggenspel_started == False:
             RGB_process = multiprocessing.Process(target=RGB_game.main)
             RGB_process.start()
-        if RGB_game.game_won is True:
+            pluggenspel_started = True
+
+        # start Simon Says after all RGB game colors are machted correctly
+        if RGB_game.game_won.value == 1 and simon_says_started == False:
             simon_says_process = multiprocessing.Process(target=simon_says.main)
-            simon_says_process.start()           
-        if simon_says.game_won is True:
+            simon_says_process.start()
+            simon_says_started = True
+
+        if simon_says.game_won.value == 1:
             first_half = 2
 
-        if draaiknoppen.game_won is True:
-            # SINUS GAME START
-            pass
-        # if sinusspel.game_won is True
+        # start the big turning knobs at the same time as the plug game.
+        if top_buttons.top_status.value == 1 and draaiknoppen_started == False:
+            draaiknoppen_process = multiprocessing.Process(target=draaiknoppen.main)
+            draaiknoppen_process.start()
+            draaiknoppen_started = True
+
+        if draaiknoppen.game_won.value == 1 and sinusspel_started == False:
+            # start sinusspel
+            sinusspel_started = True
+
+        # start Color follow after dhe sinus game is won
+        if sinusspel.game_won.value == 1 and draaiknoppen_started == False:
             color_follow_process = multiprocessing.Process(target=color_follow.main)
             color_follow_process.start()
-        if color_follow.game_won is True:
+            draaiknoppen_started = True
+
+        if color_follow.game_won.value == 1:
             second_half = 2
 
 

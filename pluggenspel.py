@@ -28,7 +28,8 @@ v1 = 2.25
 v2 = 2.5
 v3 = 4.7
 
-game_won = False
+
+game_won = multiprocessing.Value('i', 0)
 
 
 adc = ADCPi(0x6C, 0x6D, 12)

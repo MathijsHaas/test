@@ -1,6 +1,6 @@
 import multiprocessing
-import simon_says
-import slidetest
+# import simon_says
+# import slidetest
 import time
 import threading
 
@@ -19,9 +19,11 @@ def main():
             slidetest_begonnen = True
         if slidetest.game_won.value == 1 and simon_says_begonnen == False:
             print("ss start")
+            '''
             simon_says_process = multiprocessing.Process(target=simon_says.main)
             simon_says_process.start()
             simon_says_begonnen = True
+            '''
 
 
 if __name__ == "__main__":
