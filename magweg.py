@@ -1,11 +1,6 @@
-for i in range(6):
-    print ("button" + str(i))
+import datetime
 
-list = [
-    1,
-    2,
-    3,
-    4,
-]
-
-print (sum(list))
+dt = datetime.datetime.now()
+tdelta = datetime.timedelta(microseconds=50000)
+print (dt)
+print (dt + tdelta)
