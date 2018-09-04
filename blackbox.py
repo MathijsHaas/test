@@ -1,4 +1,6 @@
 # Main control
+
+# importing the differtent seperate games
 import multiprocessing
 import simon_says
 import pluggenspel
@@ -6,6 +8,18 @@ import six_buttons
 import draaiknoppen
 import color_follow
 import RGB_game
+
+import pygame  # for music
+import datetime  # to keep track of the deadline
+from Adafruit_LED_Backpack import SevenSegment  # for clock display
+
+# clock via SDA/SCL
+segment = SevenSegment.SevenSegment(address=0x70)
+
+# geluid
+pygame.mixer.init()
+won_the_box_sound = pygame.mixer.Sound("won_the_box_sound.ogg")
+lost_the_box_sound = pygame.mixer.Sound("lost_the_box_sound.ogg")
 
 # 0 = not started yet
 # 1 = started
@@ -19,6 +33,48 @@ This game_won value turns 1 when the game is won and thus the next game can star
 Each game also has its own variable in the main loop to make sure the process only starts once.
 
 '''
+
+# set when top_buttons.top_status.value == 1 (thus the game starts)
+startTime = None
+deadline = None
+minutesToPlay = datetime.deltatime(minutes=60)
+
+
+def showTime():
+    ''' Show the time on the clock on top of the box'''
+    segment.begin()
+
+    stopTime = datetime.datetime.now()
+    timePlayed = str(stopTime - startTime)
+
+    tensOfMinutes = timePlayed[2]
+    onesOfMinutes = timePlayed[3]
+    tensOfSeconds = timePlayed[5]
+    OnesOfSeconds = timePlayed[6]
+
+    print ("played in: ", tensOfMinutes, OnesOfMinutes, tensOfSeconds, OnesOfSeconds)
+
+    # setting the time as induvidual caracters to send to the clock display
+    segment.set_digit(0, tensOfMinutes)
+    segment.set_digit(1, onesOfMinutes)
+    segment.set_digit(2, tensOfSeconds)
+    segment.set_digit(3, OnesOfSeconds)
+    segment.set_colon(True)  # Toggle colon
+
+    # update the display LEDs.
+    segment.write_display()
+
+
+def BlackBoxWon():
+    showTime()
+    pygame.mixer.Sound.play(won_the_box_sound)
+    # Timerstrip op groene wave
+
+
+def BlackboxLost():
+    showtime()
+    pygame.mixer.Sound.play(lost_the_box_sound)
+    # Timerstrip op rode wave
 
 
 def main():
@@ -38,8 +94,11 @@ def main():
             pluggenspel_process = multiprocessing.Process(target=pluggenspel.main)
             pluggenspel_process.start()
             pluggenspel_started = True
-            ### START TIMER
-            ### TURN ON BACKLIGHT
+            global startTime  # record once when the game started
+            startTime = datetime.datetime.now()
+            global deadline  # set the deadline for when the game must be finished
+            deadline = datetime.datetime.now() + minutesToPlay
+            # TURN ON BACKLIGHT
 
         # Start the RGB game after all 6 plugs are connected correctly
         if pluggenspel.game_won.value == 1 and pluggenspel_started == False:
@@ -74,6 +133,14 @@ def main():
 
         if color_follow.game_won.value == 1:
             top_buttons.sinus_half_status.value = 1
+
+        # BlackBox Lost
+        if timedate.timedate.now() > deadline:
+            BlackBoxLost()
+
+        # BlackBox Won
+        if Won:
+            BlackBoxWon()
 
 
 if __name__ == "__main__":
