@@ -18,6 +18,7 @@ import random
 import pygame
 import opc
 import multiprocessing
+import buttonlayout
 
 
 pygame.mixer.init()
@@ -30,9 +31,9 @@ numLEDs = 35
 
 
 # pins on ADC Pi Plus board
-connected_pin_1 = 1
-connected_pin_2 = 2
-connected_pin_3 = 3
+RGBslide1 = buttonlayout.RGBslide1
+RGBslide2 = buttonlayout.RGBslide2
+RGBslide3 = buttonlayout.RGBslide3
 
 # PARAMETERS
 marge = 0.3  # how far can they be off from the correct valeu
@@ -88,9 +89,9 @@ def level_lost():
 def checkColorValues(red, green, blue, level):
     """ read the slides and check if they are correct"""
 
-    red = adc.read_voltage(connected_pin_1)
-    green = adc.read_voltage(connected_pin_2)
-    blue = adc.read_voltage(connected_pin_3)
+    red = adc.read_voltage(RGBslide1)
+    green = adc.read_voltage(RGBslide2)
+    blue = adc.read_voltage(RGBslide3)
 
     redtrue = red > (vb[level][0] - marge) and red < (vb[level][0] + marge)
     greentrue = green > (vb[level][1] - marge) and green < (vb[level][1] + marge)

@@ -3,13 +3,13 @@
 # importing the differtent seperate games
 import multiprocessing
 import simon_says
-import pluggenspel
+import plugs_game
 import six_buttons
 import draaiknoppen
 import color_follow
 import RGB_game
 
-import pygame  # for music
+from pygame import mixer  # for sound
 import datetime  # to keep track of the deadline
 from Adafruit_LED_Backpack import SevenSegment  # for clock display
 
@@ -17,9 +17,9 @@ from Adafruit_LED_Backpack import SevenSegment  # for clock display
 segment = SevenSegment.SevenSegment(address=0x70)
 
 # geluid
-pygame.mixer.init()
-won_the_box_sound = pygame.mixer.Sound("won_the_box_sound.ogg")
-lost_the_box_sound = pygame.mixer.Sound("lost_the_box_sound.ogg")
+mixer.init()
+won_the_box_sound = mixer.Sound("won_the_box_sound.ogg")
+lost_the_box_sound = mixer.Sound("lost_the_box_sound.ogg")
 
 # 0 = not started yet
 # 1 = started
@@ -67,33 +67,35 @@ def showTime():
 
 def BlackBoxWon():
     showTime()
-    pygame.mixer.Sound.play(won_the_box_sound)
-    # Timerstrip op groene wave
+    mixer.Sound.play(won_the_box_sound)
+    while true:  # the game is won, this happens till a reset
+        # Timerstrip op groene wave
 
 
 def BlackboxLost():
     showtime()
-    pygame.mixer.Sound.play(lost_the_box_sound)
-    # Timerstrip op rode wave
+    mixer.Sound.play(lost_the_box_sound)
+    while true:  # the game is lost, this happens till a reset
+        # Timerstrip op rode wave
 
 
 def main():
     # at the start, no games ar started.
     six_buttons_started = False
-    pluggenspel_started = False
+    plugs_game_started = False
     RGB_game_started = False
     simon_says_started = False
     draaiknoppen_started = False
-    sinusspel_started = False
+    sinus_game_started = False
     color_follow_started = False
 
     # this while loop keeps running to manage the game progression
     while True:
         # start plug game after the six buttons are pushed togheter
-        if top_buttons.top_status.value == 1 and pluggenspel_started == False:
-            pluggenspel_process = multiprocessing.Process(target=pluggenspel.main)
-            pluggenspel_process.start()
-            pluggenspel_started = True
+        if top_buttons.top_status.value == 1 and plugs_game_started == False:
+            plugs_game_process = multiprocessing.Process(target=plugs_game.main)
+            plugs_game_process.start()
+            plugs_game_started = True
             global startTime  # record once when the game started
             startTime = datetime.datetime.now()
             global deadline  # set the deadline for when the game must be finished
@@ -101,10 +103,10 @@ def main():
             # TURN ON BACKLIGHT
 
         # Start the RGB game after all 6 plugs are connected correctly
-        if pluggenspel.game_won.value == 1 and pluggenspel_started == False:
+        if plugs_game.game_won.value == 1 and plugs_game_started == False:
             RGB_process = multiprocessing.Process(target=RGB_game.main)
             RGB_process.start()
-            pluggenspel_started = True
+            plugs_game_started = True
 
         # start Simon Says after all RGB game colors are machted correctly
         if RGB_game.game_won.value == 1 and simon_says_started == False:
@@ -121,12 +123,12 @@ def main():
             draaiknoppen_process.start()
             draaiknoppen_started = True
 
-        if draaiknoppen.game_won.value == 1 and sinusspel_started == False:
-            # start sinusspel
-            sinusspel_started = True
+        if draaiknoppen.game_won.value == 1 and sinus_game_started == False:
+            # start sinus_game
+            sinus_game_started = True
 
         # start Color follow after dhe sinus game is won
-        if sinusspel.game_won.value == 1 and draaiknoppen_started == False:
+        if sinus_game.game_won.value == 1 and collor_follow_started == False:
             color_follow_process = multiprocessing.Process(target=color_follow.main)
             color_follow_process.start()
             draaiknoppen_started = True
@@ -139,7 +141,7 @@ def main():
             BlackBoxLost()
 
         # BlackBox Won
-        if Won:
+        if top_buttons.top_status.value = 2:
             BlackBoxWon()
 
 
