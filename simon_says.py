@@ -26,7 +26,7 @@ time_to_press = 4
 
 game_won = multiprocessing.Value('i', 0)
 
-#SOUND
+# SOUND
 pygame.mixer.init()
 bleep1 = pygame.mixer.Sound("bleep1.ogg")
 bleep2 = pygame.mixer.Sound("bleep2.ogg")
@@ -37,7 +37,6 @@ good_sound = pygame.mixer.Sound("good_sound.ogg")
 
 
 # IO PI PLUS shield setup
-
 iobus1 = IOPi(0x20)  # bus 1 will be inputs
 iobus2 = IOPi(0x21)  # bus 2 will be outputs
 
@@ -176,7 +175,7 @@ def main():
                     count += 1
                     if count == levels:
                         # WON
-                        game_won = True
+                        game_won.value = 1
                         pygame.mixer.Sound.play(good_sound)
                         for i in [2, 4, 6, 8]:
                             iobus2.write_pin(i, 1)

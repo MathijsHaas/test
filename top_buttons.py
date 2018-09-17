@@ -144,11 +144,12 @@ def main():
             mixer.Sound.play(deep_button_sound)
             sinus_half_status.value = 2
 
-        if RGB_half_status.value == 2 and Sinus_half_status.value == 2:  # meaning both sides are completed
+        if RGB_half_status.value == 2 and Sinus_half_status.value == 2:
+        # meaning both sides are completed.
+        # The
             pushtogheter()
             # win animation?
-            # stop timer
-            # play win sound
+
 
 
 if __name__ == "__main__":

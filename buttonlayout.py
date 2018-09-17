@@ -22,6 +22,9 @@ color_follow_button2 = 12
 color_follow_button3 = 14
 color_follow_button4 = 16
 
+# the input that reads if the the big turning knobs are in the right orientation.
+spy_knobs = 13
+
 '''DIGITAL OUTPUTS ON BUS 2 '''
 
 # top leds
@@ -44,6 +47,9 @@ color_follow_led2 = 12
 color_follow_led3 = 14
 color_follow_led4 = 16
 
+# Relais that switches the back & bottom light on
+relais = 13
+
 '''ANALOG INPUTS ADC 1 (second shield)'''
 
 # plugs game
@@ -51,9 +57,9 @@ plugs1 = 1
 plugs2 = 2
 plugs3 = 3
 
-RGBslide1 = 4
+RGBslide1 = 6
 RGBslide2 = 5
-RGBslide3 = 6
+RGBslide3 = 4
 
 
 '''ANALOG INPUTS ADC 2 (third (and top) shield)'''

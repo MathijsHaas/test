@@ -1,25 +1,52 @@
 # Main control
-
-# importing the differtent seperate games
-import multiprocessing
-import simon_says
-import plugs_game
-import six_buttons
-import draaiknoppen
-import color_follow
-import RGB_game
-
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
+try:
+    from IOPi import IOPi
+except ImportError:
+    print("Failed to import IOPi from python system path")
+    print("Importing from parent folder instead")
+    try:
+        import sys
+        sys.path.append("..")
+        from IOPi import IOPi
+    except ImportError:
+        raise ImportError(
+            "Failed to import library from parent folder")
+import buttonlayout  # what button is connected to what pin
+import ledcontrol  # where the led strips are controled and combined to send to the fadecandy
+import multiprocessing  # to spawn each game as a separate process
 from pygame import mixer  # for sound
 import datetime  # to keep track of the deadline
 from Adafruit_LED_Backpack import SevenSegment  # for clock display
 
+# importing the differtent seperate games
+import simon_says
+import plugs_game
+import six_buttons
+import color_follow
+import RGB_game
+
+# IO PI PLUS shield setup
+iobus1 = IOPi(0x20)  # bus 1 will be inputs
+iobus2 = IOPi(0x21)  # bus 2 will be outputs
+
+# inputs op bus 1
+iobus1.set_port_direction(0, 0xFF)
+iobus1.set_port_pullups(0, 0xFF)
+
+# Outputs op bus 2
+iobus2.set_port_direction(0, 0x00)
+iobus2.write_port(0, 0x00)
+
 # clock via SDA/SCL
 segment = SevenSegment.SevenSegment(address=0x70)
 
-# geluid
+# Sound
 mixer.init()
 won_the_box_sound = mixer.Sound("won_the_box_sound.ogg")
 lost_the_box_sound = mixer.Sound("lost_the_box_sound.ogg")
+good_sound = mixer.Sound("good_sound.ogg")
 
 # 0 = not started yet
 # 1 = started
@@ -30,14 +57,17 @@ Every game is it's own process in its seperate file.
 Each game has a game_won variable that is an multiprocessing value we can acces.
 This game_won value turns 1 when the game is won and thus the next game can start.
 
-Each game also has its own variable in the main loop to make sure the process only starts once.
+Each game also has its own ..._started variable in the main loop to make sure the process only starts once.
 
 '''
 
-# set when top_buttons.top_status.value == 1 (thus the game starts)
+# these are set when top_buttons.top_status.value == 1 (thus the game starts)
 startTime = None
 deadline = None
 minutesToPlay = datetime.deltatime(minutes=60)
+
+spy_knobs = buttonlayout.spy_knobs
+relais = buttonlayout.relais
 
 
 def showTime():
@@ -79,34 +109,47 @@ def BlackboxLost():
         # Timerstrip op rode wave
 
 
+def boxStart():
+    ''' what happens at the start, after the six buttons are pushed '''
+    global startTime  # record once when the game started
+    startTime = datetime.datetime.now()
+    global deadline  # set the deadline for when the game must be finished
+    deadline = datetime.datetime.now() + minutesToPlay
+    iobus2.write_pin(relais)  # put on back- and bottomlight
+
+
 def main():
     # at the start, no games ar started.
+    top_buttons_started = False
     six_buttons_started = False
     plugs_game_started = False
     RGB_game_started = False
     simon_says_started = False
-    draaiknoppen_started = False
+    spy_knobs_started = False
     sinus_game_started = False
     color_follow_started = False
 
     # this while loop keeps running to manage the game progression
     while True:
+        # loop background sound
+        # start a process to check the top buttons
+        if top_buttons.top_status.value == 0 and top_buttons_started == False:
+            top_buttons_process = multiprocessing.Process(target=top_buttons.main)
+            top_buttons_process.start()
+            top_buttons_started = True
+
         # start plug game after the six buttons are pushed togheter
         if top_buttons.top_status.value == 1 and plugs_game_started == False:
             plugs_game_process = multiprocessing.Process(target=plugs_game.main)
             plugs_game_process.start()
             plugs_game_started = True
-            global startTime  # record once when the game started
-            startTime = datetime.datetime.now()
-            global deadline  # set the deadline for when the game must be finished
-            deadline = datetime.datetime.now() + minutesToPlay
-            # TURN ON BACKLIGHT
+            boxStart()
 
         # Start the RGB game after all 6 plugs are connected correctly
-        if plugs_game.game_won.value == 1 and plugs_game_started == False:
-            RGB_process = multiprocessing.Process(target=RGB_game.main)
-            RGB_process.start()
-            plugs_game_started = True
+        if plugs_game.game_won.value == 1 and RGB_game_started == False:
+            RGB_game_process = multiprocessing.Process(target=RGB_game.main)
+            RGB_game_process.start()
+            RGB_game_started = True
 
         # start Simon Says after all RGB game colors are machted correctly
         if RGB_game.game_won.value == 1 and simon_says_started == False:
@@ -118,20 +161,22 @@ def main():
             top_buttons.RGB_half_status.value = 1
 
         # start the big turning knobs at the same time as the plug game.
-        if top_buttons.top_status.value == 1 and draaiknoppen_started == False:
-            draaiknoppen_process = multiprocessing.Process(target=draaiknoppen.main)
-            draaiknoppen_process.start()
-            draaiknoppen_started = True
+        if top_buttons.top_status.value == 1 and iobus1.read_pin(spy_knobs) == 0 and spy_knobs_started == False:
+            spy_knobs_process = multiprocessing.Process(target=spy_knobs.main)
+            spy_knobs_process.start()
+            spy_knobs_started = True
 
-        if draaiknoppen.game_won.value == 1 and sinus_game_started == False:
-            # start sinus_game
+        # start the sinus game
+        if spy_knobs.game_won.value == 1 and sinus_game_started == False:
+            sinus_game_process = multiprocessing.Process(target=sinus_game.main)
+            sinus_game_process.start()
             sinus_game_started = True
 
-        # start Color follow after dhe sinus game is won
+        # start Color follow after the sinus game is won
         if sinus_game.game_won.value == 1 and collor_follow_started == False:
             color_follow_process = multiprocessing.Process(target=color_follow.main)
             color_follow_process.start()
-            draaiknoppen_started = True
+            color_follow_started = True
 
         if color_follow.game_won.value == 1:
             top_buttons.sinus_half_status.value = 1

@@ -1,44 +1,50 @@
+''' Led control. The timer strip and the RGB led strips are controled from this file. they have multiprocessing values to read the rgb data from the rgb game and to control the timerstrip. '''
+
 import multiprocessing
 import opc
-import testy
 
-numLEDs = 4
+
+# for communication with the fadecandy server
 client = opc.Client('localhost:7890')
+timer_leds = 81  # amount of leds in the timer strip
+example_leds = 35  # amount of leds in the RGB example strip
+play_leds = 35  # amount of leds in the RGB strip the player controls
 
-red_array = multiprocessing.Array('i', numLEDs)
-red_array.array = [0, ] * numLEDs
-green_array = multiprocessing.Array('i', numLEDs)
-green_array.array = [0, ] * numLEDs
-blue_array = multiprocessing.Array('i', numLEDs)
-blue_array.array = [0, ] * numLEDs
-
-# pixel_moment = list(zip(red_array, blue_array, green_array))
+# setting up the shared list that wil be send to the strip
+manager = multiprocessing.Manager()
+strip = manager.list()
 
 
-def make_pixel_list(r, g, b):
-    '''neem de pixels_array die uit losse waardes bestaat en maak er een list van rgb waardes van waarbij iedere
-    3 waardes een led aansturen. de pixels_list bestaan dan uit tuples van 3 waardes (rgb) in de vorm [(0,0,0),(0,0,0), .... ]'''
-    pixel_moment = list(zip(r, g, b))
-    return pixel_moment
+def list_setup(strip):
+    ''' function that runs once at the start, to make a list with tuples that can be replaced
+    with the processes that control the led strips'''
+    for i in range(256):  # we need 4 pins with 64 leds each (4*64=256) to control all the leds
+        strip.append((0, 0, 0))
+    for i in range(timer_leds):
+        strip[i] = (255, 255, 255)
+    for i in range(example_leds):  # to control the leds from the fadecandy pin 3 (led 128 - 192)
+        strip[128 + i] = (255, 255, 255)
+    client.put_pixels(strip)
 
 
-def update_led():
-    for i in range(1, 11):
-        print (red_array.array)
-        client.put_pixels(make_pixel_list(red_array.array, green_array.array, blue_array.array))
-        print (i, make_pixel_list(red_array.array, green_array.array, blue_array.array))
+def set_example_color(strip, r, g, b):
+    ''' control the leds from the fadecandy pin 3 (led 128 - 192) '''
+    for i in range(example_leds):
+        strip[128 + i] = (r, g, b)
+    client.put_pixels(strip)
+
+
+def set_play_color(strip, r, g, b):
+    ''' control the leds from the fadecandy pin 4 (led 192 - 256) '''
+    for i in range(play_leds):
+        strip[192 + i] = (r, g, b)
+    client.put_pixels(strip)
 
 
 def main():
-    print("start main")
-    p = multiprocessing.Process(target=testy.kleur, args=(red_array.array))
-    p.daemon = True  # makes it a background process that quits when the main program quits
-    print("start process")
-    p.start()
-    print("start update")
-    update_led()
-    print("stop update")
+    while True:
+        set_example_color(strip, RGB_game.r_example_value.value, RGB_game.g_example_value.value, RGB_game.b_example_value.value)
+        set_play_color(strip, RGB_play.r_example_value.value, RGB_play.g_example_value.value, RGB_play.b_example_value.value)
 
 
-if __name__ == "__main__":
-    main()
+import RGB_game
