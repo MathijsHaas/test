@@ -1,11 +1,8 @@
 import time
-import multiprocessingmanager
-import multiprocessing
+import atexit
 
-manager = multiprocessing.Manager()
-shared_list = manager.list()
+ding = input("stoppen?: ")
 
-
-def main():
-    manager = multiprocessing.Manager()
-    print (shared_list)
+while ding is not 'y':
+    print("doe iets")
+    time.sleep(1)

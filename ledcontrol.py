@@ -7,8 +7,8 @@ import opc
 # for communication with the fadecandy server
 client = opc.Client('localhost:7890')
 timer_leds = 81  # amount of leds in the timer strip
-example_leds = 35  # amount of leds in the RGB example strip
-play_leds = 35  # amount of leds in the RGB strip the player controls
+example_leds = 32  # amount of leds in the RGB example strip
+play_leds = 32  # amount of leds in the RGB strip the player controls
 
 # setting up the shared list that wil be send to the strip
 manager = multiprocessing.Manager()

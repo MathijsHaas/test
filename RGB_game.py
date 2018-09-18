@@ -26,10 +26,6 @@ pygame.mixer.init()
 good_sound = pygame.mixer.Sound("good_sound.ogg")
 wrong_sound = pygame.mixer.Sound("wrong_sound.ogg")
 
-# for communication with the fadecandy server
-client = opc.Client('localhost:7890')
-numLEDs = 35
-
 
 # pins on ADC Pi Plus board
 RGBslide1 = buttonlayout.RGBslide1
@@ -77,12 +73,27 @@ def control_ledstrip(r, g, b):
 
 def blinkleds(r, g, b, n):
     """blinking all leds n times with rgb valeus"""
-    for a in range(n):
-        for i in range(numLEDs):
-            pixels = [(0, 0, 0)] * numLEDs
-            pixels[i] = (r, g, b)
-            client.put_pixels(pixels)
-            time.sleep(0.3)
+    blinkspeed = 0.2
+    for i in range(n):
+        r_example_value.value = r
+        g_example_value.value = g
+        b_example_value.value = b
+
+        r_play_value.value = r
+        g_play_value.value = g
+        b_play_value.value = b
+
+        time.sleep(blinkspeed)
+
+        r_example_value.value = 0
+        g_example_value.value = 0
+        b_example_value.value = 0
+
+        r_play_value.value = 0
+        g_play_value.value = 0
+        b_play_value.value = 0
+
+        time.sleep(blinkspeed)
 
 
 def level_won():
@@ -110,7 +121,7 @@ def checkColorValues(red, green, blue, level):
 
 
 def main():
-    while game_won is False:
+    while game_won.value == 0:
         deadline = time.time() + time_per_level
         while level < totaal_levels:
             while time.time() < deadline:
