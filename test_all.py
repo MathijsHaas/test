@@ -80,9 +80,9 @@ def test_leds():
 
 def topknobquit():
     ''' if two buttons are pushed at the same time testing ends'''
-    topknobs = [0] * 6
+    topknobs = [0,0,0,0,0,0]
     for i in topknobs:
-        topknobs[i] = iobus1[1 + 2 * i]
+        topknobs[i] = iobus1.read_pin(1 + 2 * i)
     return sum(topknobs)
 
 
