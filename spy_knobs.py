@@ -26,6 +26,8 @@ iobus1 = IOPi(0x20)  # bus 1 will be inputs
 # inputs op bus 1
 iobus1.set_port_direction(0, 0xFF)
 iobus1.set_port_pullups(0, 0xFF)
+iobus1.set_port_direction(1, 0xFF)
+iobus1.set_port_pullups(1, 0xFF)
 
 spy_knobs = buttonlayout.spy_knobs
 

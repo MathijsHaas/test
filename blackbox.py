@@ -23,7 +23,7 @@ from Adafruit_LED_Backpack import SevenSegment  # for clock display
 # importing the differtent seperate games
 import simon_says
 import plugs_game
-import six_buttons
+import top_buttons
 import color_follow
 import RGB_game
 
@@ -34,10 +34,14 @@ iobus2 = IOPi(0x21)  # bus 2 will be outputs
 # inputs op bus 1
 iobus1.set_port_direction(0, 0xFF)
 iobus1.set_port_pullups(0, 0xFF)
+iobus1.set_port_direction(1, 0xFF)
+iobus1.set_port_pullups(1, 0xFF)
 
 # Outputs op bus 2
 iobus2.set_port_direction(0, 0x00)
 iobus2.write_port(0, 0x00)
+iobus2.set_port_direction(1, 0x00)
+iobus2.write_port(1, 0x00)
 
 # clock via SDA/SCL
 segment = SevenSegment.SevenSegment(address=0x70)
@@ -48,9 +52,11 @@ won_the_box_sound = mixer.Sound("won_the_box_sound.ogg")
 lost_the_box_sound = mixer.Sound("lost_the_box_sound.ogg")
 good_sound = mixer.Sound("good_sound.ogg")
 
+game_status = multiprocessing.Value('i', 0)
 # 0 = not started yet
 # 1 = started
-# 2 = finished
+# 2 = black box won within time
+# 3 = black box lost
 
 '''
 Every game is it's own process in its seperate file.
@@ -64,7 +70,8 @@ Each game also has its own ..._started variable in the main loop to make sure th
 # these are set when top_buttons.top_status.value == 1 (thus the game starts)
 startTime = None
 deadline = None
-minutesToPlay = datetime.deltatime(minutes=60)
+minutesToPlay = 60
+deltaMinutes = datetime.deltatime(minutes=minutesToPlay)
 
 spy_knobs = buttonlayout.spy_knobs
 relais = buttonlayout.relais
@@ -95,33 +102,35 @@ def showTime():
     segment.write_display()
 
 
-def BlackBoxWon():
+def blackBoxWon():
+    game_status.value = 3
     showTime()
     mixer.Sound.play(won_the_box_sound)
     while true:  # the game is won, this happens till a reset
-        # Timerstrip op groene wave
+        pass
 
 
-def BlackboxLost():
+def blackBoxLost():
+    game_status.value = 4
     showtime()
     mixer.Sound.play(lost_the_box_sound)
     while true:  # the game is lost, this happens till a reset
-        # Timerstrip op rode wave
+        pass
 
 
 def boxStart():
     ''' what happens at the start, after the six buttons are pushed '''
+    game_status.value = 1
     global startTime  # record once when the game started
     startTime = datetime.datetime.now()
     global deadline  # set the deadline for when the game must be finished
-    deadline = datetime.datetime.now() + minutesToPlay
+    deadline = datetime.datetime.now() + deltaMinutes
     iobus2.write_pin(relais)  # put on back- and bottomlight
 
 
 def main():
     # at the start, no games ar started.
     top_buttons_started = False
-    six_buttons_started = False
     plugs_game_started = False
     RGB_game_started = False
     simon_says_started = False
@@ -183,11 +192,11 @@ def main():
 
         # BlackBox Lost
         if timedate.timedate.now() > deadline:
-            BlackBoxLost()
+            blackBoxLost()
 
         # BlackBox Won
-        if top_buttons.top_status.value = 2:
-            BlackBoxWon()
+        if top_buttons.top_status.value == 2:
+            blackBoxWon()
 
 
 if __name__ == "__main__":

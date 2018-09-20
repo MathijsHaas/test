@@ -50,19 +50,23 @@ iobus2 = IOPi(0x21)  # bus 2 will be outputs
 # inputs op bus 1
 iobus1.set_port_direction(0, 0xFF)
 iobus1.set_port_pullups(0, 0xFF)
+iobus1.set_port_direction(1, 0xFF)
+iobus1.set_port_pullups(1, 0xFF)
 
 # Outputs op bus 2
 iobus2.set_port_direction(0, 0x00)
 iobus2.write_port(0, 0x00)
+iobus2.set_port_direction(1, 0x00)
+iobus2.write_port(1, 0x00)
 
 t = 0
 
 
 def test_ledstrips():
     ''' control all ledstrips with the rgb slides'''
-    r = adc1.read_voltage(4) * 50
-    g = adc1.read_voltage(5) * 50
-    b = adc1.read_voltage(6) * 50
+    r = 250 # adc1.read_voltage(4) * 50
+    g = 250 # adc1.read_voltage(5) * 50
+    b = 250 # adc1.read_voltage(6) * 50
     pixels = [(r, g, b)] * numLEDs
     client.put_pixels(pixels)
 
@@ -71,6 +75,7 @@ def test_buttons():
     for i in range(1, 17):
         if iobus1.read_pin(i) == 0:
             mixer.Sound.play(deep_button_sound)
+            print("pin {}".format(i))
 
 
 def test_leds():

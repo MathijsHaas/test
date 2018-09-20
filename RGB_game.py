@@ -15,16 +15,16 @@ except ImportError:
             "Failed to import library from parent folder")
 import time
 import random
-import pygame
+from pygame import mixer
 import opc
 import multiprocessing
 import buttonlayout
 import ledcontrol
 
 
-pygame.mixer.init()
-good_sound = pygame.mixer.Sound("good_sound.ogg")
-wrong_sound = pygame.mixer.Sound("wrong_sound.ogg")
+mixer.init()
+good_sound = mixer.Sound("good_sound.ogg")
+wrong_sound = mixer.Sound("wrong_sound.ogg")
 
 
 # pins on ADC Pi Plus board
@@ -55,7 +55,7 @@ adc = ADCPi(0x6C, 0x6D, 12)
 
 # the colors that need to be machted in RGB valeus from 0 - 5V
 example = (
-    (78, 36, 60),
+    (160, 80, 120),
     (17, 70, 47),
     (52, 80, 17))
 
@@ -97,14 +97,14 @@ def blinkleds(r, g, b, n):
 
 
 def level_won():
-    pygame.mixer.Sound.play(good_sound)
+    mixer.Sound.play(good_sound)
     blinkleds(0, 200, 0, 3)
     global level
     level += 1
 
 
 def level_lost():
-    pygame.mixer.Sound.play(wrong_sound)
+    mixer.Sound.play(wrong_sound)
     blinkleds(200, 0, 0, 3)
     global level
     level = 0
@@ -147,4 +147,4 @@ if __name__ == "__main__":
     ledcontrol_process.terminate()
 
 
-# use the Color(255,255,255) function to convert the provided red, green, blue color (0-255) to a 24-bit color value.
+
