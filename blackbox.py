@@ -71,7 +71,7 @@ Each game also has its own ..._started variable in the main loop to make sure th
 startTime = None
 deadline = None
 minutesToPlay = 60
-deltaMinutes = datetime.deltatime(minutes=minutesToPlay)
+deltaMinutes = datetime.timedelta(minutes=minutesToPlay)
 
 spy_knobs = buttonlayout.spy_knobs
 relais = buttonlayout.relais
