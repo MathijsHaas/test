@@ -6,6 +6,13 @@ import RGB_game
 import datetime
 import time
 
+r_example_value = multiprocessing.Value('i', 0)
+g_example_value = multiprocessing.Value('i', 0)
+b_example_value = multiprocessing.Value('i', 0)
+
+r_play_value = multiprocessing.Value('i', 0)
+g_play_value = multiprocessing.Value('i', 0)
+b_play_value = multiprocessing.Value('i', 0)
 
 # for communication with the fadecandy server
 client = opc.Client('localhost:7890')
@@ -74,6 +81,15 @@ def list_setup(strip):
         strip.append((0, 0, 0))
 
 
+def RGB_color_control(strip):
+    for i in range(example_leds):
+        strip[startled + i] = (r_example_value.value, g_example_value.value, b_example_value.value)
+    for i in range(play_leds):
+        strip[startled + example_leds + i] = (r_play_value.value, g_play_value.value, b_play_value.value)
+    print("led control: Red: {}, Green: {}, Blue: {}".format(r_play_value.value, g_play_value.value, b_play_value.value))
+    client.put_pixels(strip)
+        
+        
 def set_example_color(strip, r, g, b):
     ''' control the leds from the fadecandy pin 3 (led 128 - 192) '''
     print(r, g, b)
@@ -87,23 +103,11 @@ def set_play_color(strip, r, g, b):
         strip[startled + example_leds + i] = (r, g, b)
 
 def main():
+    print("ledcontrol started")
     list_setup(strip)
     # timerstrip_setup(strip)
-    for i in range(100):
-        colorflash(strip, 200, 0, 0)
-    timertest(strip)
-    '''
-    print (strip)
-    list_setup(strip)
-    timerstrip_setup(strip)
-    print (strip)
-    RGB_game.control_ledstrip(3,0,0)
-    set_example_color(strip, RGB_game.r_example_value.value, RGB_game.g_example_value.value, RGB_game.b_example_value.value)
-    print (strip)
-    set_play_color(strip, RGB_game.r_play_value.value, RGB_game.g_play_value.value, RGB_game.b_play_value.value)
-    client.put_pixels(strip)
-    print (strip)
-    '''
+    while True:
+        RGB_color_control(strip)
     # Process that does the timerstrip countdown
     # process that controls the two ledstrips
     
