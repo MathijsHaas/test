@@ -28,9 +28,9 @@ plugs3 = buttonlayout.plugs3
 # PARAMETERS
 wait_time = 20  # amount of times it needs to be correct when checked.
 margin = 0.5  # the accepted error
-v1 = 2.25
-v2 = 2.5
-v3 = 4.7
+v1 = 3.5
+v2 = 3.5
+v3 = 3.5
 
 
 game_won = multiprocessing.Value('i', 0)
