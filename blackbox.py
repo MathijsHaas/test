@@ -125,7 +125,7 @@ def boxStart():
     startTime = datetime.datetime.now()
     global deadline  # set the deadline for when the game must be finished
     deadline = datetime.datetime.now() + deltaMinutes
-    iobus2.write_pin(relais)  # put on back- and bottomlight
+    iobus2.write_pin(relais, 1)  # put on back- and bottomlight
 
 
 def main():
