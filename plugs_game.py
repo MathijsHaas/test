@@ -2,22 +2,23 @@
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 try:
-    from IOPi import IOPi
+    from ADCPi import ADCPi
 except ImportError:
-    print("Failed to import IOPi from python system path")
+    print("Failed to import ADCPi from python system path")
     print("Importing from parent folder instead")
     try:
         import sys
-        sys.path.append("..")
-        from IOPi import IOPi
+        sys.path.append('..')
+        from ADCPi import ADCPi
     except ImportError:
         raise ImportError(
             "Failed to import library from parent folder")
-import pygame
+from pygame import mixer
 import buttonlayout
+import multiprocessing
 
-pygame.mixer.init()
-good_sound = pygame.mixer.Sound("good_sound.ogg")
+mixer.init()
+good_sound = mixer.Sound("good_sound.ogg")
 
 # pins on ADC Pi Plus board
 plugs1 = buttonlayout.plugs1
@@ -27,9 +28,9 @@ plugs3 = buttonlayout.plugs3
 # PARAMETERS
 wait_time = 20  # amount of times it needs to be correct when checked.
 margin = 0.5  # the accepted error
-v1 = 2.25
-v2 = 2.5
-v3 = 4.7
+v1 = 3.5
+v2 = 3.5
+v3 = 3.5
 
 
 game_won = multiprocessing.Value('i', 0)
@@ -46,7 +47,7 @@ def main():
                 adc.read_voltage(plugs3) >= (v3 - margin) and adc.read_voltage(plugs3) <= (v3 + margin)):
             counter += 1
             if counter == wait_time:
-                pygame.mixer.Sound.play(good_sound)
+                mixer.Sound.play(good_sound)
                 game_won is True
                 return True
             else:

@@ -64,9 +64,9 @@ t = 0
 
 def test_ledstrips():
     ''' control all ledstrips with the rgb slides'''
-    r = adc1.read_voltage(4) * 50
-    g = adc1.read_voltage(5) * 50
-    b = adc1.read_voltage(6) * 50
+    r = 250 # adc1.read_voltage(4) * 50
+    g = 250 # adc1.read_voltage(5) * 50
+    b = 250 # adc1.read_voltage(6) * 50
     pixels = [(r, g, b)] * numLEDs
     client.put_pixels(pixels)
 
@@ -75,6 +75,7 @@ def test_buttons():
     for i in range(1, 17):
         if iobus1.read_pin(i) == 0:
             mixer.Sound.play(deep_button_sound)
+            print("pin {}".format(i))
 
 
 def test_leds():
@@ -84,9 +85,9 @@ def test_leds():
 
 def topknobquit():
     ''' if two buttons are pushed at the same time testing ends'''
-    topknobs = [0] * 6
+    topknobs = [0,0,0,0,0,0]
     for i in topknobs:
-        topknobs[i] = iobus1[1 + 2 * i]
+        topknobs[i] = iobus1.read_pin(1 + 2 * i)
     return sum(topknobs)
 
 

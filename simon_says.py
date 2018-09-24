@@ -27,26 +27,29 @@ time_to_press = 4
 game_won = multiprocessing.Value('i', 0)
 
 # SOUND
-pygame.mixer.init()
-bleep1 = pygame.mixer.Sound("bleep1.ogg")
-bleep2 = pygame.mixer.Sound("bleep2.ogg")
-bleep3 = pygame.mixer.Sound("bleep3.ogg")
-bleep4 = pygame.mixer.Sound("bleep4.ogg")
-wrong_sound = pygame.mixer.Sound("wrong_sound.ogg")
-good_sound = pygame.mixer.Sound("good_sound.ogg")
+mixer.init()
+bleep1 = mixer.Sound("bleep1.ogg")
+bleep2 = mixer.Sound("bleep2.ogg")
+bleep3 = mixer.Sound("bleep3.ogg")
+bleep4 = mixer.Sound("bleep4.ogg")
+wrong_sound = mixer.Sound("wrong_sound.ogg")
+good_sound = mixer.Sound("good_sound.ogg")
 
 
 # IO PI PLUS shield setup
 iobus1 = IOPi(0x20)  # bus 1 will be inputs
 iobus2 = IOPi(0x21)  # bus 2 will be outputs
-
 # inputs op bus 1
 iobus1.set_port_direction(0, 0xFF)
 iobus1.set_port_pullups(0, 0xFF)
+iobus1.set_port_direction(1, 0xFF)
+iobus1.set_port_pullups(1, 0xFF)
 
 # Outputs op bus 2
 iobus2.set_port_direction(0, 0x00)
 iobus2.write_port(0, 0x00)
+iobus2.set_port_direction(1, 0x00)
+iobus2.write_port(1, 0x00)
 
 
 def flash(l, n):
@@ -85,25 +88,25 @@ def correct_input(value):
             ledchoise = 0
             print("led1")
 
-            pygame.mixer.Sound.play(bleep1)
+            mixer.Sound.play(bleep1)
             break
 
         elif buttonstate4 == 0:
             ledchoise = 1
             print("led2")
-            pygame.mixer.Sound.play(bleep2)
+            mixer.Sound.play(bleep2)
             break
 
         elif buttonstate6 == 0:
             ledchoise = 2
             print("led3")
-            pygame.mixer.Sound.play(bleep3)
+            mixer.Sound.play(bleep3)
             break
 
         elif buttonstate8 == 0:
             ledchoise = 3
             print("led4")
-            pygame.mixer.Sound.play(bleep4)
+            mixer.Sound.play(bleep4)
             break
 
     if ledchoise == value:
@@ -154,7 +157,7 @@ def main():
                 for i in range(0, len(sequence)):
                     print (sequence[i])
                     bleep = chose_sound(sequence[i])
-                    pygame.mixer.Sound.play(bleep)
+                    mixer.Sound.play(bleep)
                     flash(sequence[i], 0.4)
                     time.sleep(pattern_speed)
                 # Letting the player repeat the sequence
@@ -167,7 +170,7 @@ def main():
                         flash(sequence[i], 0.1)
                     else:
                         # LOST
-                        pygame.mixer.Sound.play(wrong_sound)
+                        mixer.Sound.play(wrong_sound)
                         print("Simon Says Wrong")
                         flash_all(3)
                         break
@@ -176,7 +179,7 @@ def main():
                     if count == levels:
                         # WON
                         game_won.value = 1
-                        pygame.mixer.Sound.play(good_sound)
+                        mixer.Sound.play(good_sound)
                         for i in [2, 4, 6, 8]:
                             iobus2.write_pin(i, 1)
                         time.sleep(3)  # TIJDELIJK, mag uiteindelijk weg, maar is nu zodat de lampjes niet aan blijven staan
