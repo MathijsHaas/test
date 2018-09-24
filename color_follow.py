@@ -16,7 +16,7 @@ except ImportError:
 import time
 import random
 from pygame import mixer
-import buttonlayout
+import layout
 import multiprocessing
 
 button1 = buttonlayout.color_follow_button1
@@ -56,7 +56,10 @@ iobus2.set_port_direction(1, 0x00)
 iobus2.write_port(1, 0x00)
 
 # PARAMETERS
-led_pins = [led1, led2, led3, led4]  # van bus 2
+led_pins = [layout.color_follow_led1_value.value,
+            layout.color_follow_led2_value.value,
+            layout.color_follow_led3_value.value,
+            layout.color_follow_led4_value.value]
 press_time = 2  # seconds
 levels = 6
 
@@ -67,10 +70,10 @@ def flash_all(n):
     """flash all leds for n times"""
     for i in range(0, n):
         for i in led_pins:  # de pins op het IO PI PLUS bord waar de ledjes op zijn aangesloten
-            iobus2.write_pin(i, 1)
+            i = 1
         time.sleep(0.3)
         for i in led_pins:
-            iobus2.write_pin(i, 0)
+            i = 0
         time.sleep(0.3)
     return
 
@@ -79,30 +82,26 @@ def correct_input(value):
     """check if the input is correct within the time"""
     deadline = time.time() + press_time
     while time.time() < deadline:
-        buttonstate1 = iobus1.read_pin(button1)
-        buttonstate2 = iobus1.read_pin(button2)
-        buttonstate3 = iobus1.read_pin(button3)
-        buttonstate4 = iobus1.read_pin(button4)
 
-        if buttonstate1 == 0:
+        if layout.color_follow_button1_value.value == 0:
             ledchoise = led1
             print("led1")
             mixer.Sound.play(bleep1)
             break
 
-        elif buttonstate2 == 0:
+        elif layout.color_follow_button2_value.value == 0:
             ledchoise = led2
             print("led2")
             mixer.Sound.play(bleep2)
             break
 
-        elif buttonstate3 == 0:
+        elif layout.color_follow_button3_value.value == 0:
             ledchoise = led3
             print("led3")
             mixer.Sound.play(bleep3)
             break
 
-        elif buttonstate4 == 0:
+        elif layout.color_follow_button4_value.value == 0:
             ledchoise = led4
             print("led4")
             mixer.Sound.play(bleep4)
@@ -146,4 +145,7 @@ def main():
 
 
 if __name__ == "__main__":
+    layout_process = multiprocessing.Process(target=layout.main)
+    layout_process.start()
     main()
+    layout_process.terminate()

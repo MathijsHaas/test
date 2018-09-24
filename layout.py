@@ -188,6 +188,9 @@ sinusknob3_value = multiprocessing.Value('i', 0)
 def main():
     ''' the loop that controls the input's and output's from the shields'''
     while True:
+
+        #------------------'''DIGITAL INPUTS ON BUS 1 '''--------------------------
+
     top_button1_value.value = iobus1.read_pin(top_button1)
     top_button2_value.value = iobus1.read_pin(top_button2)
     top_button3_value.value = iobus1.read_pin(top_button3)
@@ -210,9 +213,9 @@ def main():
     # the input that reads if the the big turning knobs are in the right orientation.
     spy_knobs_value.value = iobus1.read_pin()
 
-    '''DIGITAL OUTPUTS ON BUS 2 '''
+    #------------------'''DIGITAL OUTPUTS ON BUS 2 '''------------------
 
-    # top leds
+    # ------------------ top leds ------------------------------------
     if top_led1_value.value == 1:
         iobus2.write_pin(top_led1, 1)
     else:
@@ -243,7 +246,7 @@ def main():
     else:
         iobus2.write_pin(top_led6, 1)
 
-    # simon says game leds !NIET AAPASSEN! deze worden in de code gebruikt
+    # ------------------ simon says game leds -----------------------------------------
     if ss_led1_value.value == 1:
         iobus2.write_pin(ss_led1, 1)
     else:
@@ -264,7 +267,7 @@ def main():
     else:
         iobus2.write_pin(ss_led4, 0)
 
-    # color follow game leds
+    # ------------------ color follow game leds ------------------------------------
     if color_follow_led1_value.value == 1:
         iobus2.write_pin(color_follow_button1, 1)
     else:
@@ -291,7 +294,7 @@ def main():
     else:
         iobus2.write_pin(relais, 0)
 
-    '''ANALOG INPUTS ADC 1 (second shield)'''
+    #------------------ ANALOG INPUTS ADC 1 (second shield)------------------
 
     # plugs game
     plugs1_value.value = adc1.read_voltage(plugs1)
@@ -302,7 +305,8 @@ def main():
     RGBslide2_value.value = adc1.read_voltage(RGBslide2)
     RGBslide3_value.value = adc1.read_voltage(RGBslide3)
 
-    '''ANALOG INPUTS ADC 2 (third (and top) shield)'''
+    #-------------ANALOG INPUTS ADC 2 (third (and top) shield)---------------
+
     sinusknob1_value.value = adc2.read_voltage(sinusknob1)
     sinusknob2_value.value = adc2.read_voltage(sinusknob2)
     sinusknob3_value.value = adc2.read_voltage(sinusknob3)
