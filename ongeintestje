@@ -1,0 +1,1 @@
+print ("dingen".ljust(9),"dingen".ljust(9))

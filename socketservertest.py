@@ -4,7 +4,7 @@ import time
 
 def main():
     host = '127.0.0.1'
-    port = 5006
+    port = 5013
 
     s = socket.socket()
     s.bind((host, port))

@@ -50,10 +50,14 @@ iobus2 = IOPi(0x21)  # bus 2 will be outputs
 # inputs op bus 1
 iobus1.set_port_direction(0, 0xFF)
 iobus1.set_port_pullups(0, 0xFF)
+iobus1.set_port_direction(1, 0xFF)
+iobus1.set_port_pullups(1, 0xFF)
 
 # Outputs op bus 2
 iobus2.set_port_direction(0, 0x00)
 iobus2.write_port(0, 0x00)
+iobus2.set_port_direction(1, 0x00)
+iobus2.write_port(1, 0x00)
 
 t = 0
 
