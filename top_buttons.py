@@ -1,20 +1,6 @@
-from __future__ import absolute_import, division, print_function, \
-    unicode_literals
-try:
-    from IOPi import IOPi
-except ImportError:
-    print("Failed to import IOPi from python system path")
-    print("Importing from parent folder instead")
-    try:
-        import sys
-        sys.path.append("..")
-        from IOPi import IOPi
-    except ImportError:
-        raise ImportError(
-            "Failed to import library from parent folder")
-
+# The six buttons on the top of the box
 import multiprocessing
-import buttonlayout
+import layout
 import datetime
 import time
 from pygame import mixer
@@ -35,48 +21,16 @@ sinus_half_status = multiprocessing.Value('i', 0)
 presstime = 50000  # microseconds to press. 1.000.000 microseconds per second
 buttons_to_win = 3
 
-# check in de layout welke knop of led bij welke pin hoort.
-button1 = buttonlayout.top_button1
-button2 = buttonlayout.top_button2
-button3 = buttonlayout.top_button3
-button4 = buttonlayout.top_button4
-button5 = buttonlayout.top_button5
-button6 = buttonlayout.top_button6
-
-top_led1 = buttonlayout.top_led1
-top_led2 = buttonlayout.top_led2
-top_led3 = buttonlayout.top_led3
-top_led4 = buttonlayout.top_led4
-top_led5 = buttonlayout.top_led5
-top_led6 = buttonlayout.top_led6
-
-# IO PI PLUS shield setup
-
-iobus1 = IOPi(0x20)  # bus 1 will be inputs
-iobus2 = IOPi(0x21)  # bus 2 will be outputs
-
-# inputs op bus 1
-iobus1.set_port_direction(0, 0xFF)
-iobus1.set_port_pullups(0, 0xFF)
-iobus1.set_port_direction(1, 0xFF)
-iobus1.set_port_pullups(1, 0xFF)
-
-# Outputs op bus 2
-iobus2.set_port_direction(0, 0x00)
-iobus2.write_port(0, 0x00)
-iobus2.set_port_direction(1, 0x00)
-iobus2.write_port(1, 0x00)
-
 
 def pushtogheter():
     ''' put all the lights on and wait until all buttons are pressed. then start the game. (only 5 buttons are needed to start) '''
     # put all six lights on
-    iobus2.write_pin(top_led1, 1)
-    iobus2.write_pin(top_led2, 1)
-    iobus2.write_pin(top_led3, 1)
-    iobus2.write_pin(top_led4, 1)
-    iobus2.write_pin(top_led5, 1)
-    iobus2.write_pin(top_led6, 1)
+    layout.top_led1_value.value = 1
+    layout.top_led2_value.value = 1
+    layout.top_led3_value.value = 1
+    layout.top_led4_value.value = 1
+    layout.top_led5_value.value = 1
+    layout.top_led6_value.value = 1
 
     pt = datetime.timedelta(microseconds=presstime)
     bs = [0, 0, 0, 0, 0, 0]
@@ -84,12 +38,12 @@ def pushtogheter():
     count = [0, 0, 0, 0, 0, 0]  # keeps track of when the buttons are pressed
 
     while sum(buttonpressed) < buttons_to_win:
-        bs[0] = iobus1.read_pin(button1)
-        bs[1] = iobus1.read_pin(button2)
-        bs[2] = iobus1.read_pin(button3)
-        bs[3] = iobus1.read_pin(button4)
-        bs[4] = iobus1.read_pin(button5)
-        bs[5] = iobus1.read_pin(button6)
+        bs[0] = top_button1_value.value
+        bs[1] = top_button2_value.value
+        bs[2] = top_button3_value.value
+        bs[3] = top_button4_value.value
+        bs[4] = top_button5_value.value
+        bs[5] = top_button6_value.value
         for i in range(6):
             if bs[i] == 0 and count[i] == 0:
                 print ("start time", i)
@@ -106,12 +60,13 @@ def pushtogheter():
                 buttonpressed[i] = 0
 
     # put out the leds after you press the correc number togheter
-    iobus2.write_pin(top_led1, 0)
-    iobus2.write_pin(top_led2, 0)
-    iobus2.write_pin(top_led3, 0)
-    iobus2.write_pin(top_led4, 0)
-    iobus2.write_pin(top_led5, 0)
-    iobus2.write_pin(top_led6, 0)
+    layout.top_led1_value.value = 0
+    layout.top_led2_value.value = 0
+    layout.top_led3_value.value = 0
+    layout.top_led4_value.value = 0
+    layout.top_led5_value.value = 0
+    layout.top_led6_value.value = 0
+
     top_status.value += 1  # 0 to 1 to start game. 1 to 2 to end the game
 
 
@@ -126,35 +81,37 @@ def main():
 
         if RGB_half_status.value == 1:
             # helft 1 animatie
-            iobus2.write_pin(top_led1, 1)
             mixer.Sound.play(deep_button_sound)
+            layout.top_led1_value.value = 1
             time.sleep(1)
-            iobus2.write_pin(top_led2, 1)
             mixer.Sound.play(deep_button_sound)
+            layout.top_led2_value.value = 1
             time.sleep(1)
-            iobus2.write_pin(top_led3, 1)
             mixer.Sound.play(deep_button_sound)
+            layout.top_led3_value.value = 1
             RGB_half_status.value = 2
 
         if sinus_half_status.value == 1:
             # helft 2 animatie
-            iobus2.write_pin(top_led4, 1)
             mixer.Sound.play(deep_button_sound)
+            layout.top_led4_value.value = 1
             time.sleep(1)
-            iobus2.write_pin(top_led5, 1)
             mixer.Sound.play(deep_button_sound)
+            layout.top_led5_value.value = 1
             time.sleep(1)
-            iobus2.write_pin(top_led6, 1)
             mixer.Sound.play(deep_button_sound)
+            layout.top_led6_value.value = 1
             sinus_half_status.value = 2
 
         if RGB_half_status.value == 2 and Sinus_half_status.value == 2:
-        # meaning both sides are completed.
-        # The
+            # meaning both sides are completed.
+            # The
             pushtogheter()
             # win animation?
 
 
-
 if __name__ == "__main__":
+    layout_process = multiprocessing.Process(target=layout.main)
+    layout_process.start()
     main()
+    layout_process.terminate()
