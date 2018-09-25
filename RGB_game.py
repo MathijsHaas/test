@@ -1,24 +1,10 @@
 
-from __future__ import absolute_import, division, print_function, \
-    unicode_literals
-try:
-    from ADCPi import ADCPi
-except ImportError:
-    print("Failed to import ADCPi from python system path")
-    print("Importing from parent folder instead")
-    try:
-        import sys
-        sys.path.append('..')
-        from ADCPi import ADCPi
-    except ImportError:
-        raise ImportError(
-            "Failed to import library from parent folder")
 import time
 import random
 from pygame import mixer
 import opc
 import multiprocessing
-import buttonlayout
+import layout
 import ledcontrol
 
 
@@ -26,11 +12,6 @@ mixer.init()
 good_sound = mixer.Sound("good_sound.ogg")
 wrong_sound = mixer.Sound("wrong_sound.ogg")
 
-
-# pins on ADC Pi Plus board
-RGBslide1 = buttonlayout.RGBslide1
-RGBslide2 = buttonlayout.RGBslide2
-RGBslide3 = buttonlayout.RGBslide3
 
 # PARAMETERS
 marge = 30  # how far can they be off from the correct valeu
@@ -40,12 +21,8 @@ totaal_levels = 3
 time_per_level = 300  # sec
 
 
-
-
 game_won = multiprocessing.Value('i', 0)
 
-
-adc = ADCPi(0x6C, 0x6D, 12)
 
 # the colors that need to be machted in RGB valeus from 0 - 5V
 example = (
@@ -63,7 +40,7 @@ def control_ledstrip(r, g, b):
     ledcontrol.r_play_value.value = r
     ledcontrol.g_play_value.value = g
     ledcontrol.b_play_value.value = b
-    
+
 
 def blinkleds(r, g, b, n):
     """blinking all leds n times with rgb valeus"""
@@ -122,9 +99,9 @@ def main():
         while level < totaal_levels:
             print ("level {}".format(level))
             while time.time() < deadline:
-                red = int(adc.read_voltage(RGBslide1) * 51) 
-                green = int(adc.read_voltage(RGBslide2) * 51)
-                blue = int(adc.read_voltage(RGBslide3) * 51)
+                red = int(layout.RGBslide1_value.value * 51)
+                green = int(layout.RGBslide2_value.value * 51)
+                blue = int(layout.RGBslide3_value.value * 51)
                 control_ledstrip(red, green, blue)
                 print("RGB Red: {}, Green: {}, Blue: {}".format(red, green, blue))
                 if check_color_values(red, green, blue, level):  # got the right slide setting?
@@ -146,6 +123,3 @@ if __name__ == "__main__":
     ledcontrol_process.start()
     main()
     ledcontrol_process.terminate()
-
-
-

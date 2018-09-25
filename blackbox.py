@@ -1,24 +1,4 @@
 # Main control
-from __future__ import absolute_import, division, print_function, \
-    unicode_literals
-try:
-    from IOPi import IOPi
-except ImportError:
-    print("Failed to import IOPi from python system path")
-    print("Importing from parent folder instead")
-    try:
-        import sys
-        sys.path.append("..")
-        from IOPi import IOPi
-    except ImportError:
-        raise ImportError(
-            "Failed to import library from parent folder")
-import buttonlayout  # what button is connected to what pin
-import ledcontrol  # where the led strips are controled and combined to send to the fadecandy
-import multiprocessing  # to spawn each game as a separate process
-from pygame import mixer  # for sound
-import datetime  # to keep track of the deadline
-from Adafruit_LED_Backpack import SevenSegment  # for clock display
 
 # importing the differtent seperate games
 import simon_says
@@ -26,6 +6,7 @@ import plugs_game
 import top_buttons
 import color_follow
 import RGB_game
+import layout
 
 # IO PI PLUS shield setup
 iobus1 = IOPi(0x20)  # bus 1 will be inputs
@@ -72,9 +53,6 @@ startTime = None
 deadline = None
 minutesToPlay = 60
 deltaMinutes = datetime.timedelta(minutes=minutesToPlay)
-
-spy_knobs = buttonlayout.spy_knobs
-relais = buttonlayout.relais
 
 
 def showTime():
@@ -125,7 +103,7 @@ def boxStart():
     startTime = datetime.datetime.now()
     global deadline  # set the deadline for when the game must be finished
     deadline = datetime.datetime.now() + deltaMinutes
-    iobus2.write_pin(relais, 1)  # put on back- and bottomlight
+    layout.relais_value.value = 1  # put on back- and bottomlight
 
 
 def main():
@@ -169,14 +147,11 @@ def main():
         if simon_says.game_won.value == 1:
             top_buttons.RGB_half_status.value = 1
 
-        # start the big turning knobs at the same time as the plug game.
-        if top_buttons.top_status.value == 1 and iobus1.read_pin(spy_knobs) == 0 and spy_knobs_started == False:
-            spy_knobs_process = multiprocessing.Process(target=spy_knobs.main)
-            spy_knobs_process.start()
-            spy_knobs_started = True
 
         # start the sinus game
-        if spy_knobs.game_won.value == 1 and sinus_game_started == False:
+        if layout.spy_knobs_value.value == 0 and sinus_game_started == False:
+            print ('spy knobs correctly oriëntated') #spyknobs becomes 0 when connected correctly
+            mixer.Sound.play(good_sound)
             sinus_game_process = multiprocessing.Process(target=sinus_game.main)
             sinus_game_process.start()
             sinus_game_started = True
