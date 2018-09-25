@@ -1,5 +1,5 @@
-
 import time
+import datetime
 import random
 from pygame import mixer
 import layout
@@ -17,7 +17,7 @@ good_sound = mixer.Sound("good_sound.ogg")
 
 # -------------- PARAMETERS --------------------------------
 led_pins = ["led1", "led2", "led3", "led4"]
-press_time = 2  # seconds
+press_time = datetime.timedelta(seconds=1)  # seconds
 levels = 6
 
 game_won = multiprocessing.Value('i', 0)
@@ -42,23 +42,25 @@ def flash_all(n):
 
 def correct_input(value):
     """check if the input is correct within the time"""
-    deadline = time.time() + press_time
-    while time.time() < deadline:
-
+    deadline = datetime.datetime.now() + press_time
+    print("checking input")
+    ledchoice = None 
+    
+    while datetime.datetime.now() < deadline:
         if layout.color_follow_button1_value.value == 0:
-            ledchoise = "led1"
+            ledchoice = "led1"
             print("led1")
             mixer.Sound.play(bleep1)
             break
 
         elif layout.color_follow_button2_value.value == 0:
-            ledchoise = "led2"
+            ledchoice = "led2"
             print("led2")
             mixer.Sound.play(bleep2)
             break
 
         elif layout.color_follow_button3_value.value == 0:
-            ledchoise = "led3"
+            ledchoice = "led3"
             print("led3")
             mixer.Sound.play(bleep3)
             break
@@ -69,7 +71,7 @@ def correct_input(value):
             mixer.Sound.play(bleep4)
             break
 
-    if ledchoise == value:
+    if ledchoice == value:
         return True
     else:
         return False
@@ -122,7 +124,6 @@ def main():
             mixer.Sound.play(wrong_sound)
             flash_all(3)
             print("verloren")
-        break
 
         # zet lampje aan
         # tijd geven om goeie knopje in te drukken
@@ -131,7 +132,12 @@ def main():
 
 
 if __name__ == "__main__":
+    
     layout_process = multiprocessing.Process(target=layout.main)
+    layout.color_follow_led1_value.value = 0
+    layout.color_follow_led2_value.value = 0
+    layout.color_follow_led3_value.value = 0
+    layout.color_follow_led4_value.value = 0
     layout_process.start()
     main()
     layout_process.terminate()
