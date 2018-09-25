@@ -2,9 +2,9 @@
 
 import multiprocessing
 import opc
-import RGB_game
 import datetime
 import time
+import blackbox
 
 r_example_value = multiprocessing.Value('i', 0)
 g_example_value = multiprocessing.Value('i', 0)
@@ -35,43 +35,44 @@ def timerstrip_running(strip):
         pass
     while blackbox.game_status.value == 1:  # timer strip running
         if datetime.datetime.now() > newledout:
-            strip[timer_leds - shutdown_led] = (0,0,0)
+            strip[timer_leds - shutdown_led] = (0, 0, 0)
             shutdown_led += 1
             newledout = datetime.datetime.now() + datetime. timedelta(seconds=44.5)
     while blackbox.game_status.value == 2:  # game won: timer strip flashing green
         colorflash(strip, 230, 0, 0)
-    while blackbox.game_status.value == 3:  #game won: timer strip flashing red
+    while blackbox.game_status.value == 3:  # game won: timer strip flashing red
         colorflash(strip, 0, 230, 0)
 
 
-def timertest(strip): #mag weg
+def timertest(strip):  # mag weg
     global newledout
     global shutdown_led
-    while True: # timer strip running
+    while True:  # timer strip running
         if datetime.datetime.now() > newledout:
-            strip[timer_leds - shutdown_led] = (0,0,0)
+            strip[timer_leds - shutdown_led] = (0, 0, 0)
             shutdown_led += 1
             newledout = datetime.datetime.now() + datetime.timedelta(seconds=0.5)
             client.put_pixels(strip)
-        
+
+
 def colorflash(strip, r, g, b):
-        for i in range(timer_leds):
-            strip[i] = (r,g,b)
-        client.put_pixels(strip)
-        time.sleep(0.4) 
-        for i in range(timer_leds):
-            strip[i] = (0,0,0)
-        client.put_pixels(strip)
-        time.sleep(0.2)
-    
+    for i in range(timer_leds):
+        strip[i] = (r, g, b)
+    client.put_pixels(strip)
+    time.sleep(0.4)
+    for i in range(timer_leds):
+        strip[i] = (0, 0, 0)
+    client.put_pixels(strip)
+    time.sleep(0.2)
+
 
 def timerstrip_setup(strip):
     ''' timerstrip setup that runs the timerstrip from green to red'''
-    for i in range(timer_leds): # timerstrip setup
-        r = 255-(255/timer_leds*i)
-        g = 255/timer_leds*i 
+    for i in range(timer_leds):  # timerstrip setup
+        r = 255 - (255 / timer_leds * i)
+        g = 255 / timer_leds * i
         b = 0
-        strip[i] = (r,g,b)
+        strip[i] = (r, g, b)
 
 
 def list_setup(strip):
@@ -88,8 +89,8 @@ def RGB_color_control(strip):
         strip[startled + example_leds + i] = (r_play_value.value, g_play_value.value, b_play_value.value)
     # print("led control: Red: {}, Green: {}, Blue: {}".format(r_play_value.value, g_play_value.value, b_play_value.value))
     client.put_pixels(strip)
-        
-        
+
+
 def set_example_color(strip, r, g, b):
     ''' control the leds from the fadecandy pin 3 (led 128 - 192) '''
     print(r, g, b)
@@ -102,6 +103,7 @@ def set_play_color(strip, r, g, b):
     for i in range(play_leds):
         strip[startled + example_leds + i] = (r, g, b)
 
+
 def main():
     print("ledcontrol started")
     list_setup(strip)
@@ -110,10 +112,7 @@ def main():
         RGB_color_control(strip)
     # Process that does the timerstrip countdown
     # process that controls the two ledstrips
-    
+
 
 if __name__ == "__main__":
     main()
-
-import RGB_game
-# import blackbox

@@ -16,13 +16,13 @@ good_sound = mixer.Sound("good_sound.ogg")
 
 
 # -------------- PARAMETERS --------------------------------
-led_pins = [led1, led2, led3, led4]
+led_pins = ["led1", "led2", "led3", "led4"]
 press_time = 2  # seconds
 levels = 6
 
 game_won = multiprocessing.Value('i', 0)
 
-#-------------- FUNCTIONS FOR IN THE GAME ---------------------
+# -------------- FUNCTIONS FOR IN THE GAME ---------------------
 
 
 def flash_all(n):
@@ -46,25 +46,25 @@ def correct_input(value):
     while time.time() < deadline:
 
         if layout.color_follow_button1_value.value == 0:
-            ledchoise = led1
+            ledchoise = "led1"
             print("led1")
             mixer.Sound.play(bleep1)
             break
 
         elif layout.color_follow_button2_value.value == 0:
-            ledchoise = led2
+            ledchoise = "led2"
             print("led2")
             mixer.Sound.play(bleep2)
             break
 
         elif layout.color_follow_button3_value.value == 0:
-            ledchoise = led3
+            ledchoise = "led3"
             print("led3")
             mixer.Sound.play(bleep3)
             break
 
         elif layout.color_follow_button4_value.value == 0:
-            ledchoise = led4
+            ledchoise = "led4"
             print("led4")
             mixer.Sound.play(bleep4)
             break
@@ -76,24 +76,24 @@ def correct_input(value):
 
 
 def put_led_on(led):
-    if led == led1:
+    if led == "led1":
         layout.color_follow_led1_value.value = 1
-    elif led == led2:
+    elif led == "led2":
         layout.color_follow_led2_value.value = 1
-    elif led == led3:
+    elif led == "led3":
         layout.color_follow_led3_value.value = 1
-    elif led == led4:
+    elif led == "led4":
         layout.color_follow_led4_value.value = 1
 
 
 def put_led_off(led):
-    if led == led1:
+    if led == "led1":
         layout.color_follow_led1_value.value = 0
-    elif led == led2:
+    elif led == "led2":
         layout.color_follow_led2_value.value = 0
-    elif led == led3:
+    elif led == "led3":
         layout.color_follow_led3_value.value = 0
-    elif led == led4:
+    elif led == "led4":
         layout.color_follow_led4_value.value = 0
 
 # ---------------- THE GAME -----------------------------------
@@ -109,13 +109,12 @@ def main():
         put_led_on(new_led)
         status = correct_input(new_led)
         put_led_off(new_led)
-        iobus2.write_pin(new_led, 0)
-        if status == True:
+        if status is True:
             count += 1
             if count == levels:
                 time.sleep(1)
                 mixer.Sound.play(good_sound)
-                game_won = True
+                game_won.value = 1
                 print ("gewonnen")
                 break
             continue

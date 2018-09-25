@@ -1,8 +1,6 @@
 
 import time
-import random
 from pygame import mixer
-import opc
 import multiprocessing
 import layout
 import ledcontrol
@@ -32,7 +30,7 @@ example = (
     (52, 80, 17))
 
 
-#-------------- FUNCTIONS FOR IN THE GAME -----------------------------------------
+# -------------- FUNCTIONS FOR IN THE GAME -----------------------------------------
 
 def control_ledstrip(r, g, b):
     """change the color of the ledstrip the player can control"""
@@ -96,7 +94,7 @@ def check_color_values(red, green, blue, level):
     return redtrue and greentrue and bluetrue  # returns only true if all three are true
 
 
-#---------------------- THE GAME ----------------------------------------------------------
+# ---------------------- THE GAME ----------------------------------------------------------
 
 def main():
     while game_won.value == 0:
@@ -108,7 +106,7 @@ def main():
                 green = int(layout.RGBslide2_value.value * 51)
                 blue = int(layout.RGBslide3_value.value * 51)
                 control_ledstrip(layout.RGBslide1_value.value, layout.RGBslide2_value.value, layout.RGBslide3_value.value)
-                #print("RGB Red: {}, Green: {}, Blue: {}".format(layout.RGBslide1_value.value, layout.RGBslide2_value.value, layout.RGBslide3_value.value))
+                # print("RGB Red: {}, Green: {}, Blue: {}".format(layout.RGBslide1_value.value, layout.RGBslide2_value.value, layout.RGBslide3_value.value))
                 # time.sleep(0.2)
                 if check_color_values(red, green, blue, level):  # got the right slide setting?
                     # timer to make sure its equal

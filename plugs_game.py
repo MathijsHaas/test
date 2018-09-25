@@ -6,7 +6,7 @@ mixer.init()
 good_sound = mixer.Sound("good_sound.ogg")
 
 
-#--------------------- PARAMETERS -----------------------------------
+# --------------------- PARAMETERS -----------------------------------
 
 wait_time = 20  # amount of times it needs to be correct when checked.
 margin = 50  # the accepted error
@@ -16,7 +16,9 @@ v3 = 350
 
 game_won = multiprocessing.Value('i', 0)
 
-#---------------------- THE GAME ------------------------------------
+# ---------------------- THE GAME ------------------------------------
+
+
 def main():
     counter = 0  # so you dont accidentally come past the right voltage
     while True:

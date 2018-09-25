@@ -40,12 +40,12 @@ def pushtogheter():
     count = [0, 0, 0, 0, 0, 0]  # keeps track of when the buttons are pressed
 
     while sum(buttonpressed) < buttons_to_win:
-        bs[0] = top_button1_value.value
-        bs[1] = top_button2_value.value
-        bs[2] = top_button3_value.value
-        bs[3] = top_button4_value.value
-        bs[4] = top_button5_value.value
-        bs[5] = top_button6_value.value
+        bs[0] = layout.top_button1_value.value
+        bs[1] = layout.top_button2_value.value
+        bs[2] = layout.top_button3_value.value
+        bs[3] = layout.top_button4_value.value
+        bs[4] = layout.top_button5_value.value
+        bs[5] = layout.top_button6_value.value
         for i in range(6):
             if bs[i] == 0 and count[i] == 0:
                 print ("start time", i)
@@ -71,7 +71,7 @@ def pushtogheter():
 
     top_status.value += 1  # 0 to 1 to start game. 1 to 2 to end the game
 
-#---------------------- THE GAME ---------------------------------------------------
+# ---------------------- THE GAME ---------------------------------------------------
 
 
 def main():
@@ -107,7 +107,7 @@ def main():
             layout.top_led6_value.value = 1
             sinus_half_status.value = 2
 
-        if RGB_half_status.value == 2 and Sinus_half_status.value == 2:
+        if RGB_half_status.value == 2 and sinus_half_status.value == 2:
             # meaning both sides are completed.
             # The
             pushtogheter()

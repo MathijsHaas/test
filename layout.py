@@ -1,7 +1,6 @@
 
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
-import opc
 try:
     from ADCPi import ADCPi
 except ImportError:
@@ -192,7 +191,7 @@ def main():
     print ("reading and writing the pins")
     while True:
 
-        #------------------'''DIGITAL INPUTS ON BUS 1 '''--------------------------
+        # ------------------'''DIGITAL INPUTS ON BUS 1 '''--------------------------
 
         top_button1_value.value = iobus1.read_pin(top_button1)
         top_button2_value.value = iobus1.read_pin(top_button2)
@@ -216,7 +215,7 @@ def main():
         # the input that reads if the the big turning knobs are in the right orientation.
         spy_knobs_value.value = iobus1.read_pin(spy_knobs)
 
-#------------------'''DIGITAL OUTPUTS ON BUS 2 '''------------------
+# ------------------'''DIGITAL OUTPUTS ON BUS 2 '''------------------
 
         # ------------------ top leds ------------------------------------
         if top_led1_value.value == 1:
@@ -297,7 +296,7 @@ def main():
         else:
             iobus2.write_pin(relais, 0)
 
-#------------------ ANALOG INPUTS ADC 1 (second shield)------------------
+# ------------------ ANALOG INPUTS ADC 1 (second shield)------------------
 
         # plugs game
         plugs1_value.value = int(adc1.read_voltage(plugs1) * 1000)
@@ -308,7 +307,7 @@ def main():
         RGBslide2_value.value = int(adc1.read_voltage(RGBslide2) * 50)
         RGBslide3_value.value = int(adc1.read_voltage(RGBslide3) * 50)
 
-#-------------ANALOG INPUTS ADC 2 (third (and top) shield)---------------
+# -------------ANALOG INPUTS ADC 2 (third (and top) shield)---------------
 
         sinusknob1_value.value = int(adc2.read_voltage(sinusknob1) * 100)
         sinusknob2_value.value = int(adc2.read_voltage(sinusknob2) * 100)
