@@ -86,7 +86,7 @@ def RGB_color_control(strip):
         strip[startled + i] = (r_example_value.value, g_example_value.value, b_example_value.value)
     for i in range(play_leds):
         strip[startled + example_leds + i] = (r_play_value.value, g_play_value.value, b_play_value.value)
-    print("led control: Red: {}, Green: {}, Blue: {}".format(r_play_value.value, g_play_value.value, b_play_value.value))
+    # print("led control: Red: {}, Green: {}, Blue: {}".format(r_play_value.value, g_play_value.value, b_play_value.value))
     client.put_pixels(strip)
         
         

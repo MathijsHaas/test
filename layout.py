@@ -27,6 +27,8 @@ except ImportError:
         raise ImportError(
             "Failed to import library from parent folder")
 
+import multiprocessing
+
 #  analog shield adress
 adc1 = ADCPi(0x6C, 0x6D, 12)
 adc2 = ADCPi(0x6A, 0x6B, 12)
@@ -187,126 +189,130 @@ sinusknob3_value = multiprocessing.Value('i', 0)
 
 def main():
     ''' the loop that controls the input's and output's from the shields'''
+    print ("reading and writing the pins")
     while True:
 
         #------------------'''DIGITAL INPUTS ON BUS 1 '''--------------------------
 
-    top_button1_value.value = iobus1.read_pin(top_button1)
-    top_button2_value.value = iobus1.read_pin(top_button2)
-    top_button3_value.value = iobus1.read_pin(top_button3)
-    top_button4_value.value = iobus1.read_pin(top_button4)
-    top_button5_value.value = iobus1.read_pin(top_button5)
-    top_button6_value.value = iobus1.read_pin(top_button6)
+        top_button1_value.value = iobus1.read_pin(top_button1)
+        top_button2_value.value = iobus1.read_pin(top_button2)
+        top_button3_value.value = iobus1.read_pin(top_button3)
+        top_button4_value.value = iobus1.read_pin(top_button4)
+        top_button5_value.value = iobus1.read_pin(top_button5)
+        top_button6_value.value = iobus1.read_pin(top_button6)
 
-    # simon says game buttons
-    ss_button1_value.value = iobus1.read_pin(ss_button1)
-    ss_button2_value.value = iobus1.read_pin(ss_button2)
-    ss_button3_value.value = iobus1.read_pin(ss_button3)
-    ss_button4_value.value = iobus1.read_pin(ss_button4)
+        # simon says game buttons
+        ss_button1_value.value = iobus1.read_pin(ss_button1)
+        ss_button2_value.value = iobus1.read_pin(ss_button2)
+        ss_button3_value.value = iobus1.read_pin(ss_button3)
+        ss_button4_value.value = iobus1.read_pin(ss_button4)
 
-    # Color follow buttons
-    color_follow_button1_value.value = iobus1.read_pin(color_follow_button1)
-    color_follow_button2_value.value = iobus1.read_pin(color_follow_button2)
-    color_follow_button3_value.value = iobus1.read_pin(color_follow_button3)
-    color_follow_button4_value.value = iobus1.read_pin(color_follow_button4)
+        # Color follow buttons
+        color_follow_button1_value.value = iobus1.read_pin(color_follow_button1)
+        color_follow_button2_value.value = iobus1.read_pin(color_follow_button2)
+        color_follow_button3_value.value = iobus1.read_pin(color_follow_button3)
+        color_follow_button4_value.value = iobus1.read_pin(color_follow_button4)
 
-    # the input that reads if the the big turning knobs are in the right orientation.
-    spy_knobs_value.value = iobus1.read_pin()
+        # the input that reads if the the big turning knobs are in the right orientation.
+        spy_knobs_value.value = iobus1.read_pin(spy_knobs)
 
-    #------------------'''DIGITAL OUTPUTS ON BUS 2 '''------------------
+        #------------------'''DIGITAL OUTPUTS ON BUS 2 '''------------------
 
-    # ------------------ top leds ------------------------------------
-    if top_led1_value.value == 1:
-        iobus2.write_pin(top_led1, 1)
-    else:
-        iobus2.write_pin(top_led1, 0)
+        # ------------------ top leds ------------------------------------
+        if top_led1_value.value == 1:
+            iobus2.write_pin(top_led1, 1)
+        else:
+            iobus2.write_pin(top_led1, 0)
 
-    if top_led2_value.value == 1:
-        iobus2.write_pin(top_led2, 1)
-    else:
-        iobus2.write_pin(top_led2, 1)
+        if top_led2_value.value == 1:
+            iobus2.write_pin(top_led2, 1)
+        else:
+            iobus2.write_pin(top_led2, 1)
 
-    if top_led3_value.value == 1:
-        iobus2.write_pin(top_led3, 1)
-    else:
-        iobus2.write_pin(top_led3, 1)
+        if top_led3_value.value == 1:
+            iobus2.write_pin(top_led3, 1)
+        else:
+            iobus2.write_pin(top_led3, 1)
 
-    if top_led4_value.value == 1:
-        iobus2.write_pin(top_led4, 1)
-    else:
-        iobus2.write_pin(top_led4, 1)
+        if top_led4_value.value == 1:
+            iobus2.write_pin(top_led4, 1)
+        else:
+            iobus2.write_pin(top_led4, 1)
 
-    if top_led5_value.value == 1:
-        iobus2.write_pin(top_led5, 1)
-    else:
-        iobus2.write_pin(top_led5, 1)
+        if top_led5_value.value == 1:
+            iobus2.write_pin(top_led5, 1)
+        else:
+            iobus2.write_pin(top_led5, 1)
 
-    if top_led6_value.value == 1:
-        iobus2.write_pin(top_led6, 1)
-    else:
-        iobus2.write_pin(top_led6, 1)
+        if top_led6_value.value == 1:
+            iobus2.write_pin(top_led6, 1)
+        else:
+            iobus2.write_pin(top_led6, 1)
 
-    # ------------------ simon says game leds -----------------------------------------
-    if ss_led1_value.value == 1:
-        iobus2.write_pin(ss_led1, 1)
-    else:
-        iobus2.write_pin(ss_led1, 0)
+        # ------------------ simon says game leds -----------------------------------------
+        if ss_led1_value.value == 1:
+            iobus2.write_pin(ss_led1, 1)
+        else:
+            iobus2.write_pin(ss_led1, 0)
 
-    if ss_led2_value.value == 1:
-        iobus2.write_pin(ss_led2, 1)
-    else:
-        iobus2.write_pin(ss_led2, 0)
+        if ss_led2_value.value == 1:
+            iobus2.write_pin(ss_led2, 1)
+        else:
+            iobus2.write_pin(ss_led2, 0)
 
-    if ss_led3_value.value == 1:
-        iobus2.write_pin(ss_led3, 1)
-    else:
-        iobus2.write_pin(ss_led3, 0)
+        if ss_led3_value.value == 1:
+            iobus2.write_pin(ss_led3, 1)
+        else:
+            iobus2.write_pin(ss_led3, 0)
 
-    if ss_led4_value.value == 1:
-        iobus2.write_pin(ss_led4, 1)
-    else:
-        iobus2.write_pin(ss_led4, 0)
+        if ss_led4_value.value == 1:
+            iobus2.write_pin(ss_led4, 1)
+        else:
+            iobus2.write_pin(ss_led4, 0)
 
-    # ------------------ color follow game leds ------------------------------------
-    if color_follow_led1_value.value == 1:
-        iobus2.write_pin(color_follow_button1, 1)
-    else:
-        iobus2.write_pin(color_follow_button1, 0)
+        # ------------------ color follow game leds ------------------------------------
+        if color_follow_led1_value.value == 1:
+            iobus2.write_pin(color_follow_button1, 1)
+        else:
+            iobus2.write_pin(color_follow_button1, 0)
 
-    if color_follow_led2_value.value == 1:
-        iobus2.write_pin(color_follow_button2, 1)
-    else:
-        iobus2.write_pin(color_follow_button2, 0)
+        if color_follow_led2_value.value == 1:
+            iobus2.write_pin(color_follow_button2, 1)
+        else:
+            iobus2.write_pin(color_follow_button2, 0)
 
-    if color_follow_led3_value.value == 1:
-        iobus2.write_pin(color_follow_button3, 1)
-    else:
-        iobus2.write_pin(color_follow_button3, 0)
+        if color_follow_led3_value.value == 1:
+            iobus2.write_pin(color_follow_button3, 1)
+        else:
+            iobus2.write_pin(color_follow_button3, 0)
 
-    if color_follow_led4_value.value == 1:
-        iobus2.write_pin(color_follow_button4, 1)
-    else:
-        iobus2.write_pin(color_follow_button4, 0)
+        if color_follow_led4_value.value == 1:
+            iobus2.write_pin(color_follow_button4, 1)
+        else:
+            iobus2.write_pin(color_follow_button4, 0)
 
-    # Relais that switches the back & bottom light on
-    if relais_value.value == 1:
-        iobus2.write_pin(relais, 1)
-    else:
-        iobus2.write_pin(relais, 0)
+        # Relais that switches the back & bottom light on
+        if relais_value.value == 1:
+            iobus2.write_pin(relais, 1)
+        else:
+            iobus2.write_pin(relais, 0)
 
-    #------------------ ANALOG INPUTS ADC 1 (second shield)------------------
+        #------------------ ANALOG INPUTS ADC 1 (second shield)------------------
 
-    # plugs game
-    plugs1_value.value = adc1.read_voltage(plugs1)
-    plugs2_value.value = adc1.read_voltage(plugs2)
-    plugs3_value.value = adc1.read_voltage(plugs3)
+        # plugs game
+        plugs1_value.value = int(adc1.read_voltage(plugs1) * 1000)
+        plugs2_value.value = int(adc1.read_voltage(plugs2) * 1000)
+        plugs3_value.value = int(adc1.read_voltage(plugs3) * 1000)
 
-    RGBslide1_value.value = adc1.read_voltage(RGBslide1)
-    RGBslide2_value.value = adc1.read_voltage(RGBslide2)
-    RGBslide3_value.value = adc1.read_voltage(RGBslide3)
+        RGBslide1_value.value = int(adc1.read_voltage(RGBslide1) * 50) # to become a 0-255 value for the RGB led strips
+        RGBslide2_value.value = int(adc1.read_voltage(RGBslide2) * 50)
+        RGBslide3_value.value = int(adc1.read_voltage(RGBslide3) * 50)
 
-    #-------------ANALOG INPUTS ADC 2 (third (and top) shield)---------------
+        #-------------ANALOG INPUTS ADC 2 (third (and top) shield)---------------
 
-    sinusknob1_value.value = adc2.read_voltage(sinusknob1)
-    sinusknob2_value.value = adc2.read_voltage(sinusknob2)
-    sinusknob3_value.value = adc2.read_voltage(sinusknob3)
+        sinusknob1_value.value = int(adc2.read_voltage(sinusknob1) * 1000)
+        sinusknob2_value.value = int(adc2.read_voltage(sinusknob2) * 1000)
+        sinusknob3_value.value = int(adc2.read_voltage(sinusknob3) * 1000)
+
+if __name__ == "__main__":
+    main()

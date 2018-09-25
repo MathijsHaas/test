@@ -15,7 +15,7 @@ wrong_sound = mixer.Sound("wrong_sound.ogg")
 
 # PARAMETERS
 marge = 30  # how far can they be off from the correct valeu
-wait_time = 20  # amount of times it needs to be correct when checked.
+wait_time = 5  # amount of times it needs to be correct when checked.
 level = 0
 totaal_levels = 3
 time_per_level = 300  # sec
@@ -102,16 +102,17 @@ def main():
                 red = int(layout.RGBslide1_value.value * 51)
                 green = int(layout.RGBslide2_value.value * 51)
                 blue = int(layout.RGBslide3_value.value * 51)
-                control_ledstrip(red, green, blue)
-                print("RGB Red: {}, Green: {}, Blue: {}".format(red, green, blue))
+                control_ledstrip(layout.RGBslide1_value.value, layout.RGBslide2_value.value, layout.RGBslide3_value.value)
+                #print("RGB Red: {}, Green: {}, Blue: {}".format(layout.RGBslide1_value.value, layout.RGBslide2_value.value, layout.RGBslide3_value.value))
+                #time.sleep(0.2)
                 if check_color_values(red, green, blue, level):  # got the right slide setting?
                     # timer to make sure its equal
-                    print("LOST level:", level)
+                    print("WIN level:", level)
                     level_won()
                     deadline += time_per_level  # add the time per level to the deadline. fast with the first level? more time for the second level.
                     break
             else:
-                print("WIN level:", level)
+                print("LOST level:", level)
                 level_lost()
             break  # het level is weer op 0 gezet, dus er moet opnieuw een deadline gezet worden
         else:
@@ -120,6 +121,9 @@ def main():
 
 if __name__ == "__main__":
     ledcontrol_process = multiprocessing.Process(target=ledcontrol.main)
+    layout_process = multiprocessing.Process(target=layout.main)
+    layout_process.start()
     ledcontrol_process.start()
     main()
     ledcontrol_process.terminate()
+    layout_process.terminate()

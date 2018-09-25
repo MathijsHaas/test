@@ -1,6 +1,4 @@
 ''' This script is to test everything. All the buttons will give a sound. all the leds wil turn on. '''
-
-
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 import opc
@@ -29,6 +27,7 @@ except ImportError:
         raise ImportError(
             "Failed to import library from parent folder")
 
+import time
 from pygame import mixer
 
 # for communication with the fadecandy server
@@ -92,15 +91,21 @@ def topknobquit():
 
 
 def main():
-    test_leds()
+    #test_leds()
     while topknobquit() != 2:
-        test_ledstrips()
-        test_buttons()
+        #test_ledstrips()
+        #test_buttons()
+        knop1 = adc2.read_voltage(1)
+
+        print("1: ",adc2.read_voltage(1), "2: ", adc2.read_voltage(2) , "3: ", adc2.read_voltage(3))
+        time.sleep(0.2)
     else:
         for i in range(1, 17):
             iobus2.write_pin(i, 0)
         pixels = [(0, 0, 0)] * numLEDs
         client.put_pixels(pixels)
+    
+    
 
 
 if __name__ == '__main__':
