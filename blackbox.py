@@ -8,21 +8,7 @@ import color_follow
 import RGB_game
 import layout
 
-# IO PI PLUS shield setup
-iobus1 = IOPi(0x20)  # bus 1 will be inputs
-iobus2 = IOPi(0x21)  # bus 2 will be outputs
-
-# inputs op bus 1
-iobus1.set_port_direction(0, 0xFF)
-iobus1.set_port_pullups(0, 0xFF)
-iobus1.set_port_direction(1, 0xFF)
-iobus1.set_port_pullups(1, 0xFF)
-
-# Outputs op bus 2
-iobus2.set_port_direction(0, 0x00)
-iobus2.write_port(0, 0x00)
-iobus2.set_port_direction(1, 0x00)
-iobus2.write_port(1, 0x00)
+# -------------- SETUP ------------------------------------------------------------------
 
 # clock via SDA/SCL
 segment = SevenSegment.SevenSegment(address=0x70)
@@ -47,6 +33,7 @@ This game_won value turns 1 when the game is won and thus the next game can star
 Each game also has its own ..._started variable in the main loop to make sure the process only starts once.
 
 '''
+# -------------- PARAMETERS ------------------------------------------------------------------
 
 # these are set when top_buttons.top_status.value == 1 (thus the game starts)
 startTime = None
@@ -54,6 +41,7 @@ deadline = None
 minutesToPlay = 60
 deltaMinutes = datetime.timedelta(minutes=minutesToPlay)
 
+# ------------- FUNCTIONS FOR IN THE GAME ------------------------------------------------------
 
 def showTime():
     ''' Show the time on the clock on top of the box'''
@@ -105,6 +93,7 @@ def boxStart():
     deadline = datetime.datetime.now() + deltaMinutes
     layout.relais_value.value = 1  # put on back- and bottomlight
 
+# -------------- THE GAME ------------------------------------------------------------------
 
 def main():
     # at the start, no games ar started.

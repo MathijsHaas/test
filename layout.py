@@ -216,7 +216,7 @@ def main():
         # the input that reads if the the big turning knobs are in the right orientation.
         spy_knobs_value.value = iobus1.read_pin(spy_knobs)
 
-        #------------------'''DIGITAL OUTPUTS ON BUS 2 '''------------------
+#------------------'''DIGITAL OUTPUTS ON BUS 2 '''------------------
 
         # ------------------ top leds ------------------------------------
         if top_led1_value.value == 1:
@@ -297,22 +297,23 @@ def main():
         else:
             iobus2.write_pin(relais, 0)
 
-        #------------------ ANALOG INPUTS ADC 1 (second shield)------------------
+#------------------ ANALOG INPUTS ADC 1 (second shield)------------------
 
         # plugs game
         plugs1_value.value = int(adc1.read_voltage(plugs1) * 1000)
         plugs2_value.value = int(adc1.read_voltage(plugs2) * 1000)
         plugs3_value.value = int(adc1.read_voltage(plugs3) * 1000)
 
-        RGBslide1_value.value = int(adc1.read_voltage(RGBslide1) * 50) # to become a 0-255 value for the RGB led strips
+        RGBslide1_value.value = int(adc1.read_voltage(RGBslide1) * 50)  # to become a 0-255 value for the RGB led strips
         RGBslide2_value.value = int(adc1.read_voltage(RGBslide2) * 50)
         RGBslide3_value.value = int(adc1.read_voltage(RGBslide3) * 50)
 
-        #-------------ANALOG INPUTS ADC 2 (third (and top) shield)---------------
+#-------------ANALOG INPUTS ADC 2 (third (and top) shield)---------------
 
-        sinusknob1_value.value = int(adc2.read_voltage(sinusknob1) * 1000)
-        sinusknob2_value.value = int(adc2.read_voltage(sinusknob2) * 1000)
-        sinusknob3_value.value = int(adc2.read_voltage(sinusknob3) * 1000)
+        sinusknob1_value.value = int(adc2.read_voltage(sinusknob1) * 100)
+        sinusknob2_value.value = int(adc2.read_voltage(sinusknob2) * 100)
+        sinusknob3_value.value = int(adc2.read_voltage(sinusknob3) * 100)
+
 
 if __name__ == "__main__":
     main()

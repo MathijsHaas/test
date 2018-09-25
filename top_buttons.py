@@ -21,6 +21,8 @@ sinus_half_status = multiprocessing.Value('i', 0)
 presstime = 50000  # microseconds to press. 1.000.000 microseconds per second
 buttons_to_win = 3
 
+# ---------------- FUNCTIONS FOR IN THE GAME -----------------------------------------
+
 
 def pushtogheter():
     ''' put all the lights on and wait until all buttons are pressed. then start the game. (only 5 buttons are needed to start) '''
@@ -68,6 +70,8 @@ def pushtogheter():
     layout.top_led6_value.value = 0
 
     top_status.value += 1  # 0 to 1 to start game. 1 to 2 to end the game
+
+#---------------------- THE GAME ---------------------------------------------------
 
 
 def main():

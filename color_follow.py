@@ -15,12 +15,14 @@ wrong_sound = mixer.Sound("wrong_sound.ogg")
 good_sound = mixer.Sound("good_sound.ogg")
 
 
-# PARAMETERS
+# -------------- PARAMETERS --------------------------------
 led_pins = [led1, led2, led3, led4]
 press_time = 2  # seconds
 levels = 6
 
 game_won = multiprocessing.Value('i', 0)
+
+#-------------- FUNCTIONS FOR IN THE GAME ---------------------
 
 
 def flash_all(n):
@@ -93,6 +95,8 @@ def put_led_off(led):
         layout.color_follow_led3_value.value = 0
     elif led == led4:
         layout.color_follow_led4_value.value = 0
+
+# ---------------- THE GAME -----------------------------------
 
 
 def main():
