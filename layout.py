@@ -118,6 +118,8 @@ sinusknob1 = 1
 sinusknob2 = 2
 sinusknob3 = 3
 
+bypass = 4
+
 
 # ------------------ MULTIPROCESSING VALUES TO WORK WITH ACROS FILES ---------------
 
@@ -184,6 +186,8 @@ RGBslide3_value = multiprocessing.Value('i', 0)
 sinusknob1_value = multiprocessing.Value('i', 0)
 sinusknob2_value = multiprocessing.Value('i', 0)
 sinusknob3_value = multiprocessing.Value('i', 0)
+
+bypass_value = multiprocessing.Value("i", 0)
 
 
 def main():
@@ -312,6 +316,9 @@ def main():
         sinusknob1_value.value = int(adc2.read_voltage(sinusknob1) * 100)
         sinusknob2_value.value = int(adc2.read_voltage(sinusknob2) * 100)
         sinusknob3_value.value = int(adc2.read_voltage(sinusknob3) * 100)
+
+        # a 0 - 5 voltage to measure resistors
+        bypass_value.value = int(adc2.read_voltage(bypass) * 1000)
 
 
 if __name__ == "__main__":
