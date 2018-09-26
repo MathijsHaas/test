@@ -127,52 +127,61 @@ def check_bypass():
 
     bypass = 0
     margin = 100
-    if (bypass_value.value <= (plug_bypass - margin) and bypass_value.value >= (plug_bypass + margin):
-        bypass=1
-    elif (bypass_value.value <= (RGB_bypass - margin) and bypass_value.value >= (RGB_bypass + margin):
-        bypass=2
-    elif (bypass_value.value <= (simon_says_bypass - margin) and bypass_value.value >= (simon_says_bypass + margin):
-        bypass=3
-    elif (bypass_value.value <= (turning_knobs_bypass - margin) and bypass_value.value >= (turning_knobs_bypass + margin):
-        bypass=4
-    elif (bypass_value.value <= (sinus_game_bypass - margin) and bypass_value.value >= (sinus_game_bypass + margin):
-        bypass=5
-    elif (bypass_value.value <= (color_follow_bypass - margin) and bypass_value.value >= (color_follow_bypass + margin):
-        bypass=6
+    count_number = 100  # the amount of times it needs to check if there is a value before passing it to see what it is.
 
-    # bypass the plugs to start the rgb game
-    if bypass == 1 and RGB_game_started is False:
-        RGB_game_process=multiprocessing.Process(target=RGB_game.main)
-        RGB_game_process.start()
-        RGB_game_started=True
+    if bypass_value.value > 100 or bypass_value.value < 4900:
+        count += 1
+    else:
+        count = 0
 
-    # bypass the rgb game to start simon says
-    if bypass == 2 and simon_says_started is False:
-        simon_says_process=multiprocessing.Process(target=simon_says.main)
-        simon_says_process.start()
-        simon_says_started=True
+    if count > count_number:
+        if (bypass_value.value <= (plug_bypass - margin) and bypass_value.value >= (plug_bypass + margin)):
+            bypass = 1
+        elif (bypass_value.value <= (RGB_bypass - margin) and bypass_value.value >= (RGB_bypass + margin)):
+            bypass = 2
+        elif (bypass_value.value <= (simon_says_bypass - margin) and bypass_value.value >= (simon_says_bypass + margin)):
+            bypass = 3
+        elif (bypass_value.value <= (turning_knobs_bypass - margin) and bypass_value.value >= (turning_knobs_bypass + margin)):
+            bypass = 4
+        elif (bypass_value.value <= (sinus_game_bypass - margin) and bypass_value.value >= (sinus_game_bypass + margin)):
+            bypass = 5
+        elif (bypass_value.value <= (color_follow_bypass - margin) and bypass_value.value >= (color_follow_bypass + margin)):
+            bypass = 6
 
-    # bypass simon says to turn on the three top leds
-    if bypass == 3:
-        top_buttons.RGB_half_status.value=1
+        # bypass the plugs to start the rgb game
+        if bypass == 1 and RGB_game_started is False:
+            RGB_game_process = multiprocessing.Process(target=RGB_game.main)
+            RGB_game_process.start()
+            RGB_game_started = True
 
-    # bypass the turning knobs and start the sinus game
-    if bypass == 4 and sinus_game_started is False:
-        print ('spy knobs correctly oriëntated')  # spyknobs becomes 0 when connected correctly
-        mixer.Sound.play(good_sound)
-        sinus_game_process=multiprocessing.Process(target=sinus_game.main)
-        sinus_game_process.start()
-        sinus_game_started=True
+        # bypass the rgb game to start simon says
+        if bypass == 2 and simon_says_started is False:
+            simon_says_process = multiprocessing.Process(target=simon_says.main)
+            simon_says_process.start()
+            simon_says_started = True
 
-    # bypass the sinus game and start the color follow
-    if bypass == 5 and color_follow_started is False:
-        color_follow_process=multiprocessing.Process(target=color_follow.main)
-        color_follow_process.start()
-        color_follow_started=True
+        # bypass simon says to turn on the three top leds
+        if bypass == 3:
+            top_buttons.RGB_half_status.value = 1
 
-    # bypass the color follow game and turn on the three top leds
-    if bypass == 6:
-        top_buttons.sinus_half_status.value=1
+        # bypass the turning knobs and start the sinus game
+        if bypass == 4 and sinus_game_started is False:
+            print ('spy knobs correctly oriëntated')  # spyknobs becomes 0 when connected correctly
+            mixer.Sound.play(good_sound)
+            sinus_game_process = multiprocessing.Process(target=sinus_game.main)
+            sinus_game_process.start()
+            sinus_game_started = True
+
+        # bypass the sinus game and start the color follow
+        if bypass == 5 and color_follow_started is False:
+            color_follow_process = multiprocessing.Process(target=color_follow.main)
+            color_follow_process.start()
+            color_follow_started = True
+
+        # bypass the color follow game and turn on the three top leds
+        if bypass == 6:
+            top_buttons.sinus_half_status.value = 1
+
 # -------------- THE GAME ------------------------------------------------------------------
 
 
@@ -190,48 +199,48 @@ def main():
         # loop background sound
         # start a process to check the top buttons
         if top_buttons.top_status.value == 0 and top_buttons_started is False:
-            top_buttons_process=multiprocessing.Process(target=top_buttons.main)
+            top_buttons_process = multiprocessing.Process(target=top_buttons.main)
             top_buttons_process.start()
-            top_buttons_started=True
+            top_buttons_started = True
 
         # start plug game after the six buttons are pushed togheter
         if top_buttons.top_status.value == 1 and plugs_game_started is False:
-            plugs_game_process=multiprocessing.Process(target=plugs_game.main)
+            plugs_game_process = multiprocessing.Process(target=plugs_game.main)
             plugs_game_process.start()
-            plugs_game_started=True
+            plugs_game_started = True
             boxStart()
 
         # Start the RGB game after all 6 plugs are connected correctly
         if plugs_game.game_won.value == 1 and RGB_game_started is False:
-            RGB_game_process=multiprocessing.Process(target=RGB_game.main)
+            RGB_game_process = multiprocessing.Process(target=RGB_game.main)
             RGB_game_process.start()
-            RGB_game_started=True
+            RGB_game_started = True
 
         # start Simon Says after all RGB game colors are machted correctly
         if RGB_game.game_won.value == 1 and simon_says_started is False:
-            simon_says_process=multiprocessing.Process(target=simon_says.main)
+            simon_says_process = multiprocessing.Process(target=simon_says.main)
             simon_says_process.start()
-            simon_says_started=True
+            simon_says_started = True
 
         if simon_says.game_won.value == 1:
-            top_buttons.RGB_half_status.value=1
+            top_buttons.RGB_half_status.value = 1
 
         # start the sinus game
         if layout.spy_knobs_value.value == 0 and sinus_game_started is False:
             print ('spy knobs correctly oriëntated')  # spyknobs becomes 0 when connected correctly
             mixer.Sound.play(good_sound)
-            sinus_game_process=multiprocessing.Process(target=sinus_game.main)
+            sinus_game_process = multiprocessing.Process(target=sinus_game.main)
             sinus_game_process.start()
-            sinus_game_started=True
+            sinus_game_started = True
 
         # start Color follow after the sinus game is won
         if sinus_game.game_won.value == 1 and color_follow_started is False:
-            color_follow_process=multiprocessing.Process(target=color_follow.main)
+            color_follow_process = multiprocessing.Process(target=color_follow.main)
             color_follow_process.start()
-            color_follow_started=True
+            color_follow_started = True
 
         if color_follow.game_won.value == 1:
-            top_buttons.sinus_half_status.value=1
+            top_buttons.sinus_half_status.value = 1
 
         # BlackBox Lost
         if datetime.datetime.now() > deadline:
@@ -243,8 +252,8 @@ def main():
 
 
 if __name__ == "__main__":
-    layout_process=multiprocessing.Process(target=layout.main)
-    ledcontrol_process=multiprocessing.Process(target=ledcontrol.main)
+    layout_process = multiprocessing.Process(target=layout.main)
+    ledcontrol_process = multiprocessing.Process(target=ledcontrol.main)
     layout_process.start()
     ledcontrol_process.start()
     main()
