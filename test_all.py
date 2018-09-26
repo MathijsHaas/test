@@ -91,7 +91,7 @@ def topknobquit():
 
 
 def main():
-    #test_leds()
+    test_leds()
     while topknobquit() != 2:
         #test_ledstrips()
         #test_buttons()
