@@ -40,12 +40,12 @@ sinus_game_started = False
 color_follow_started = False
 
 # the voltages needed to be measured to bypass the game (remember the multiprocessing.value is * 1000)
-plug_bypass =
-RGB_bypass =
-simon_says_bypass =
-turning_knobs_bypass =
-sinus_game_bypass =
-color_follow_bypass =
+plug_bypass = 1000
+RGB_bypass = 1500
+simon_says_bypass = 2000
+turning_knobs_bypass = 2500
+sinus_game_bypass = 3000
+color_follow_bypass = 3500
 
 '''
 Every game is it's own process in its seperate file.
