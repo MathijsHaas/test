@@ -17,7 +17,7 @@ good_sound = mixer.Sound("good_sound.ogg")
 
 # -------------- PARAMETERS --------------------------------
 led_pins = ["led1", "led2", "led3", "led4"]
-press_time = datetime.timedelta(seconds=1)  # seconds
+press_time = datetime.timedelta(seconds=2)  # seconds
 levels = 6
 
 game_won = multiprocessing.Value('i', 0)
@@ -66,12 +66,13 @@ def correct_input(value):
             break
 
         elif layout.color_follow_button4_value.value == 0:
-            ledchoise = "led4"
+            ledchoice = "led4"
             print("led4")
             mixer.Sound.play(bleep4)
             break
 
     if ledchoice == value:
+        print ("right button!")
         return True
     else:
         return False
@@ -104,15 +105,17 @@ def put_led_off(led):
 def main():
     random.seed()
     count = 0
-
+    print (count)
     while True:
         time.sleep(1)
         new_led = random.choice(led_pins)
+        print(new_led)
         put_led_on(new_led)
         status = correct_input(new_led)
         put_led_off(new_led)
         if status is True:
             count += 1
+            print(count)
             if count == levels:
                 time.sleep(1)
                 mixer.Sound.play(good_sound)
@@ -123,6 +126,7 @@ def main():
         else:
             mixer.Sound.play(wrong_sound)
             flash_all(3)
+            count = 0
             print("verloren")
 
         # zet lampje aan

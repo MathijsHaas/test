@@ -94,10 +94,10 @@ def main():
     test_leds()
     while topknobquit() != 2:
         #test_ledstrips()
-        #test_buttons()
+        test_buttons()
         knop1 = adc2.read_voltage(1)
 
-        print("1: ",adc2.read_voltage(1), "2: ", adc2.read_voltage(2) , "3: ", adc2.read_voltage(3))
+        #print("1: ",adc2.read_voltage(1), "2: ", adc2.read_voltage(2) , "3: ", adc2.read_voltage(3))
         time.sleep(0.2)
     else:
         for i in range(1, 17):
