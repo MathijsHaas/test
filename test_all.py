@@ -89,6 +89,8 @@ def topknobquit():
         topknobs[i] = iobus1.read_pin(1 + 2 * i)
     return sum(topknobs)
 
+def testturnknobs():
+    pass
 
 def main():
     test_leds()
@@ -96,10 +98,13 @@ def main():
         #test_ledstrips()
         test_buttons()
         knop1 = adc2.read_voltage(1)
-
-        #print("1: ",adc2.read_voltage(1), "2: ", adc2.read_voltage(2) , "3: ", adc2.read_voltage(3))
+        knop1 = adc2.read_voltage(2)
+        knop1 = adc2.read_voltage(3)
+        
+        print("1: ",adc2.read_voltage(1), "2: ", adc2.read_voltage(2) , "3: ", adc2.read_voltage(3))
         time.sleep(0.2)
-    else:
+        if iobus1.read_pin(13) ==  0:
+            print("big turn knobs rightly orientated!!")
         for i in range(1, 17):
             iobus2.write_pin(i, 0)
         pixels = [(0, 0, 0)] * numLEDs

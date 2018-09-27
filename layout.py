@@ -74,7 +74,7 @@ color_follow_button3 = 14
 color_follow_button4 = 16
 
 # the input that reads if the the big turning knobs are in the right orientation.
-spy_knobs = 13
+big_knobs = 13
 
 '''DIGITAL OUTPUTS ON BUS 2 '''
 
@@ -143,7 +143,7 @@ color_follow_button3_value = multiprocessing.Value('i', 0)
 color_follow_button4_value = multiprocessing.Value('i', 0)
 
 # the input that reads if the the big turning knobs are in the right orientation.
-spy_knobs_value = multiprocessing.Value('i', 0)
+big_knobs_value = multiprocessing.Value('i', 0)
 
 '''DIGITAL OUTPUTS ON BUS 2 '''
 
@@ -217,7 +217,7 @@ def main():
         color_follow_button4_value.value = iobus1.read_pin(color_follow_button4)
 
         # the input that reads if the the big turning knobs are in the right orientation.
-        spy_knobs_value.value = iobus1.read_pin(spy_knobs)
+        big_knobs_value.value = iobus1.read_pin(big_knobs)
 
 # ------------------'''DIGITAL OUTPUTS ON BUS 2 '''------------------
 
