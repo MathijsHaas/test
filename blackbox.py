@@ -10,6 +10,7 @@ except ImportError:
     except ImportError:
         raise ImportError(
             "Failed to import library from parent folder")
+
 # Main control
 import ledcontrol  # where the led strips are controled and combined to send to the fadecandy
 import multiprocessing  # to spawn each game as a separate process
