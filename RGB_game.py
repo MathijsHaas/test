@@ -26,7 +26,7 @@ game_won = multiprocessing.Value('i', 0)
 # the colors that need to be machted in RGB valeus from 0 - 5V
 example = (
     (160, 80, 120),
-    (17, 70, 47),
+    (50, 140, 100),
     (52, 80, 17))
 
 
@@ -102,13 +102,13 @@ def main():
         while level < totaal_levels:
             print ("level {}".format(level))
             while time.time() < deadline:
-                red = int(layout.RGBslide1_value.value * 51)
-                green = int(layout.RGBslide2_value.value * 51)
-                blue = int(layout.RGBslide3_value.value * 51)
+                red = layout.RGBslide1_value.value
+                green = layout.RGBslide2_value.value
+                blue = layout.RGBslide3_value.value
                 control_ledstrip(layout.RGBslide1_value.value, layout.RGBslide2_value.value, layout.RGBslide3_value.value)
-                # print("RGB Red: {}, Green: {}, Blue: {}".format(layout.RGBslide1_value.value, layout.RGBslide2_value.value, layout.RGBslide3_value.value))
-                # time.sleep(0.2)
-                if check_color_values(red, green, blue, level):  # got the right slide setting?
+                print("RGB Red: {}, Green: {}, Blue: {}".format(layout.RGBslide1_value.value, layout.RGBslide2_value.value, layout.RGBslide3_value.value))
+                time.sleep(0.2)
+                if check_color_values(layout.RGBslide1_value.value, layout.RGBslide2_value.value, layout.RGBslide3_value.value, level):  # got the right slide setting?
                     # timer to make sure its equal
                     print("WIN level:", level)
                     level_won()
@@ -127,6 +127,7 @@ if __name__ == "__main__":
     layout_process = multiprocessing.Process(target=layout.main)
     layout_process.start()
     ledcontrol_process.start()
+    print("start RGB_game")
     main()
     ledcontrol_process.terminate()
     layout_process.terminate()
