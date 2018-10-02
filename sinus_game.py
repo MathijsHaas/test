@@ -2,6 +2,7 @@
 import multiprocessing
 import socket
 import time
+import layout
 
 game_won = multiprocessing.Value('i', 0)
 
@@ -18,6 +19,13 @@ def main():
     s.send(message.encode('utf-8'))
     data = s.recv(1024)
     data = data.decode('utf-8')
+    while data != "done":
+        sinus_waardes = [layout.sinusknob1_value.value, layout.sinusknob2_value.value, layout.sinusknob3_value.value]
+        sinus_waardes_string = str(sinus_waardes[0]) + " " + str(sinus_waardes[1]) + " " + str(sinus_waardes[2])
+        print(sinus_waardes_string)
+        s.send(sinus_waardes_string.encode('utf-8'))
+        data = s.recv(1024)
+        data = data.decode('utf-8')
     if data == "done":
         print("received from Sinus processing script: " + data)
         game_won.value = 1
@@ -27,4 +35,8 @@ def main():
 
 
 if __name__ == '__main__':
+    layout_process = multiprocessing.Process(target=layout.main)
+    layout_process.start()
     main()
+    layout_process.terminate()
+

@@ -20,7 +20,7 @@ from pygame import mixer
 import multiprocessing
 
 # PARAMETERS
-levels = 2
+levels = 6
 pattern_speed = 0.1
 time_to_press = 4
 
