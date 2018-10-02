@@ -1,12 +1,12 @@
 try:
-    from Adafruit_Python_LED_Backpack import Adafruit_LED_Backpack
+    from Adafruit_LED_Backpack import Adafruit_LED_Backpack
 except ImportError:
     print("Failed to import Adafruit_Python_LED_Backpack from python system path")
     print("Importing from parent folder instead")
     try:
         import sys
         sys.path.append('..')
-        from Adafruit_Python_LED_Backpack import Adafruit_Python_LED_Backpack
+        from Adafruit_LED_Backpack import Adafruit_LED_Backpack
     except ImportError:
         raise ImportError(
             "Failed to import library from parent folder")
