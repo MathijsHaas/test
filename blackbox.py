@@ -1,9 +1,20 @@
+try:
+    from Adafruit_Python_LED_Backpack import Adafruit_LED_Backpack
+except ImportError:
+    print("Failed to import Adafruit_Python_LED_Backpack from python system path")
+    print("Importing from parent folder instead")
+    try:
+        import sys
+        sys.path.append('..')
+        from Adafruit_Python_LED_Backpack import Adafruit_Python_LED_Backpack
+    except ImportError:
+        raise ImportError(
+            "Failed to import library from parent folder")
 # Main control
 import ledcontrol  # where the led strips are controled and combined to send to the fadecandy
 import multiprocessing  # to spawn each game as a separate process
 from pygame import mixer  # for sound
 import datetime  # to keep track of the deadline
-from Adafruit_LED_Backpack import SevenSegment  # for clock display
 import layout
 
 # importing the differtent seperate games
