@@ -19,11 +19,16 @@ def main():
     s.send(message.encode('utf-8'))
     data = s.recv(1024)
     data = data.decode('utf-8')
+    count = 0  # TEST
     while data != "done":
         # sinus_waardes = [layout.sinusknob1_value.value,
         #                 layout.sinusknob2_value.value,
         #                 layout.sinusknob3_value.value]
-        sinus_waardes_string = str(230) + " " + str(340) + " " + str(140)
+        if count < 150:
+            sinus_waardes_string = str(230) + " " + str(340) + " " + str(140)
+            count += 1
+        else:
+            sinus_waardes_string = str(400) + " " + str(120) + " " + str(340)
         print(sinus_waardes_string)
         s.send(sinus_waardes_string.encode('utf-8'))
         data = s.recv(1024)
