@@ -51,7 +51,7 @@ def timertest(strip):  # mag weg
         if datetime.datetime.now() > newledout:
             strip[timer_leds - shutdown_led] = (0, 0, 0)
             shutdown_led += 1
-            newledout = datetime.datetime.now() + datetime.timedelta(seconds=0.5)
+            newledout = datetime.datetime.now() + datetime.timedelta(seconds=44.5)
             client.put_pixels(strip)
 
 
@@ -107,9 +107,10 @@ def set_play_color(strip, r, g, b):
 def main():
     print("ledcontrol started")
     list_setup(strip)
-    # timerstrip_setup(strip)
+    timerstrip_setup(strip)
     while True:
         RGB_color_control(strip)
+        timertest(strip)
     # Process that does the timerstrip countdown
     # process that controls the two ledstrips
 

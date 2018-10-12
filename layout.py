@@ -143,7 +143,7 @@ color_follow_button3_value = multiprocessing.Value('i', 0)
 color_follow_button4_value = multiprocessing.Value('i', 0)
 
 # the input that reads if the the big turning knobs are in the right orientation.
-big_knobs_value = multiprocessing.Value('i', 0)
+big_knobs_value = multiprocessing.Value('i', 1)
 
 '''DIGITAL OUTPUTS ON BUS 2 '''
 

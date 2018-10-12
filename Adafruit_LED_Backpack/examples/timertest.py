@@ -27,5 +27,3 @@ segment.set_colon(True)                       # Toggle colon
 
 # update the display LEDs.
 segment.write_display()
-
-'''

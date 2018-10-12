@@ -1,15 +1,6 @@
-try:
-    from Adafruit_LED_Backpack import Adafruit_LED_Backpack
-except ImportError:
-    print("Failed to import Adafruit_Python_LED_Backpack from python system path")
-    print("Importing from parent folder instead")
-    try:
-        import sys
-        sys.path.append('..')
-        from Adafruit_LED_Backpack import Adafruit_LED_Backpack
-    except ImportError:
-        raise ImportError(
-            "Failed to import library from parent folder")
+
+from Adafruit_LED_Backpack import SevenSegment
+
 
 # Main control
 import ledcontrol  # where the led strips are controled and combined to send to the fadecandy
@@ -238,7 +229,7 @@ def main():
             top_buttons.RGB_half_status.value = 1
 
         # start the sinus game
-        if layout.spy_knobs_value.value == 0 and sinus_game_started is False:
+        if layout.big_knobs_value.value == 0 and sinus_game_started is False:
             print ('spy knobs correctly oriëntated')  # spyknobs becomes 0 when connected correctly
             mixer.Sound.play(good_sound)
             sinus_game_process = multiprocessing.Process(target=sinus_game.main)
@@ -255,11 +246,11 @@ def main():
             top_buttons.sinus_half_status.value = 1
 
         # BlackBox Lost
-        if datetime.datetime.now() > deadline:
+        if game_status.value == 1 and datetime.datetime.now() > deadline:
             blackBoxLost()
 
         # BlackBox Won
-        if top_buttons.top_status.value == 2:
+        if game_status.value == 1 and top_buttons.top_status.value == 2:
             blackBoxWon()
 
 
