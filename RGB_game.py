@@ -129,5 +129,6 @@ if __name__ == "__main__":
     ledcontrol_process.start()
     print("start RGB_game")
     main()
+    print("RGB_game stop")
     ledcontrol_process.terminate()
     layout_process.terminate()

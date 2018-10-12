@@ -4,7 +4,7 @@ import multiprocessing
 import opc
 import datetime
 import time
-# import blackbox
+import blackbox
 
 r_example_value = multiprocessing.Value('i', 0)
 g_example_value = multiprocessing.Value('i', 0)
@@ -27,20 +27,27 @@ newledout = datetime.datetime.now()
 manager = multiprocessing.Manager()
 strip = manager.list()
 
+timer_started = False
 
 def timerstrip_running(strip):
     global newledout
     global shutdown_led
-    while blackbox.game_status.value == 0:  # not started
+    if blackbox.game_status.value == 0:  # not started
         pass
-    while blackbox.game_status.value == 1:  # timer strip running
-        if datetime.datetime.now() > newledout:
+    
+    if blackbox.game_status.value == 1:
+        if timer_started is False:
+            timerstrip_setup(strip)
+            timer_started = True
+        if datetime.datetime.now() > newledout: # timer strip running
             strip[timer_leds - shutdown_led] = (0, 0, 0)
             shutdown_led += 1
-            newledout = datetime.datetime.now() + datetime. timedelta(seconds=44.5)
-    while blackbox.game_status.value == 2:  # game won: timer strip flashing green
+            newledout = newledout + datetime.timedelta(seconds=44.5)
+            
+    if blackbox.game_status.value == 2:  # game won: timer strip flashing green
         colorflash(strip, 230, 0, 0)
-    while blackbox.game_status.value == 3:  # game won: timer strip flashing red
+        
+    if blackbox.game_status.value == 3:  # game won: timer strip flashing red
         colorflash(strip, 0, 230, 0)
 
 
@@ -107,10 +114,9 @@ def set_play_color(strip, r, g, b):
 def main():
     print("ledcontrol started")
     list_setup(strip)
-    timerstrip_setup(strip)
     while True:
         RGB_color_control(strip)
-        timertest(strip)
+        timerstrip_running(strip)
     # Process that does the timerstrip countdown
     # process that controls the two ledstrips
 

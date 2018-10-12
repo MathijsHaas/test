@@ -78,6 +78,7 @@ def test_buttons():
 
 
 def test_leds():
+    print("alle lampen aan!")
     for i in range(1, 17):
         iobus2.write_pin(i, 1)
 
@@ -96,6 +97,7 @@ def main():
     test_leds()
     while topknobquit() != 2:
         #test_ledstrips()
+        iobus2.write_pin(13, 1)
         test_buttons()
         # knop1 = adc2.read_voltage(1)
         # knop1 = adc2.read_voltage(2)

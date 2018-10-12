@@ -1,23 +1,10 @@
 
-from __future__ import absolute_import, division, print_function, \
-    unicode_literals
-try:
-    from IOPi import IOPi
-except ImportError:
-    print("Failed to import IOPi from python system path")
-    print("Importing from parent folder instead")
-    try:
-        import sys
-        sys.path.append("..")
-        from IOPi import IOPi
-    except ImportError:
-        raise ImportError(
-            "Failed to import library from parent folder")
 
 import time
 import random
 from pygame import mixer
 import multiprocessing
+import layout
 
 # PARAMETERS
 levels = 6
@@ -35,25 +22,8 @@ bleep4 = mixer.Sound("bleep4.ogg")
 wrong_sound = mixer.Sound("wrong_sound.ogg")
 good_sound = mixer.Sound("good_sound.ogg")
 
-
-# IO PI PLUS shield setup
-iobus1 = IOPi(0x20)  # bus 1 will be inputs
-iobus2 = IOPi(0x21)  # bus 2 will be outputs
-# inputs op bus 1
-iobus1.set_port_direction(0, 0xFF)
-iobus1.set_port_pullups(0, 0xFF)
-iobus1.set_port_direction(1, 0xFF)
-iobus1.set_port_pullups(1, 0xFF)
-
-# Outputs op bus 2
-iobus2.set_port_direction(0, 0x00)
-iobus2.write_port(0, 0x00)
-iobus2.set_port_direction(1, 0x00)
-iobus2.write_port(1, 0x00)
-
-
 def flash(l, n):
-    """flash led l for n times"""
+    """flash led l for n"""
     iobus2.write_pin((2 + 2 * l), 1)  # deze rekensom omdat de eerste ledjes op 2,4,6,8 zitten
     time.sleep(n)
     iobus2.write_pin((2 + 2 * l), 0)
@@ -63,14 +33,17 @@ def flash(l, n):
 def flash_all(n):
     """flash all leds for n times"""
     for i in range(0, n):
-        for i in [2, 4, 6, 8]:  # de pins op het IO PI PLUS bord waar de ledjes op zijn aangesloten
-            iobus2.write_pin(i, 1)
+        # de pins op het IO PI PLUS bord waar de ledjes op zijn aangesloten
+        layout.ss_led1_value.value = 1
+        layout.ss_led2_value.value = 1
+        layout.ss_led3_value.value = 1
+        layout.ss_led4_value.value = 1
         time.sleep(0.3)
-        for i in [2, 4, 6, 8]:
-            iobus2.write_pin(i, 0)
-        time.sleep(0.3)
-    return
-
+        layout.ss_led1_value.value = 0
+        layout.ss_led2_value.value = 0
+        layout.ss_led3_value.value = 0
+        layout.ss_led4_value.value = 0
+        time sleep(0.3)
 
 def correct_input(value):
     """check if the input is correct"""
@@ -79,31 +52,26 @@ def correct_input(value):
 
     while time.time() < deadline:
 
-        buttonstate2 = iobus1.read_pin(2)
-        buttonstate4 = iobus1.read_pin(4)
-        buttonstate6 = iobus1.read_pin(6)
-        buttonstate8 = iobus1.read_pin(8)
 
-        if buttonstate2 == 0:
+        if layout.ss_button1_value.value == 0:
             ledchoise = 0
             print("led1")
-
             mixer.Sound.play(bleep1)
             break
 
-        elif buttonstate4 == 0:
+        elif layout.ss_button2_value.value == 0:
             ledchoise = 1
             print("led2")
             mixer.Sound.play(bleep2)
             break
 
-        elif buttonstate6 == 0:
+        elif layout.ss_button3_value.value == 0:
             ledchoise = 2
             print("led3")
             mixer.Sound.play(bleep3)
             break
 
-        elif buttonstate8 == 0:
+        elif layout.ss_button4_value.value == 0:
             ledchoise = 3
             print("led4")
             mixer.Sound.play(bleep4)

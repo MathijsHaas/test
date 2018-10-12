@@ -189,6 +189,7 @@ def check_bypass():
 
 
 def main():
+    print("Black Box started")
     # at the start, no games ar started.
     global top_buttons_started
     global plugs_game_started
@@ -204,12 +205,14 @@ def main():
         if top_buttons.top_status.value == 0 and top_buttons_started is False:
             top_buttons_process = multiprocessing.Process(target=top_buttons.main)
             top_buttons_process.start()
+            print("top_buttons process started")
             top_buttons_started = True
 
         # start plug game after the six buttons are pushed togheter
-        if top_buttons.top_status.value == 1 and plugs_game_started is False:
+        if top_buttons.top_status.value == 0 and plugs_game_started is False:
             plugs_game_process = multiprocessing.Process(target=plugs_game.main)
             plugs_game_process.start()
+            print("plugs process started")
             plugs_game_started = True
             boxStart()
 
@@ -217,12 +220,14 @@ def main():
         if plugs_game.game_won.value == 1 and RGB_game_started is False:
             RGB_game_process = multiprocessing.Process(target=RGB_game.main)
             RGB_game_process.start()
+            print("rgb process started")
             RGB_game_started = True
 
         # start Simon Says after all RGB game colors are machted correctly
         if RGB_game.game_won.value == 1 and simon_says_started is False:
             simon_says_process = multiprocessing.Process(target=simon_says.main)
             simon_says_process.start()
+            print("simon says process started")
             simon_says_started = True
 
         if simon_says.game_won.value == 1:
@@ -234,12 +239,14 @@ def main():
             mixer.Sound.play(good_sound)
             sinus_game_process = multiprocessing.Process(target=sinus_game.main)
             sinus_game_process.start()
+            print("sinus_game process started")
             sinus_game_started = True
 
         # start Color follow after the sinus game is won
         if sinus_game.game_won.value == 1 and color_follow_started is False:
             color_follow_process = multiprocessing.Process(target=color_follow.main)
             color_follow_process.start()
+            print("color_follow process started")
             color_follow_started = True
 
         if color_follow.game_won.value == 1:
