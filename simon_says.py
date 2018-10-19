@@ -7,7 +7,7 @@ import layout
 import bb_sound
 
 # PARAMETERS
-levels = 6
+levels = 3
 pattern_speed = 0.1
 time_to_press = 4
 
@@ -58,25 +58,25 @@ def correct_input(value):
 
         if layout.ss_button1_value.value == 0:
             ledchoise = 0
-            print("led1")
+##            print("led1")
             bb_sound.play_simon1.value = 1
             break
 
         elif layout.ss_button2_value.value == 0:
             ledchoise = 1
-            print("led2")
+##            print("led2")
             bb_sound.play_simon2.value = 1
             break
 
         elif layout.ss_button3_value.value == 0:
             ledchoise = 2
-            print("led3")
+##            print("led3")
             bb_sound.play_simon3.value = 1
             break
 
         elif layout.ss_button4_value.value == 0:
             ledchoise = 3
-            print("led4")
+##            print("led4")
             bb_sound.play_simon4.value = 1
             break
         
@@ -85,11 +85,11 @@ def correct_input(value):
 
     if ledchoise == value:
         
-        print(ledchoise, "goeie keuze")
+##        print(ledchoise, "goeie keuze")
         return 1
         
     else:
-        print(ledchoise, "slechte keuze")
+##        print(ledchoise, "slechte keuze")
         return 0
 
 
@@ -107,10 +107,7 @@ def chose_sound(i):
 
 def attract_mode():
     ''' attracting the atention of the player to push a button and start the game'''
-    layout.ss_led1_value.value = 1
-    layout.ss_led2_value.value = 1
     layout.ss_led3_value.value = 1
-    layout.ss_led4_value.value = 1
     while True:
         # knipper met lampjes
         if layout.ss_button1_value.value == 0 or layout.ss_button2_value.value == 0 or layout.ss_button3_value.value == 0 or layout.ss_button4_value.value == 0:
@@ -130,14 +127,14 @@ def main():
             sequence = []  # Will contain the sequence of light for the simon says
 
             while True:
-                time.sleep(1)
+                time.sleep(0.5)
                 new_value = random.randint(0, 3)
                 sequence.append(new_value)
                 # Running through the example sequence
                 for i in range(0, len(sequence)):
-                    print (sequence[i])
+##                    print (sequence[i])
                     chose_sound(sequence[i])
-                    flash(sequence[i], 0.4)
+                    flash(sequence[i], 0.6)
                     time.sleep(pattern_speed)
                 # Letting the player repeat the sequence
                 for i in range(0, len(sequence)):

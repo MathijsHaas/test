@@ -161,7 +161,7 @@ def blackBoxWon():
     game_status.value = 3
     bb_sound.play_won_the_box_sound.value = 1
     while True:  # the game is won, this happens till a reset
-        pass
+        sound()
 
 
 def blackBoxLost():
@@ -169,11 +169,15 @@ def blackBoxLost():
     game_status.value = 4
     bb_sound.play_lost_the_box_sound.value = 1
     while True:  # the game is lost, this happens till a reset
-        pass
+        sound()
 
 
 def boxStart():
     ''' what happens at the start, after the six buttons are pushed '''
+
+
+    # update the display LEDs.
+    segment.write_display()
     layout.game_status.value = 1
     bb_sound.play_start_the_box_sound.value = 1
     global startTime  # record once when the game started
@@ -273,6 +277,7 @@ def check_bypass():
 
 def main():
     print("Black Box started")
+
     # at the start, no games ar started.
     global top_buttons_started
     global plugs_game_started
@@ -280,6 +285,8 @@ def main():
     global simon_says_started
     global sinus_game_started
     global color_follow_started
+    global first_half_finished
+    global second_half_finished
     
     mixer.music.play(-1) # start looping background music
     
@@ -320,9 +327,10 @@ def main():
             print("simon says process started")
             simon_says_started = True
 
-        if simon_says.game_won.value == 1:
+        if simon_says.game_won.value == 1 and first_half_finished == False:
             top_buttons.RGB_half_status.value = 1
-
+            first_half_finished = True
+            
         # start the sinus game
         if layout.big_knobs_value.value == 0 and sinus_game_started is False:
             print ('spy knobs correctly oriëntated')  # spyknobs becomes 0 when connected correctly
@@ -339,8 +347,9 @@ def main():
             print("color_follow process started")
             color_follow_started = True
 
-        if color_follow.game_won.value == 1:
+        if color_follow.game_won.value == 1 and second_half_finished == False:
             top_buttons.sinus_half_status.value = 1
+            second_half_finished = True
 
         # BlackBox Lost
         if game_status.value == 1 and datetime.datetime.now() > deadline:

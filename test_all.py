@@ -105,10 +105,10 @@ def main():
         
         # print("1: ",adc2.read_voltage(1), "2: ", adc2.read_voltage(2) , "3: ", adc2.read_voltage(3))
         # time.sleep(0.2)
+        print(iobus1.read_pin(13))
+        if iobus1.read_pin(13) ==  0:
+            print("big turn knobs rightly orientated!!")
         
-        # if iobus1.read_pin(13) ==  0:
-            # print("big turn knobs rightly orientated!!")
-            
     else:
         for i in range(1, 17):
             iobus2.write_pin(i, 0)

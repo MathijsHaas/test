@@ -83,6 +83,8 @@ def main():
 
         if RGB_half_status.value == 1:
             # helft 1 animatie
+            time.sleep(1.5)
+            print("rgb helft animation")
             bb_sound.play_deep_button_sound.value = 1
             layout.top_led1_value.value = 1
             time.sleep(1)
@@ -95,6 +97,8 @@ def main():
 
         if sinus_half_status.value == 1:
             # helft 2 animatie
+            time.sleep(1.5)
+            print(" sinus helft animatie")
             bb_sound.play_deep_button_sound.value = 1
             layout.top_led4_value.value = 1
             time.sleep(1)
