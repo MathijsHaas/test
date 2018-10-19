@@ -13,7 +13,7 @@ import sinus_game
 import color_follow
 
 mixer.init()
-background_sound = mixer.Sound("sound_background.ogg")
+mixer.music.load("sound_background.ogg")
 won_the_box_sound = mixer.Sound("sound_win_box.ogg")
 lost_the_box_sound = mixer.Sound("sound_lost_box.ogg")
 good_sound = mixer.Sound("sound_good.ogg")
@@ -40,28 +40,45 @@ play_simon4 = multiprocessing.Value('i', 0)
 
 def main():
     print("sound module started")
-    background_start = False
+    mixer.music.play(-1)
     while True:
-        if blackbox.sound_background == 1 and background is False:
-            #loop
-            mixer.Sound.play(background_sound)
-            background_start = True
-        if plugs_game.good_sound == 1 or RGB_game.good_sound == 1 or simon_says.good_sound == 1 or color_follow.good_sound == 1:
+        if play_won_the_box_sound.value == 1:
+            mixer.Sound.play(won_the_box_sound)
+            play_won_the_box_sound.value == 0
+
+        if play_lost_the_box_sound.value == 1:
+            mixer.Sound.play(lost_the_box_sound)
+            play_lost_the_box_sound.value == 0
+
+        if play_good_sound.value == 1:
             mixer.Sound.play(good_sound)
-            
-        play_background_sound = multiprocessing.Value('i', 0)
-        play_won_the_box_sound = multiprocessing.Value('i', 0)
-        play_lost_the_box_sound = multiprocessing.Value('i', 0)
-        play_good_sound = multiprocessing.Value('i', 0)
-        play_wrong_sound = multiprocessing.Value('i', 0)
-        play_deep_button_sound = multiprocessing.Value('i', 0)
-        play_bleep = multiprocessing.Value('i', 0)
-        play_simon1 = multiprocessing.Value('i', 0)
-        play_simon2 = multiprocessing.Value('i', 0)
-        play_simon3 = multiprocessing.Value('i', 0)
-        play_simon4 = multiprocessing.Value('i', 0)
-        
-        
+            play_good_sound.value == 0
 
+        if play_wrong_sound.value == 1:
+            mixer.Sound.play(wrong_sound)
+            play_wrong_sound.value == 0
 
-# importing the differtent modules that play sound
+        if play_deep_button_sound.value == 1:
+            mixer.Sound.play(deep_button_sound)
+            play_deep_button_sound.value == 0
+
+        if play_bleep.value == 1:
+            mixer.Sound.play(bleep)
+            play_bleep.value == 0
+
+        if play_simon1.value == 1:
+            mixer.Sound.play(simon1)
+            play_simon1.value == 0
+
+        if play_simon2.value == 1:
+            mixer.Sound.play(simon2)
+            play_simon2.value == 0
+
+        if play_simon3.value == 1:
+            mixer.Sound.play(simon3)
+            play_simon3.value == 0
+
+        if play_simon4.value == 1:
+            mixer.Sound.play(simon4)
+            play_simon4.value == 0
+
