@@ -5,7 +5,7 @@ from Adafruit_LED_Backpack import SevenSegment
 # Main control
 import ledcontrol  # where the led strips are controled and combined to send to the fadecandy
 import multiprocessing  # to spawn each game as a separate process
-from pygame import mixer  # for sound
+import bb_sound  # sound control
 import datetime  # to keep track of the deadline
 import layout
 import time
@@ -23,13 +23,6 @@ import color_follow
 
 # clock via SDA/SCL
 segment = SevenSegment.SevenSegment(address=0x70)
-
-# Sound
-mixer.init()
-background_sound = mixer.Sound("sound_background.ogg")
-won_the_box_sound = mixer.Sound("sound_win_box.ogg")
-lost_the_box_sound = mixer.Sound("sound_lost_box.ogg")
-good_sound = mixer.Sound("sound_good.ogg")
 
 game_status = multiprocessing.Value('i', 0)
 # 0 = not started yet
@@ -99,14 +92,14 @@ def showTime():
 
 def blackBoxWon():
     game_status.value = 3
-    mixer.Sound.play(won_the_box_sound)
+    bb_sound.play_won_the_box_sound.value = 1
     while True:  # the game is won, this happens till a reset
         pass
 
 
 def blackBoxLost():
     game_status.value = 4
-    mixer.Sound.play(lost_the_box_sound)
+    bb_sound.play_lost_the_box_sound.value = 1
     while True:  # the game is lost, this happens till a reset
         pass
 
@@ -174,7 +167,6 @@ def check_bypass():
         # bypass the turning knobs and start the sinus game
         if bypass == 4 and sinus_game_started is False:
             print ('spy knobs correctly oriëntated')  # spyknobs becomes 0 when connected correctly
-            mixer.Sound.play(good_sound)
             sinus_game_process = multiprocessing.Process(target=sinus_game.main)
             sinus_game_process.start()
             sinus_game_started = True
@@ -204,13 +196,13 @@ def main():
 
     # this while loop keeps running to manage the game progression
     while True:
-        
+
         # test
         if top_buttons.sinus_half_status.value == 1:
             showTime()
             while True:
                 pass
-        
+
         # loop background sound
         # start a process to check the top buttons
         if top_buttons.top_status.value == 0 and top_buttons_started is False:
@@ -249,7 +241,7 @@ def main():
         # start the sinus game
         if layout.big_knobs_value.value == 0 and sinus_game_started is False:
             print ('spy knobs correctly oriëntated')  # spyknobs becomes 0 when connected correctly
-            mixer.Sound.play(good_sound)
+            bb_sound.play_good_sound.value = 1
             sinus_game_process = multiprocessing.Process(target=sinus_game.main)
             sinus_game_process.start()
             print("sinus_game process started")
@@ -277,9 +269,12 @@ def main():
 if __name__ == "__main__":
     layout_process = multiprocessing.Process(target=layout.main)
     ledcontrol_process = multiprocessing.Process(target=ledcontrol.main)
+    sound_process = multiprocessing.Process(target=bb_sound.main)
     layout_process.start()
     time.sleep(2)
     ledcontrol_process.start()
+    sound_process.start()
     main()
     layout_process.terminate()
     ledcontrol_process.terminate()
+    sound_process.terminate()
