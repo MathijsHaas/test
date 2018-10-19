@@ -1,6 +1,7 @@
 """ script handeling the sounds """
 
 from pygame import mixer
+import multiprocessing
 
 # importing the differtent modules that play sound
 import blackbox
@@ -37,7 +38,7 @@ play_simon2 = multiprocessing.Value('i', 0)
 play_simon3 = multiprocessing.Value('i', 0)
 play_simon4 = multiprocessing.Value('i', 0)
 
-def main:
+def main():
     print("sound module started")
     background_start = False
     while True:
