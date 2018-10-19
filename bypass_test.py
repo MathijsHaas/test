@@ -24,16 +24,22 @@ def main():
     if count > count_number:
         if (layout.bypass_value.value >= (plug_bypass - margin) and layout.bypass_value.value <= (plug_bypass + margin)):
             bypass = 1
+            print("bypass 1")
         elif (layout.bypass_value.value >= (RGB_bypass - margin) and layout.bypass_value.value <= (RGB_bypass + margin)):
             bypass = 2
+            print("bypass 2")
         elif (layout.bypass_value.value >= (simon_says_bypass - margin) and layout.bypass_value.value <= (simon_says_bypass + margin)):
             bypass = 3
+            print("bypass 3")
         elif (layout.bypass_value.value >= (turning_knobs_bypass - margin) and layout.bypass_value.value <= (turning_knobs_bypass + margin)):
             bypass = 4
+            print("bypass 4")
         elif (layout.bypass_value.value >= (sinus_game_bypass - margin) and layout.bypass_value.value <= (sinus_game_bypass + margin)):
             bypass = 5
+            print("bypass 5")
         elif (layout.bypass_value.value >= (color_follow_bypass - margin) and layout.bypass_value.value <= (color_follow_bypass + margin)):
             bypass = 6
+            print("bypass 6")
             
         print("bypass: ", bypass)
         

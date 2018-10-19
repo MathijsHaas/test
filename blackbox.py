@@ -9,6 +9,7 @@ import bb_sound  # sound control
 import datetime  # to keep track of the deadline
 import layout
 import time
+from pygame import mixer
 
 # importing the differtent seperate games
 import top_buttons
@@ -36,14 +37,17 @@ RGB_game_started = False
 simon_says_started = False
 sinus_game_started = False
 color_follow_started = False
-
+first_half_finished = False
+second_half_finished = False
 # the voltages needed to be measured to bypass the game (remember the multiprocessing.value is * 1000)
-plug_bypass = 1000
-RGB_bypass = 1500
-simon_says_bypass = 2000
-turning_knobs_bypass = 2500
-sinus_game_bypass = 3000
-color_follow_bypass = 3500
+plug_bypass = 3548
+RGB_bypass = 3271
+simon_says_bypass = 3953
+turning_knobs_bypass = 2466
+sinus_game_bypass = 1116
+color_follow_bypass = 88
+bypass_count = 0
+
 
 '''
 Every game is it's own process in its seperate file.
@@ -61,6 +65,68 @@ startTime = None
 deadline = None
 minutesToPlay = 60
 deltaMinutes = datetime.timedelta(minutes=minutesToPlay)
+
+# -------------- SOUND ------------------------------------------------------------------
+
+mixer.init()
+mixer.music.load("sound_background.ogg")
+won_the_box_sound = mixer.Sound("sound_win_box.ogg")
+lost_the_box_sound = mixer.Sound("sound_lost_box.ogg")
+start_the_box_sound = mixer.Sound("sound_start_box.ogg")
+good_sound = mixer.Sound("sound_good.ogg")
+wrong_sound = mixer.Sound("sound_wrong.ogg")
+deep_button_sound = mixer.Sound("sound_deep_button.ogg")
+bleep = mixer.Sound("sound_small_button.ogg")
+simon1 = mixer.Sound("sound_simon1.ogg")
+simon2 = mixer.Sound("sound_simon2.ogg")
+simon3 = mixer.Sound("sound_simon3.ogg")
+simon4 = mixer.Sound("sound_simon4.ogg")
+
+def sound():
+    
+    if bb_sound.play_start_the_box_sound.value == 1:
+        mixer.Sound.play(start_the_box_sound)
+        bb_sound.play_start_the_box_sound.value = 0
+    
+    if bb_sound.play_won_the_box_sound.value == 1:
+        mixer.Sound.play(won_the_box_sound)
+        bb_sound.play_won_the_box_sound.value = 0
+
+    if bb_sound.play_lost_the_box_sound.value == 1:
+        mixer.Sound.play(lost_the_box_sound)
+        bb_sound.play_lost_the_box_sound.value = 0
+
+    if bb_sound.play_good_sound.value == 1:
+        mixer.Sound.play(good_sound)
+        bb_sound.play_good_sound.value = 0
+
+    if bb_sound.play_wrong_sound.value == 1:
+        mixer.Sound.play(wrong_sound)
+        bb_sound.play_wrong_sound.value = 0
+
+    if bb_sound.play_deep_button_sound.value == 1:
+        mixer.Sound.play(deep_button_sound)
+        bb_sound.play_deep_button_sound.value = 0
+
+    if bb_sound.play_bleep.value == 1:
+        mixer.Sound.play(bleep)
+        bb_sound.play_bleep.value = 0
+
+    if bb_sound.play_simon1.value == 1:
+        mixer.Sound.play(simon1)
+        bb_sound.play_simon1.value = 0
+
+    if bb_sound.play_simon2.value == 1:
+        mixer.Sound.play(simon2)
+        bb_sound.play_simon2.value = 0
+
+    if bb_sound.play_simon3.value == 1:
+        mixer.Sound.play(simon3)
+        bb_sound.play_simon3.value = 0
+
+    if bb_sound.play_simon4.value == 1:
+        mixer.Sound.play(simon4)
+        bb_sound.play_simon4.value = 0
 
 # ------------- FUNCTIONS FOR IN THE GAME ------------------------------------------------------
 
@@ -91,6 +157,7 @@ def showTime():
 
 
 def blackBoxWon():
+    showTime()
     game_status.value = 3
     bb_sound.play_won_the_box_sound.value = 1
     while True:  # the game is won, this happens till a reset
@@ -98,6 +165,7 @@ def blackBoxWon():
 
 
 def blackBoxLost():
+    showTime()
     game_status.value = 4
     bb_sound.play_lost_the_box_sound.value = 1
     while True:  # the game is lost, this happens till a reset
@@ -107,12 +175,14 @@ def blackBoxLost():
 def boxStart():
     ''' what happens at the start, after the six buttons are pushed '''
     layout.game_status.value = 1
+    bb_sound.play_start_the_box_sound.value = 1
     global startTime  # record once when the game started
     startTime = datetime.datetime.now()
     print("start time: ", startTime)
     global deadline  # set the deadline for when the game must be finished
     deadline = datetime.datetime.now() + deltaMinutes
     layout.relais_value.value = 1  # put on back- and bottomlight
+    game_status.value = 1
 
 # -------------- BYPASS ------------------------------------------------------------------
 
@@ -124,62 +194,79 @@ def check_bypass():
     global simon_says_started
     global sinus_game_started
     global color_follow_started
-
+    global bypass_count
+    global first_half_finished
+    global second_half_finished
+    
     bypass = 0
-    margin = 100
-    count_number = 100  # the amount of times it needs to check if there is a value before passing it to see what it is.
+    margin = 60
+    count_number = 4  # the amount of times it needs to check if there is a value before passing it to see what it is.
 
-    if bypass_value.value > 100 or bypass_value.value < 4900:
-        count += 1
+    if layout.bypass_value.value > 100 or layout.bypass_value.value < 4900:
+        bypass_count += 1
+        # print(layout.bypass_value.value)
     else:
-        count = 0
+        bypass_count = 0
 
-    if count > count_number:
-        if (bypass_value.value <= (plug_bypass - margin) and bypass_value.value >= (plug_bypass + margin)):
+    if bypass_count > count_number:
+        if (layout.bypass_value.value >= (plug_bypass - margin) and layout.bypass_value.value <= (plug_bypass + margin)):
             bypass = 1
-        elif (bypass_value.value <= (RGB_bypass - margin) and bypass_value.value >= (RGB_bypass + margin)):
+            # print("bypass 1")
+        elif (layout.bypass_value.value >= (RGB_bypass - margin) and layout.bypass_value.value <= (RGB_bypass + margin)):
             bypass = 2
-        elif (bypass_value.value <= (simon_says_bypass - margin) and bypass_value.value >= (simon_says_bypass + margin)):
+            # print("bypass 2")
+        elif (layout.bypass_value.value >= (simon_says_bypass - margin) and layout.bypass_value.value <= (simon_says_bypass + margin)):
             bypass = 3
-        elif (bypass_value.value <= (turning_knobs_bypass - margin) and bypass_value.value >= (turning_knobs_bypass + margin)):
+            # print("bypass 3")
+        elif (layout.bypass_value.value >= (turning_knobs_bypass - margin) and layout.bypass_value.value <= (turning_knobs_bypass + margin)):
             bypass = 4
-        elif (bypass_value.value <= (sinus_game_bypass - margin) and bypass_value.value >= (sinus_game_bypass + margin)):
+            # print("bypass 4")
+        elif (layout.bypass_value.value >= (sinus_game_bypass - margin) and layout.bypass_value.value <= (sinus_game_bypass + margin)):
             bypass = 5
-        elif (bypass_value.value <= (color_follow_bypass - margin) and bypass_value.value >= (color_follow_bypass + margin)):
+            # print("bypass 5")
+        elif (layout.bypass_value.value >= (color_follow_bypass - margin) and layout.bypass_value.value <= (color_follow_bypass + margin)):
             bypass = 6
+            # print("bypass 6")
 
         # bypass the plugs to start the rgb game
         if bypass == 1 and RGB_game_started is False:
+            print("plugs bypassed, rgb started")
             RGB_game_process = multiprocessing.Process(target=RGB_game.main)
             RGB_game_process.start()
             RGB_game_started = True
 
         # bypass the rgb game to start simon says
         if bypass == 2 and simon_says_started is False:
+            print("rgb bypassed, simon says started")
             simon_says_process = multiprocessing.Process(target=simon_says.main)
             simon_says_process.start()
             simon_says_started = True
 
         # bypass simon says to turn on the three top leds
-        if bypass == 3:
+        if bypass == 3 and first_half_finished == False:
+            print("SS bypassed, first half finished")
             top_buttons.RGB_half_status.value = 1
+            first_half_finished = True
 
         # bypass the turning knobs and start the sinus game
         if bypass == 4 and sinus_game_started is False:
-            print ('spy knobs correctly oriëntated')  # spyknobs becomes 0 when connected correctly
+            print ('spy knobs bypassed, sinus started')  # spyknobs becomes 0 when connected correctly
             sinus_game_process = multiprocessing.Process(target=sinus_game.main)
             sinus_game_process.start()
             sinus_game_started = True
 
         # bypass the sinus game and start the color follow
         if bypass == 5 and color_follow_started is False:
+            print("sinus bypass, color follow started")
             color_follow_process = multiprocessing.Process(target=color_follow.main)
             color_follow_process.start()
             color_follow_started = True
 
         # bypass the color follow game and turn on the three top leds
-        if bypass == 6:
+        if bypass == 6 and second_half_finished == False:
+            print("color follow bypass, second half finisched")
             top_buttons.sinus_half_status.value = 1
+            second_half_finished = True 
 
 # -------------- THE GAME ------------------------------------------------------------------
 
@@ -193,15 +280,13 @@ def main():
     global simon_says_started
     global sinus_game_started
     global color_follow_started
-
+    
+    mixer.music.play(-1) # start looping background music
+    
     # this while loop keeps running to manage the game progression
     while True:
-
-        # test
-        if top_buttons.sinus_half_status.value == 1:
-            showTime()
-            while True:
-                pass
+        check_bypass() 
+        sound() #check and play the sounds
 
         # loop background sound
         # start a process to check the top buttons
@@ -259,10 +344,12 @@ def main():
 
         # BlackBox Lost
         if game_status.value == 1 and datetime.datetime.now() > deadline:
+            print("BLACKBOX LOST")
             blackBoxLost()
 
         # BlackBox Won
         if game_status.value == 1 and top_buttons.top_status.value == 2:
+            print("BLACKBOX WON")
             blackBoxWon()
 
 
@@ -271,7 +358,7 @@ if __name__ == "__main__":
     ledcontrol_process = multiprocessing.Process(target=ledcontrol.main)
     sound_process = multiprocessing.Process(target=bb_sound.main)
     layout_process.start()
-    time.sleep(2)
+    time.sleep(1)
     ledcontrol_process.start()
     sound_process.start()
     main()

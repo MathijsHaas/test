@@ -3,11 +3,7 @@ import multiprocessing
 import layout
 import datetime
 import time
-from pygame import mixer
-
-# SOUND
-mixer.init()
-deep_button_sound = mixer.Sound("sound_deep_button.ogg")
+import bb_sound
 
 # top_status keeps track of the top buttons and what they have to do.
 # 0 = not started, 1 = started, 2 = end game
@@ -50,7 +46,7 @@ def pushtogheter():
         for i in range(6):
             if bs[i] == 0 and count[i] == 0:
                 print ("start time", i)
-                mixer.Sound.play(deep_button_sound)
+                bb_sound.play_deep_button_sound.value = 1
                 count[i] = datetime.datetime.now()
                 buttonpressed[i] = 1
             elif bs[i] == 0 and datetime.datetime.now() < count[i] + pt:
@@ -87,25 +83,25 @@ def main():
 
         if RGB_half_status.value == 1:
             # helft 1 animatie
-            mixer.Sound.play(deep_button_sound)
+            bb_sound.play_deep_button_sound.value = 1
             layout.top_led1_value.value = 1
             time.sleep(1)
-            mixer.Sound.play(deep_button_sound)
+            bb_sound.play_deep_button_sound.value = 1
             layout.top_led2_value.value = 1
             time.sleep(1)
-            mixer.Sound.play(deep_button_sound)
+            bb_sound.play_deep_button_sound.value = 1
             layout.top_led3_value.value = 1
             RGB_half_status.value = 2
 
         if sinus_half_status.value == 1:
             # helft 2 animatie
-            mixer.Sound.play(deep_button_sound)
+            bb_sound.play_deep_button_sound.value = 1
             layout.top_led4_value.value = 1
             time.sleep(1)
-            mixer.Sound.play(deep_button_sound)
+            bb_sound.play_deep_button_sound.value = 1
             layout.top_led5_value.value = 1
             time.sleep(1)
-            mixer.Sound.play(deep_button_sound)
+            bb_sound.play_deep_button_sound.value = 1
             layout.top_led6_value.value = 1
             sinus_half_status.value = 2
 
@@ -113,6 +109,7 @@ def main():
             # meaning both sides are completed.
             # The
             pushtogheter()
+            RGB_half_status.value = 3 # to only run this once
             # win animation?
 
 

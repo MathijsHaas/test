@@ -17,7 +17,7 @@ b_play_value = multiprocessing.Value('i', 0)
 # for communication with the fadecandy server
 client = opc.Client('localhost:7890')
 timer_leds = 81  # amount of leds in the timer strip
-example_leds = 32  # amount of leds in the RGB example strip
+example_leds = 31  # amount of leds in the RGB example strip
 play_leds = 32  # amount of leds in the RGB strip the player controls
 startled = 128  # at what led does the RGB game start (first led of Fadecandy pin 3)
 

@@ -1,23 +1,18 @@
 
 import time
-from pygame import mixer
 import multiprocessing
 import layout
 import ledcontrol
-
-
-mixer.init()
-good_sound = mixer.Sound("sound_good.ogg")
-wrong_sound = mixer.Sound("sound_wrong.ogg")
+import bb_sound
 
 
 # -------------- PARAMETERS ------------------------------------------------------
 
-marge = 30  # how far can they be off from the correct valeu
-wait_time = 5  # amount of times it needs to be correct when checked.
+marge = 20  # how far can they be off from the correct valeu
+wait_time = 30  # amount of times it needs to be correct when checked.
 level = 0
 totaal_levels = 3
-time_per_level = 300  # sec
+time_per_level = 600  # sec
 
 
 game_won = multiprocessing.Value('i', 0)
@@ -27,7 +22,7 @@ game_won = multiprocessing.Value('i', 0)
 example = (
     (160, 80, 120),
     (50, 140, 100),
-    (52, 80, 17))
+    (40, 40, 160))
 
 
 # -------------- FUNCTIONS FOR IN THE GAME -----------------------------------------
@@ -45,7 +40,7 @@ def control_ledstrip(r, g, b):
 
 def blinkleds(r, g, b, n):
     """blinking all leds n times with rgb valeus"""
-    blinkspeed = 0.2
+    blinkspeed = 0.5
     for i in range(n):
         ledcontrol.r_example_value.value = r
         ledcontrol.g_example_value.value = g
@@ -69,7 +64,7 @@ def blinkleds(r, g, b, n):
 
 
 def level_won():
-    mixer.Sound.play(good_sound)
+    bb_sound.play_good_sound.value = 1
     print("blinking")
     blinkleds(0, 200, 0, 3)
     global level
@@ -77,7 +72,7 @@ def level_won():
 
 
 def level_lost():
-    mixer.Sound.play(wrong_sound)
+    bb_sound.play_wrong_sound.value = 1
     print("blinking")
     blinkleds(200, 0, 0, 3)
     global level
@@ -106,10 +101,10 @@ def main():
                 green = layout.RGBslide2_value.value
                 blue = layout.RGBslide3_value.value
                 control_ledstrip(layout.RGBslide1_value.value, layout.RGBslide2_value.value, layout.RGBslide3_value.value)
-                # print("RGB Red: {}, Green: {}, Blue: {}".format(layout.RGBslide1_value.value, layout.RGBslide2_value.value, layout.RGBslide3_value.value))
-                time.sleep(0.2)
+                print("RGB Red: {}, Green: {}, Blue: {}".format(layout.RGBslide1_value.value, layout.RGBslide2_value.value, layout.RGBslide3_value.value))
+                time.sleep(0.5)
                 if check_color_values(layout.RGBslide1_value.value, layout.RGBslide2_value.value, layout.RGBslide3_value.value, level):  # got the right slide setting?
-                    # timer to make sure its equal
+                     timer to make sure its equal
                     print("WIN level:", level)
                     level_won()
                     deadline += time_per_level  # add the time per level to the deadline. fast with the first level? more time for the second level.

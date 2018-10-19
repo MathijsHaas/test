@@ -1,15 +1,9 @@
 import time
 import datetime
 import random
-from pygame import mixer
 import layout
 import multiprocessing
-
-
-mixer.init()
-bleep = mixer.Sound("sound_small_button.ogg")
-wrong_sound = mixer.Sound("sound_wrong.ogg")
-good_sound = mixer.Sound("sound_good.ogg")
+import bb_sound
 
 
 # -------------- PARAMETERS --------------------------------
@@ -47,25 +41,25 @@ def correct_input(value):
         if layout.color_follow_button1_value.value == 0:
             ledchoice = "led1"
             print("led1")
-            mixer.Sound.play(bleep)
+            bb_sound.play_bleep.value = 1
             break
 
         elif layout.color_follow_button2_value.value == 0:
             ledchoice = "led2"
             print("led2")
-            mixer.Sound.play(bleep)
+            bb_sound.play_bleep.value = 1
             break
 
         elif layout.color_follow_button3_value.value == 0:
             ledchoice = "led3"
             print("led3")
-            mixer.Sound.play(bleep)
+            bb_sound.play_bleep.value = 1
             break
 
         elif layout.color_follow_button4_value.value == 0:
             ledchoice = "led4"
             print("led4")
-            mixer.Sound.play(bleep)
+            bb_sound.play_bleep.value = 1
             break
 
     if ledchoice == value:
@@ -115,13 +109,13 @@ def main():
             print(count)
             if count == levels:
                 time.sleep(1)
-                mixer.Sound.play(good_sound)
+                bb_sound.play_good_sound.value = 1
                 game_won.value = 1
                 print ("gewonnen")
                 break
             continue
         else:
-            mixer.Sound.play(wrong_sound)
+            bb_sound.play_wrong_sound.value = 1
             flash_all(3)
             count = 0
             print("verloren")

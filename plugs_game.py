@@ -1,10 +1,9 @@
-from pygame import mixer
 import time
 import layout
 import multiprocessing
+import bb_sound
 
-mixer.init()
-good_sound = mixer.Sound("sound_good.ogg")
+
 
 
 # --------------------- PARAMETERS -----------------------------------
@@ -30,7 +29,7 @@ def main():
                 layout.plugs3_value.value >= (v3 - margin) and layout.plugs3_value.value <= (v3 + margin)):
             counter += 1
             if counter == wait_time:
-                mixer.Sound.play(good_sound)
+                bb_sound.play_good_sound.value = 1
                 game_won.value = 1
                 print("plugs rightly plugged")
                 break

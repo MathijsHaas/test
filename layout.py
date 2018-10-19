@@ -315,9 +315,9 @@ def main():
         plugs2_value.value = int(adc1.read_voltage(plugs2) * 1000)
         plugs3_value.value = int(adc1.read_voltage(plugs3) * 1000)
 
-        RGBslide1_value.value = int(adc1.read_voltage(RGBslide1) * 50)  # to become a 0-255 value for the RGB led strips
-        RGBslide2_value.value = int(adc1.read_voltage(RGBslide2) * 50)
-        RGBslide3_value.value = int(adc1.read_voltage(RGBslide3) * 50)
+        RGBslide1_value.value = int(adc1.read_voltage(RGBslide1) * 35)  # to become a 0-255 value for the RGB led strips
+        RGBslide2_value.value = int(adc1.read_voltage(RGBslide2) * 35)
+        RGBslide3_value.value = int(adc1.read_voltage(RGBslide3) * 35)
 
 # -------------ANALOG INPUTS ADC 2 (third (and top) shield)---------------
 
