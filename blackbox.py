@@ -8,6 +8,7 @@ import multiprocessing  # to spawn each game as a separate process
 from pygame import mixer  # for sound
 import datetime  # to keep track of the deadline
 import layout
+import time
 
 # importing the differtent seperate games
 import top_buttons
@@ -25,9 +26,10 @@ segment = SevenSegment.SevenSegment(address=0x70)
 
 # Sound
 mixer.init()
-won_the_box_sound = mixer.Sound("won_the_box_sound.ogg")
-lost_the_box_sound = mixer.Sound("lost_the_box_sound.ogg")
-good_sound = mixer.Sound("good_sound.ogg")
+background_sound = mixer.Sound("sound_background.ogg")
+won_the_box_sound = mixer.Sound("sound_win_box.ogg")
+lost_the_box_sound = mixer.Sound("sound_lost_box.ogg")
+good_sound = mixer.Sound("sound_good.ogg")
 
 game_status = multiprocessing.Value('i', 0)
 # 0 = not started yet
@@ -52,7 +54,8 @@ color_follow_bypass = 3500
 
 '''
 Every game is it's own process in its seperate file.
-Each game has a game_won variable that is an multiprocessing value we can acces.
+Each game has a game_won variable that is
+ an multiprocessing value we can acces.
 This game_won value turns 1 when the game is won and thus the next game can start.
 
 Each game also has its own ..._started variable in the main loop to make sure the process only starts once.
@@ -110,9 +113,10 @@ def blackBoxLost():
 
 def boxStart():
     ''' what happens at the start, after the six buttons are pushed '''
-    game_status.value = 1
+    layout.game_status.value = 1
     global startTime  # record once when the game started
     startTime = datetime.datetime.now()
+    print("start time: ", startTime)
     global deadline  # set the deadline for when the game must be finished
     deadline = datetime.datetime.now() + deltaMinutes
     layout.relais_value.value = 1  # put on back- and bottomlight
@@ -200,6 +204,13 @@ def main():
 
     # this while loop keeps running to manage the game progression
     while True:
+        
+        # test
+        if top_buttons.sinus_half_status.value == 1:
+            showTime()
+            while True:
+                pass
+        
         # loop background sound
         # start a process to check the top buttons
         if top_buttons.top_status.value == 0 and top_buttons_started is False:
@@ -209,12 +220,14 @@ def main():
             top_buttons_started = True
 
         # start plug game after the six buttons are pushed togheter
-        if top_buttons.top_status.value == 0 and plugs_game_started is False:
+        if top_buttons.top_status.value == 1 and plugs_game_started is False:
             plugs_game_process = multiprocessing.Process(target=plugs_game.main)
             plugs_game_process.start()
             print("plugs process started")
             plugs_game_started = True
+            print("game start")
             boxStart()
+            print("gamestatus ", game_status.value)
 
         # Start the RGB game after all 6 plugs are connected correctly
         if plugs_game.game_won.value == 1 and RGB_game_started is False:
@@ -265,6 +278,7 @@ if __name__ == "__main__":
     layout_process = multiprocessing.Process(target=layout.main)
     ledcontrol_process = multiprocessing.Process(target=ledcontrol.main)
     layout_process.start()
+    time.sleep(2)
     ledcontrol_process.start()
     main()
     layout_process.terminate()

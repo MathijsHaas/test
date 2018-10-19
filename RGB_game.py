@@ -7,8 +7,8 @@ import ledcontrol
 
 
 mixer.init()
-good_sound = mixer.Sound("good_sound.ogg")
-wrong_sound = mixer.Sound("wrong_sound.ogg")
+good_sound = mixer.Sound("sound_good.ogg")
+wrong_sound = mixer.Sound("sound_wrong.ogg")
 
 
 # -------------- PARAMETERS ------------------------------------------------------
@@ -106,7 +106,7 @@ def main():
                 green = layout.RGBslide2_value.value
                 blue = layout.RGBslide3_value.value
                 control_ledstrip(layout.RGBslide1_value.value, layout.RGBslide2_value.value, layout.RGBslide3_value.value)
-                print("RGB Red: {}, Green: {}, Blue: {}".format(layout.RGBslide1_value.value, layout.RGBslide2_value.value, layout.RGBslide3_value.value))
+                # print("RGB Red: {}, Green: {}, Blue: {}".format(layout.RGBslide1_value.value, layout.RGBslide2_value.value, layout.RGBslide3_value.value))
                 time.sleep(0.2)
                 if check_color_values(layout.RGBslide1_value.value, layout.RGBslide2_value.value, layout.RGBslide3_value.value, level):  # got the right slide setting?
                     # timer to make sure its equal

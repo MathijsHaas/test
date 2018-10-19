@@ -15,12 +15,12 @@ game_won = multiprocessing.Value('i', 0)
 
 # SOUND
 mixer.init()
-bleep1 = mixer.Sound("bleep1.ogg")
-bleep2 = mixer.Sound("bleep2.ogg")
-bleep3 = mixer.Sound("bleep3.ogg")
-bleep4 = mixer.Sound("bleep4.ogg")
-wrong_sound = mixer.Sound("wrong_sound.ogg")
-good_sound = mixer.Sound("good_sound.ogg")
+bleep1 = mixer.Sound("sound_simon1.ogg")
+bleep2 = mixer.Sound("sound_simon2.ogg")
+bleep3 = mixer.Sound("sound_simon3.ogg")
+bleep4 = mixer.Sound("sound_simon4.ogg")
+wrong_sound = mixer.Sound("sound_wrong.ogg")
+good_sound = mixer.Sound("sound_good.ogg")
 
 
 def flash(led, n):

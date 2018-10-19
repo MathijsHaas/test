@@ -49,6 +49,11 @@ iobus2.set_port_direction(1, 0x00)
 iobus2.write_port(1, 0x00)
 
 
+# ---- test ----
+
+game_status = multiprocessing.Value('i', 0)
+
+
 # ------------------ ASSIGNING THE SHIELD PINS ---------------
 
 ''' DIGITAL INPUTS ON BUS 1 (ALL PULLUP) '''
@@ -193,6 +198,9 @@ bypass_value = multiprocessing.Value("i", 0)
 def main():
     ''' the loop that controls the input's and output's from the shields'''
     print ("reading and writing the pins")
+    for i in range(1, 17): # put out every lamp that might still be on
+            iobus2.write_pin(i, 0)
+            
     while True:
 
         # ------------------'''DIGITAL INPUTS ON BUS 1 '''--------------------------
@@ -230,27 +238,27 @@ def main():
         if top_led2_value.value == 1:
             iobus2.write_pin(top_led2, 1)
         else:
-            iobus2.write_pin(top_led2, 1)
+            iobus2.write_pin(top_led2, 0)
 
         if top_led3_value.value == 1:
             iobus2.write_pin(top_led3, 1)
         else:
-            iobus2.write_pin(top_led3, 1)
+            iobus2.write_pin(top_led3, 0)
 
         if top_led4_value.value == 1:
             iobus2.write_pin(top_led4, 1)
         else:
-            iobus2.write_pin(top_led4, 1)
+            iobus2.write_pin(top_led4, 0)
 
         if top_led5_value.value == 1:
             iobus2.write_pin(top_led5, 1)
         else:
-            iobus2.write_pin(top_led5, 1)
+            iobus2.write_pin(top_led5, 0)
 
         if top_led6_value.value == 1:
             iobus2.write_pin(top_led6, 1)
         else:
-            iobus2.write_pin(top_led6, 1)
+            iobus2.write_pin(top_led6, 0)
 
         # ------------------ simon says game leds -----------------------------------------
         if ss_led1_value.value == 1:

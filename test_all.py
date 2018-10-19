@@ -39,7 +39,7 @@ adc2 = ADCPi(0x6A, 0x6B, 12)
 
 # SOUND
 mixer.init()
-deep_button_sound = mixer.Sound("deep_button_sound.ogg")
+deep_button_sound = mixer.Sound("sound_deep_button.ogg")
 
 # IO PI PLUS shield setup
 

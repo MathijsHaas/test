@@ -7,18 +7,15 @@ import multiprocessing
 
 
 mixer.init()
-bleep1 = mixer.Sound("bleep2.ogg")
-bleep2 = mixer.Sound("bleep2.ogg")
-bleep3 = mixer.Sound("bleep2.ogg")
-bleep4 = mixer.Sound("bleep2.ogg")
-wrong_sound = mixer.Sound("wrong_sound.ogg")
-good_sound = mixer.Sound("good_sound.ogg")
+bleep = mixer.Sound("sound_small_button.ogg")
+wrong_sound = mixer.Sound("sound_wrong.ogg")
+good_sound = mixer.Sound("sound_good.ogg")
 
 
 # -------------- PARAMETERS --------------------------------
 led_pins = ["led1", "led2", "led3", "led4"]
 press_time = datetime.timedelta(seconds=2)  # seconds
-levels = 6
+levels = 2
 
 game_won = multiprocessing.Value('i', 0)
 
@@ -50,25 +47,25 @@ def correct_input(value):
         if layout.color_follow_button1_value.value == 0:
             ledchoice = "led1"
             print("led1")
-            mixer.Sound.play(bleep1)
+            mixer.Sound.play(bleep)
             break
 
         elif layout.color_follow_button2_value.value == 0:
             ledchoice = "led2"
             print("led2")
-            mixer.Sound.play(bleep2)
+            mixer.Sound.play(bleep)
             break
 
         elif layout.color_follow_button3_value.value == 0:
             ledchoice = "led3"
             print("led3")
-            mixer.Sound.play(bleep3)
+            mixer.Sound.play(bleep)
             break
 
         elif layout.color_follow_button4_value.value == 0:
             ledchoice = "led4"
             print("led4")
-            mixer.Sound.play(bleep4)
+            mixer.Sound.play(bleep)
             break
 
     if ledchoice == value:

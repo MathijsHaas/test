@@ -22,7 +22,7 @@ def main():
     while data != "done":
         sinus_waardes = [layout.sinusknob1_value.value, layout.sinusknob2_value.value, layout.sinusknob3_value.value]
         sinus_waardes_string = str(sinus_waardes[0]) + " " + str(sinus_waardes[1]) + " " + str(sinus_waardes[2])
-        print(sinus_waardes_string)
+        # print(sinus_waardes_string)
         s.send(sinus_waardes_string.encode('utf-8'))
         data = s.recv(1024)
         data = data.decode('utf-8')

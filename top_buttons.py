@@ -7,7 +7,7 @@ from pygame import mixer
 
 # SOUND
 mixer.init()
-deep_button_sound = mixer.Sound("deep_button_sound.ogg")
+deep_button_sound = mixer.Sound("sound_deep_button.ogg")
 
 # top_status keeps track of the top buttons and what they have to do.
 # 0 = not started, 1 = started, 2 = end game
@@ -19,7 +19,7 @@ sinus_half_status = multiprocessing.Value('i', 0)
 
 # PARAMETERS
 presstime = 50000  # microseconds to press. 1.000.000 microseconds per second
-buttons_to_win = 3
+buttons_to_win = 2
 
 # ---------------- FUNCTIONS FOR IN THE GAME -----------------------------------------
 
@@ -27,6 +27,7 @@ buttons_to_win = 3
 def pushtogheter():
     ''' put all the lights on and wait until all buttons are pressed. then start the game. (only 5 buttons are needed to start) '''
     # put all six lights on
+    print("push togheter started")
     layout.top_led1_value.value = 1
     layout.top_led2_value.value = 1
     layout.top_led3_value.value = 1
@@ -62,6 +63,7 @@ def pushtogheter():
                 buttonpressed[i] = 0
 
     # put out the leds after you press the correc number togheter
+    print("lampjes uit")
     layout.top_led1_value.value = 0
     layout.top_led2_value.value = 0
     layout.top_led3_value.value = 0
@@ -69,19 +71,19 @@ def pushtogheter():
     layout.top_led5_value.value = 0
     layout.top_led6_value.value = 0
 
-    top_status.value += 1  # 0 to 1 to start game. 1 to 2 to end the game
-
+    top_status.value += 1  # 0 to 1 to start game. 1 to 2 to end the ga
+    print("top_status.value: ", top_status.value)
 # ---------------------- THE GAME ---------------------------------------------------
 
 
 def main():
-    while top_status.value < 1:  # when the game is ended you exit this loop.
+    while True:  # when the game is ended you exit this loop.
         if top_status.value == 0:
             pushtogheter()
 
         if top_status.value == 1:
-            print ("we zijn los hoor")
             pass
+            
 
         if RGB_half_status.value == 1:
             # helft 1 animatie
@@ -117,5 +119,6 @@ def main():
 if __name__ == "__main__":
     layout_process = multiprocessing.Process(target=layout.main)
     layout_process.start()
+    time.sleep(2)
     main()
     layout_process.terminate()

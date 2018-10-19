@@ -4,7 +4,7 @@ import multiprocessing
 import opc
 import datetime
 import time
-import blackbox
+import layout
 
 r_example_value = multiprocessing.Value('i', 0)
 g_example_value = multiprocessing.Value('i', 0)
@@ -32,10 +32,12 @@ timer_started = False
 def timerstrip_running(strip):
     global newledout
     global shutdown_led
-    if blackbox.game_status.value == 0:  # not started
+    if layout.game_status.value == 0:  # not started
+        # print("gamestatus is nul hoor")
         pass
     
-    if blackbox.game_status.value == 1:
+    if layout.game_status.value == 1:
+        global timer_started
         if timer_started is False:
             timerstrip_setup(strip)
             timer_started = True
@@ -44,10 +46,10 @@ def timerstrip_running(strip):
             shutdown_led += 1
             newledout = newledout + datetime.timedelta(seconds=44.5)
             
-    if blackbox.game_status.value == 2:  # game won: timer strip flashing green
+    if layout.game_status.value == 2:  # game won: timer strip flashing green
         colorflash(strip, 230, 0, 0)
         
-    if blackbox.game_status.value == 3:  # game won: timer strip flashing red
+    if layout.game_status.value == 3:  # game won: timer strip flashing red
         colorflash(strip, 0, 230, 0)
 
 
@@ -75,6 +77,7 @@ def colorflash(strip, r, g, b):
 
 def timerstrip_setup(strip):
     ''' timerstrip setup that runs the timerstrip from green to red'''
+    print("timer strip setup")
     for i in range(timer_leds):  # timerstrip setup
         r = 255 - (255 / timer_leds * i)
         g = 255 / timer_leds * i
