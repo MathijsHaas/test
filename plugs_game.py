@@ -31,11 +31,10 @@ def main():
             if counter == wait_time:
                 bb_sound.play_good_sound.value = 1
                 game_won.value = 1
-                print("plugs rightly plugged")
                 break
         else:
             counter = 0
-
+    print("plugs rightly plugged")
 
 if __name__ == "__main__":
     layout_process = multiprocessing.Process(target=layout.main)

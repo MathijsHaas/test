@@ -7,8 +7,8 @@ import layout
 import bb_sound
 
 # PARAMETERS
-levels = 3
-pattern_speed = 0.1
+levels = 6
+pattern_speed = 0.2
 time_to_press = 4
 
 game_won = multiprocessing.Value('i', 0)
@@ -52,10 +52,10 @@ def flash_all(n):
 def correct_input(value):
     """check if the input is correct"""
     deadline = time.time() + time_to_press
-    print("value", value)
+##    print("value", value)
 
     while time.time() < deadline:
-
+        time.sleep(0.01)
         if layout.ss_button1_value.value == 0:
             ledchoise = 0
 ##            print("led1")
@@ -109,6 +109,7 @@ def attract_mode():
     ''' attracting the atention of the player to push a button and start the game'''
     layout.ss_led3_value.value = 1
     while True:
+        time.sleep(0.02)
         # knipper met lampjes
         if layout.ss_button1_value.value == 0 or layout.ss_button2_value.value == 0 or layout.ss_button3_value.value == 0 or layout.ss_button4_value.value == 0:
             layout.ss_led1_value.value = 0
@@ -127,23 +128,23 @@ def main():
             sequence = []  # Will contain the sequence of light for the simon says
 
             while True:
-                time.sleep(0.5)
+                time.sleep(1) #test
                 new_value = random.randint(0, 3)
                 sequence.append(new_value)
                 # Running through the example sequence
                 for i in range(0, len(sequence)):
 ##                    print (sequence[i])
                     chose_sound(sequence[i])
-                    flash(sequence[i], 0.6)
+                    flash(sequence[i], 0.4)
                     time.sleep(pattern_speed)
                 # Letting the player repeat the sequence
                 for i in range(0, len(sequence)):
                     while layout.ss_button1_value.value == 0 or layout.ss_button2_value.value == 0 or layout.ss_button3_value.value == 0 or layout.ss_button4_value.value == 0:
+                        time.sleep(0.01)
                         pass  # stops the program until you release the button again.
                     status = correct_input(sequence[i])
-                    time.sleep(0.05)
                     if status == 1:
-                        flash(sequence[i], 0.1)
+                        flash(sequence[i], 0.2)
                     else:
                         # LOST
                         bb_sound.play_wrong_sound.value = 1

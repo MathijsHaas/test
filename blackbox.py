@@ -68,6 +68,7 @@ deltaMinutes = datetime.timedelta(minutes=minutesToPlay)
 
 # -------------- SOUND ------------------------------------------------------------------
 
+mixer.pre_init(44100, -16, 2, 2048) #somehow makes the sound react quicker
 mixer.init()
 mixer.music.load("sound_background.ogg")
 won_the_box_sound = mixer.Sound("sound_win_box.ogg")
@@ -160,6 +161,7 @@ def blackBoxWon():
     showTime()
     game_status.value = 3
     bb_sound.play_won_the_box_sound.value = 1
+    ledcontrol.win_or_lose.value = 1
     while True:  # the game is won, this happens till a reset
         sound()
 
@@ -167,7 +169,11 @@ def blackBoxWon():
 def blackBoxLost():
     showTime()
     game_status.value = 4
+    mixer.music.stop()
     bb_sound.play_lost_the_box_sound.value = 1
+    time.sleep(0.2)
+    ledcontrol.win_or_lose.value = 2
+    layout.relais_value.value = 0
     while True:  # the game is lost, this happens till a reset
         sound()
 
@@ -288,10 +294,11 @@ def main():
     global first_half_finished
     global second_half_finished
     
-    mixer.music.play(-1) # start looping background music
+##    mixer.music.play(-1) # start looping background music
     
     # this while loop keeps running to manage the game progression
     while True:
+        time.sleep(0.005)
         check_bypass() 
         sound() #check and play the sounds
 

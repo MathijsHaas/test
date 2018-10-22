@@ -6,6 +6,8 @@ import datetime
 import time
 import layout
 
+win_or_lose = multiprocessing.Value('i', 0)
+
 r_example_value = multiprocessing.Value('i', 0)
 g_example_value = multiprocessing.Value('i', 0)
 b_example_value = multiprocessing.Value('i', 0)
@@ -118,8 +120,25 @@ def main():
     print("ledcontrol started")
     list_setup(strip)
     while True:
+        time.sleep(0.02) 
         RGB_color_control(strip)
         timerstrip_running(strip)
+        if win_or_lose.value == 1:
+            #won
+            for i in range(timer_leds):  # timerstrip to green
+                r = 0
+                g = 255
+                b = 0
+                strip[i] = (r, g, b)
+        if win_or_lose.value == 2:
+            #lost
+            for i in range(timer_leds):  # timerstrip to green
+                r = 255
+                g = 0
+                b = 0
+                strip[i] = (r, g, b)
+           
+            
     # Process that does the timerstrip countdown
     # process that controls the two ledstrips
 

@@ -27,6 +27,7 @@ except ImportError:
             "Failed to import library from parent folder")
 
 import multiprocessing
+import time
 
 #  analog shield adress
 adc1 = ADCPi(0x6C, 0x6D, 12)
@@ -79,7 +80,7 @@ color_follow_button3 = 14
 color_follow_button4 = 16
 
 # the input that reads if the the big turning knobs are in the right orientation.
-big_knobs = 13
+big_knobs = 15
 
 '''DIGITAL OUTPUTS ON BUS 2 '''
 
@@ -153,12 +154,12 @@ big_knobs_value = multiprocessing.Value('i', 1)
 '''DIGITAL OUTPUTS ON BUS 2 '''
 
 # top leds
-top_led1_value = multiprocessing.Value('i', 0)
-top_led2_value = multiprocessing.Value('i', 0)
-top_led3_value = multiprocessing.Value('i', 0)
-top_led4_value = multiprocessing.Value('i', 0)
-top_led5_value = multiprocessing.Value('i', 0)
-top_led6_value = multiprocessing.Value('i', 0)
+top_led1_value = multiprocessing.Value('i', 1)
+top_led2_value = multiprocessing.Value('i', 1)
+top_led3_value = multiprocessing.Value('i', 1)
+top_led4_value = multiprocessing.Value('i', 1)
+top_led5_value = multiprocessing.Value('i', 1)
+top_led6_value = multiprocessing.Value('i', 1)
 
 # simon says game leds !NIET AAPASSEN! deze worden in de code gebruikt
 ss_led1_value = multiprocessing.Value('i', 0)
@@ -202,6 +203,7 @@ def main():
             iobus2.write_pin(i, 0)
             
     while True:
+        time.sleep(0.01)
 
         # ------------------'''DIGITAL INPUTS ON BUS 1 '''--------------------------
 

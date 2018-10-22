@@ -9,9 +9,9 @@ import bb_sound
 # -------------- PARAMETERS ------------------------------------------------------
 
 marge = 20  # how far can they be off from the correct valeu
-wait_time = 30  # amount of times it needs to be correct when checked.
+wait_time = 50  # amount of times it needs to be correct when checked.
 level = 0
-totaal_levels = 1
+totaal_levels = 3
 time_per_level = 600  # sec
 
 
@@ -94,10 +94,12 @@ def check_color_values(red, green, blue, level):
 def main():
     count = 0
     while game_won.value == 0:
+        time.sleep(0.5)
         deadline = time.time() + time_per_level
         while level < totaal_levels:
             print ("level {}".format(level))
             while time.time() < deadline:
+                time.sleep(0.02)
                 red = layout.RGBslide1_value.value
                 green = layout.RGBslide2_value.value
                 blue = layout.RGBslide3_value.value

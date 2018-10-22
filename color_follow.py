@@ -98,7 +98,7 @@ def main():
     count = 0
     print (count)
     while True:
-        time.sleep(1)
+        time.sleep(0.02)
         new_led = random.choice(led_pins)
         print(new_led)
         put_led_on(new_led)

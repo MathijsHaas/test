@@ -37,6 +37,7 @@ def pushtogheter():
     count = [0, 0, 0, 0, 0, 0]  # keeps track of when the buttons are pressed
 
     while sum(buttonpressed) < buttons_to_win:
+        time.sleep(0.02)
         bs[0] = layout.top_button1_value.value
         bs[1] = layout.top_button2_value.value
         bs[2] = layout.top_button3_value.value
@@ -73,7 +74,9 @@ def pushtogheter():
 
 
 def main():
-    while True:  # when the game is ended you exit this loop.
+    time.sleep(1)
+    while True:
+        time.sleep(0.1)# when the game is ended you exit this loop.
         if top_status.value == 0:
             pushtogheter()
 
