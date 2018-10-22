@@ -7,7 +7,7 @@ import layout
 import bb_sound
 
 # PARAMETERS
-levels = 6
+levels = 10
 pattern_speed = 0.2
 time_to_press = 4
 

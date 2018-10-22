@@ -294,7 +294,7 @@ def main():
     global first_half_finished
     global second_half_finished
     
-##    mixer.music.play(-1) # start looping background music
+    mixer.music.play(-1) # start looping background music
     
     # this while loop keeps running to manage the game progression
     while True:
