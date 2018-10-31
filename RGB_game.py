@@ -11,7 +11,7 @@ import bb_sound
 marge = 20  # how far can they be off from the correct valeu
 wait_time = 50  # amount of times it needs to be correct when checked.
 level = 0
-totaal_levels = 3
+totaal_levels = 5
 time_per_level = 600  # sec
 
 
@@ -20,9 +20,11 @@ game_won = multiprocessing.Value('i', 0)
 
 # the colors that need to be machted in RGB valeus from 0 - 5V
 example = (
+    (0, 0, 170),
+    (100, 100, 0),
     (160, 80, 120),
     (50, 140, 100),
-    (40, 40, 160))
+    (40, 40, 170))
 
 
 # -------------- FUNCTIONS FOR IN THE GAME -----------------------------------------

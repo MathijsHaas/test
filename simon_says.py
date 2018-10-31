@@ -136,7 +136,7 @@ def main():
                 for i in range(0, len(sequence)):
                     ##                    print (sequence[i])
                     chose_sound(sequence[i])
-                    flash(sequence[i], 0.4)
+                    flash(sequence[i], 0.3)
                     time.sleep(pattern_speed)
                 # Letting the player repeat the sequence
                 for i in range(0, len(sequence)):
