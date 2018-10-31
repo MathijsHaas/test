@@ -8,7 +8,7 @@ import bb_sound
 
 # -------------- PARAMETERS --------------------------------
 led_pins = ["led1", "led2", "led3", "led4"]
-press_time = datetime.timedelta(seconds=1)  # seconds
+press_time = datetime.timedelta(seconds=2)  # seconds
 levels = 10
 
 game_won = multiprocessing.Value('i', 0)

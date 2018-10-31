@@ -15,7 +15,7 @@ sinus_half_status = multiprocessing.Value('i', 0)
 
 # PARAMETERS
 presstime = 50000  # microseconds to press. 1.000.000 microseconds per second
-buttons_to_win = 2
+buttons_to_win = 5
 
 # ---------------- FUNCTIONS FOR IN THE GAME -----------------------------------------
 
