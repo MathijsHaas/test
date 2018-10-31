@@ -199,11 +199,11 @@ bypass_value = multiprocessing.Value("i", 0)
 def main():
     ''' the loop that controls the input's and output's from the shields'''
     print ("reading and writing the pins")
-    for i in range(1, 17): # put out every lamp that might still be on
-            iobus2.write_pin(i, 0)
-            
+    for i in range(1, 17):  # put out every lamp that might still be on
+        iobus2.write_pin(i, 0)
+
     while True:
-        time.sleep(0.01)
+        time.sleep(0.02)
 
         # ------------------'''DIGITAL INPUTS ON BUS 1 '''--------------------------
 

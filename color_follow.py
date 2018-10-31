@@ -35,9 +35,10 @@ def correct_input(value):
     """check if the input is correct within the time"""
     deadline = datetime.datetime.now() + press_time
     print("checking input")
-    ledchoice = None 
-    
+    ledchoice = None
+
     while datetime.datetime.now() < deadline:
+        time.sleep(0.02)
         if layout.color_follow_button1_value.value == 0:
             ledchoice = "led1"
             print("led1")
@@ -97,7 +98,7 @@ def main():
     random.seed()
     count = 0
     print (count)
-    while True:
+    while game_won.value == 0:
         time.sleep(0.02)
         new_led = random.choice(led_pins)
         print(new_led)
@@ -127,7 +128,6 @@ def main():
 
 
 if __name__ == "__main__":
-    
     layout_process = multiprocessing.Process(target=layout.main)
     layout.color_follow_led1_value.value = 0
     layout.color_follow_led2_value.value = 0

@@ -68,7 +68,7 @@ deltaMinutes = datetime.timedelta(minutes=minutesToPlay)
 
 # -------------- SOUND ------------------------------------------------------------------
 
-mixer.pre_init(44100, -16, 2, 2048) #somehow makes the sound react quicker
+mixer.pre_init(44100, -16, 2, 2048)  # somehow makes the sound react quicker
 mixer.init()
 mixer.music.load("sound_background.ogg")
 won_the_box_sound = mixer.Sound("sound_win_box.ogg")
@@ -83,12 +83,13 @@ simon2 = mixer.Sound("sound_simon2.ogg")
 simon3 = mixer.Sound("sound_simon3.ogg")
 simon4 = mixer.Sound("sound_simon4.ogg")
 
+
 def sound():
-    
+
     if bb_sound.play_start_the_box_sound.value == 1:
         mixer.Sound.play(start_the_box_sound)
         bb_sound.play_start_the_box_sound.value = 0
-    
+
     if bb_sound.play_won_the_box_sound.value == 1:
         mixer.Sound.play(won_the_box_sound)
         bb_sound.play_won_the_box_sound.value = 0
@@ -181,7 +182,6 @@ def blackBoxLost():
 def boxStart():
     ''' what happens at the start, after the six buttons are pushed '''
 
-
     # update the display LEDs.
     segment.write_display()
     layout.game_status.value = 1
@@ -207,7 +207,7 @@ def check_bypass():
     global bypass_count
     global first_half_finished
     global second_half_finished
-    
+
     bypass = 0
     margin = 60
     count_number = 4  # the amount of times it needs to check if there is a value before passing it to see what it is.
@@ -276,7 +276,7 @@ def check_bypass():
         if bypass == 6 and second_half_finished == False:
             print("color follow bypass, second half finisched")
             top_buttons.sinus_half_status.value = 1
-            second_half_finished = True 
+            second_half_finished = True
 
 # -------------- THE GAME ------------------------------------------------------------------
 
@@ -293,14 +293,14 @@ def main():
     global color_follow_started
     global first_half_finished
     global second_half_finished
-    
-    mixer.music.play(-1) # start looping background music
-    
+
+    mixer.music.play(-1)  # start looping background music
+
     # this while loop keeps running to manage the game progression
     while True:
         time.sleep(0.005)
-        check_bypass() 
-        sound() #check and play the sounds
+        check_bypass()
+        sound()  # check and play the sounds
 
         # loop background sound
         # start a process to check the top buttons
@@ -334,10 +334,10 @@ def main():
             print("simon says process started")
             simon_says_started = True
 
-        if simon_says.game_won.value == 1 and first_half_finished == False:
+        if simon_says.game_won.value == 1 and first_half_finished is False:
             top_buttons.RGB_half_status.value = 1
             first_half_finished = True
-            
+
         # start the sinus game
         if layout.big_knobs_value.value == 0 and sinus_game_started is False:
             print ('spy knobs correctly oriëntated')  # spyknobs becomes 0 when connected correctly
@@ -354,7 +354,7 @@ def main():
             print("color_follow process started")
             color_follow_started = True
 
-        if color_follow.game_won.value == 1 and second_half_finished == False:
+        if color_follow.game_won.value == 1 and second_half_finished is False:
             top_buttons.sinus_half_status.value = 1
             second_half_finished = True
 

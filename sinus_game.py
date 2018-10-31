@@ -20,6 +20,7 @@ def main():
     data = s.recv(1024)
     data = data.decode('utf-8')
     while data != "done":
+        time.sleep(0.02)
         sinus_waardes = [layout.sinusknob1_value.value, layout.sinusknob2_value.value, layout.sinusknob3_value.value]
         sinus_waardes_string = str(sinus_waardes[0]) + " " + str(sinus_waardes[1]) + " " + str(sinus_waardes[2])
         # print(sinus_waardes_string)
