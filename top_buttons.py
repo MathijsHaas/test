@@ -37,7 +37,7 @@ def pushtogheter():
     count = [0, 0, 0, 0, 0, 0]  # keeps track of when the buttons are pressed
 
     while sum(buttonpressed) < buttons_to_win:
-        time.sleep(0.02)
+        time.sleep(0.05)
         bs[0] = layout.top_button1_value.value
         bs[1] = layout.top_button2_value.value
         bs[2] = layout.top_button3_value.value
@@ -76,13 +76,14 @@ def pushtogheter():
 def main():
     time.sleep(1)
     while True:
-        time.sleep(0.1)# when the game is ended you exit this loop.
+        # checking the status every second is enough,
+        # when buttons are pushed in the pushtogheter() the check is faster
+        time.sleep(1)
         if top_status.value == 0:
             pushtogheter()
 
         if top_status.value == 1:
             pass
-            
 
         if RGB_half_status.value == 1:
             # helft 1 animatie
@@ -116,7 +117,7 @@ def main():
             # meaning both sides are completed.
             # The
             pushtogheter()
-            RGB_half_status.value = 3 # to only run this once
+            RGB_half_status.value = 3  # to only run this once
             # win animation?
 
 

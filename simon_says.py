@@ -13,6 +13,7 @@ time_to_press = 4
 
 game_won = multiprocessing.Value('i', 0)
 
+
 def flash(led, n):
     """turn led l for n seconds"""
     if led == 0:
@@ -55,41 +56,41 @@ def correct_input(value):
 ##    print("value", value)
 
     while time.time() < deadline:
-        time.sleep(0.01)
+        time.sleep(0.02)
         if layout.ss_button1_value.value == 0:
             ledchoise = 0
-##            print("led1")
+# print("led1")
             bb_sound.play_simon1.value = 1
             break
 
         elif layout.ss_button2_value.value == 0:
             ledchoise = 1
-##            print("led2")
+# print("led2")
             bb_sound.play_simon2.value = 1
             break
 
         elif layout.ss_button3_value.value == 0:
             ledchoise = 2
-##            print("led3")
+# print("led3")
             bb_sound.play_simon3.value = 1
             break
 
         elif layout.ss_button4_value.value == 0:
             ledchoise = 3
-##            print("led4")
+# print("led4")
             bb_sound.play_simon4.value = 1
             break
-        
+
         else:
             ledchoise = 5  # to declare the ledcoise variable without it being 0-3 for the comparison at the end of the function
 
     if ledchoise == value:
-        
-##        print(ledchoise, "goeie keuze")
+
+        ##        print(ledchoise, "goeie keuze")
         return 1
-        
+
     else:
-##        print(ledchoise, "slechte keuze")
+        ##        print(ledchoise, "slechte keuze")
         return 0
 
 
@@ -109,7 +110,7 @@ def attract_mode():
     ''' attracting the atention of the player to push a button and start the game'''
     layout.ss_led3_value.value = 1
     while True:
-        time.sleep(0.02)
+        time.sleep(0.04)
         # knipper met lampjes
         if layout.ss_button1_value.value == 0 or layout.ss_button2_value.value == 0 or layout.ss_button3_value.value == 0 or layout.ss_button4_value.value == 0:
             layout.ss_led1_value.value = 0
@@ -120,7 +121,7 @@ def attract_mode():
 
 
 def main():
-    while True:
+    while game_won.value == 0:
         if attract_mode():
 
             random.seed()   # Different seed for every game
@@ -128,12 +129,12 @@ def main():
             sequence = []  # Will contain the sequence of light for the simon says
 
             while True:
-                time.sleep(1) #test
+                time.sleep(1)  # test
                 new_value = random.randint(0, 3)
                 sequence.append(new_value)
                 # Running through the example sequence
                 for i in range(0, len(sequence)):
-##                    print (sequence[i])
+                    ##                    print (sequence[i])
                     chose_sound(sequence[i])
                     flash(sequence[i], 0.4)
                     time.sleep(pattern_speed)
