@@ -7,7 +7,7 @@ import bb_sound
 # --------------------- PARAMETERS -----------------------------------
 
 wait_time = 5  # amount of times it needs to be correct when checked.
-margin = 50  # the accepted error
+margin = 80  # the accepted error
 v1 = 3232
 v2 = 3230
 v3 = 1092

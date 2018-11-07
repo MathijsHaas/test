@@ -31,28 +31,27 @@ strip = manager.list()
 
 timer_started = False
 
+
 def timerstrip_running(strip):
     global newledout
     global shutdown_led
-    if layout.game_status.value == 0:  # not started
-        # print("gamestatus is nul hoor")
-        pass
-    
+
     if layout.game_status.value == 1:
         global timer_started
         if timer_started is False:
             timerstrip_setup(strip)
+            newledout = datetime.datetime.now()
             timer_started = True
-        if datetime.datetime.now() > newledout: # timer strip running
+        if datetime.datetime.now() > newledout:  # timer strip running
             strip[timer_leds - shutdown_led] = (0, 0, 0)
             shutdown_led += 1
             newledout = newledout + datetime.timedelta(seconds=44.5)
-            
+
     if layout.game_status.value == 2:  # game won: timer strip flashing green
-        colorflash(strip, 230, 0, 0)
-        
-    if layout.game_status.value == 3:  # game won: timer strip flashing red
         colorflash(strip, 0, 230, 0)
+
+    if layout.game_status.value == 3:  # game lost: timer strip flashing red
+        colorflash(strip, 230, 0, 0)
 
 
 def timertest(strip):  # mag weg
@@ -120,25 +119,24 @@ def main():
     print("ledcontrol started")
     list_setup(strip)
     while True:
-        time.sleep(0.02) 
+        time.sleep(0.02)
         RGB_color_control(strip)
         timerstrip_running(strip)
         if win_or_lose.value == 1:
-            #won
+            # won
             for i in range(timer_leds):  # timerstrip to green
                 r = 0
                 g = 255
                 b = 0
                 strip[i] = (r, g, b)
         if win_or_lose.value == 2:
-            #lost
+            # lost
             for i in range(timer_leds):  # timerstrip to green
                 r = 255
                 g = 0
                 b = 0
                 strip[i] = (r, g, b)
-           
-            
+
     # Process that does the timerstrip countdown
     # process that controls the two ledstrips
 

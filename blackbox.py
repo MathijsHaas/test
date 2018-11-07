@@ -25,7 +25,6 @@ import color_follow
 # clock via SDA/SCL
 segment = SevenSegment.SevenSegment(address=0x70)
 
-game_status = multiprocessing.Value('i', 0)
 # 0 = not started yet
 # 1 = started
 # 2 = black box won within time
@@ -160,7 +159,7 @@ def showTime():
 
 def blackBoxWon():
     showTime()
-    game_status.value = 3
+    layout.game_status.value = 2
     bb_sound.play_won_the_box_sound.value = 1
     ledcontrol.win_or_lose.value = 1
     while True:  # the game is won, this happens till a reset
@@ -169,7 +168,7 @@ def blackBoxWon():
 
 def blackBoxLost():
     showTime()
-    game_status.value = 4
+    layout.game_status.value = 3
     mixer.music.stop()
     bb_sound.play_lost_the_box_sound.value = 1
     time.sleep(0.2)
@@ -192,7 +191,7 @@ def boxStart():
     global deadline  # set the deadline for when the game must be finished
     deadline = datetime.datetime.now() + deltaMinutes
     layout.relais_value.value = 1  # put on back- and bottomlight
-    game_status.value = 1
+    layout.game_status.value = 1
 
 # -------------- BYPASS ------------------------------------------------------------------
 
@@ -318,7 +317,7 @@ def main():
             plugs_game_started = True
             print("game start")
             boxStart()
-            print("gamestatus ", game_status.value)
+            print("gamestatus ", layout.game_status.value)
 
         # Start the RGB game after all 6 plugs are connected correctly
         if plugs_game.game_won.value == 1 and RGB_game_started is False:
@@ -359,12 +358,12 @@ def main():
             second_half_finished = True
 
         # BlackBox Lost
-        if game_status.value == 1 and datetime.datetime.now() > deadline:
+        if layout.game_status.value == 1 and datetime.datetime.now() > deadline:
             print("BLACKBOX LOST")
             blackBoxLost()
 
         # BlackBox Won
-        if game_status.value == 1 and top_buttons.top_status.value == 2:
+        if layout.game_status.value == 1 and top_buttons.top_status.value == 2:
             print("BLACKBOX WON")
             blackBoxWon()
 
