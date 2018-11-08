@@ -122,6 +122,10 @@ def main():
                 level_lost()
             break  # het level is weer op 0 gezet, dus er moet opnieuw een deadline gezet worden
         else:
+            # set the ledstrip to permanent green
+            ledcontrol.g_example_value.value = 200
+            ledcontrol.g_play_value.value = 200
+
             game_won.value = 1
 
 
