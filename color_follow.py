@@ -41,25 +41,25 @@ def correct_input(value):
         time.sleep(0.02)
         if layout.color_follow_button1_value.value == 0:
             ledchoice = "led1"
-            print("led1")
+            print("kies led1")
             bb_sound.play_bleep.value = 1
             break
 
         elif layout.color_follow_button2_value.value == 0:
             ledchoice = "led2"
-            print("led2")
+            print("kies led2")
             bb_sound.play_bleep.value = 1
             break
 
         elif layout.color_follow_button3_value.value == 0:
             ledchoice = "led3"
-            print("led3")
+            print("kies led3")
             bb_sound.play_bleep.value = 1
             break
 
         elif layout.color_follow_button4_value.value == 0:
             ledchoice = "led4"
-            print("led4")
+            print("kies led4")
             bb_sound.play_bleep.value = 1
             break
 
