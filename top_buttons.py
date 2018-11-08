@@ -20,6 +20,29 @@ buttons_to_win = 5
 # ---------------- FUNCTIONS FOR IN THE GAME -----------------------------------------
 
 
+def winanimation():
+    speed = 0.2
+    while True:
+        layout.top_led1_value.value = 1
+        time.sleep(speed)
+        layout.top_led1_value.value = 0
+        layout.top_led2_value.value = 1
+        time.sleep(speed)
+        layout.top_led2_value.value = 0
+        layout.top_led3_value.value = 1
+        time.sleep(speed)
+        layout.top_led3_value.value = 0
+        layout.top_led4_value.value = 1
+        time.sleep(speed)
+        layout.top_led4_value.value = 0
+        layout.top_led5_value.value = 1
+        time.sleep(speed)
+        layout.top_led5_value.value = 0
+        layout.top_led6_value.value = 1
+        time.sleep(speed)
+        layout.top_led6_value.value = 0
+
+
 def pushtogheter():
     ''' put all the lights on and wait until all buttons are pressed. then start the game. (only 5 buttons are needed to start) '''
     # put all six lights on
@@ -59,7 +82,7 @@ def pushtogheter():
                 count[i] = 0
                 buttonpressed[i] = 0
 
-    # put out the leds after you press the correc number togheter
+    # put out the leds after you press the correct number togheter
     print("lampjes uit")
     layout.top_led1_value.value = 0
     layout.top_led2_value.value = 0
@@ -118,8 +141,7 @@ def main():
             # The
             pushtogheter()
             RGB_half_status.value = 3  # to only run this once
-            # win animation?
-
+            winanimation()
 
 if __name__ == "__main__":
     layout_process = multiprocessing.Process(target=layout.main)
