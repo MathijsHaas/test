@@ -12,7 +12,7 @@ marge = 20  # how far can they be off from the correct valeu
 wait_time = 50  # amount of times it needs to be correct when checked.
 level = 0
 totaal_levels = 5
-time_per_level = 600  # sec
+time_per_level = 60000  # sec
 
 
 game_won = multiprocessing.Value('i', 0)
@@ -102,12 +102,12 @@ def main():
             print ("level {}".format(level))
             while time.time() < deadline:
                 time.sleep(0.02)
-                red = layout.RGBslide1_value.value
-                green = layout.RGBslide2_value.value
-                blue = layout.RGBslide3_value.value
-                control_ledstrip(layout.RGBslide1_value.value, layout.RGBslide2_value.value, layout.RGBslide3_value.value)
+##                red = layout.RGBslide1_value.value
+##                green = layout.RGBslide2_value.value
+##                blue = layout.RGBslide3_value.value
 ##                print("RGB Red: {}, Green: {}, Blue: {}".format(layout.RGBslide1_value.value, layout.RGBslide2_value.value, layout.RGBslide3_value.value))
-##                time.sleep(0.5)
+                control_ledstrip(layout.RGBslide1_value.value, layout.RGBslide2_value.value, layout.RGBslide3_value.value)
+# time.sleep(0.5)
                 if check_color_values(layout.RGBslide1_value.value, layout.RGBslide2_value.value, layout.RGBslide3_value.value, level):  # got the right slide setting?
                     count += 1
                 else:

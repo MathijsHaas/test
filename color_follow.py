@@ -105,6 +105,9 @@ def main():
         put_led_on(new_led)
         status = correct_input(new_led)
         put_led_off(new_led)
+        while layout.color_follow_button1_value.value == 0 or layout.color_follow_button2_value.value == 0 or layout.color_follow_button3_value.value == 0 or layout.color_follow_button4_value.value == 0:
+            time.sleep(0.01)
+            pass  # stops the program until you release the button again.
         if status is True:
             count += 1
             print(count)
