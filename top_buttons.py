@@ -14,7 +14,7 @@ RGB_half_status = multiprocessing.Value('i', 0)
 sinus_half_status = multiprocessing.Value('i', 0)
 
 # PARAMETERS
-presstime = 50000  # microseconds to press. 1.000.000 microseconds per second
+presstime = 200000  # microseconds to press. 1.000.000 microseconds per second
 buttons_to_win = 5
 
 # ---------------- FUNCTIONS FOR IN THE GAME -----------------------------------------
@@ -142,6 +142,7 @@ def main():
             pushtogheter()
             RGB_half_status.value = 3  # to only run this once
             winanimation()
+
 
 if __name__ == "__main__":
     layout_process = multiprocessing.Process(target=layout.main)
