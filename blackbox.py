@@ -297,7 +297,7 @@ def main():
 
     # this while loop keeps running to manage the game progression
     while True:
-        time.sleep(0.005)
+        time.sleep(0.05)
         check_bypass()
         sound()  # check and play the sounds
 

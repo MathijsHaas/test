@@ -56,29 +56,41 @@ def correct_input(value):
 ##    print("value", value)
 
     while time.time() < deadline:
-        time.sleep(0.02)
+        time.sleep(0.05)
         if layout.ss_button1_value.value == 0:
             ledchoise = 0
 # print("led1")
-            bb_sound.play_simon1.value = 1
-            break
+            bb_sound.play_simon1.value = 1  # play the sound
+            while layout.ss_button1_value.value == 0:  # keep the light on till button release
+                layout.ss_led1_value.value = 1
+            layout.ss_led1_value.value = 0  # light out after button release
+            break  # break the loop to compare the coise to the correct anwser
 
         elif layout.ss_button2_value.value == 0:
             ledchoise = 1
 # print("led2")
             bb_sound.play_simon2.value = 1
+            while layout.ss_button2_value.value == 0:
+                layout.ss_led2_value.value = 1
+            layout.ss_led2_value.value = 0
             break
 
         elif layout.ss_button3_value.value == 0:
             ledchoise = 2
 # print("led3")
             bb_sound.play_simon3.value = 1
+            while layout.ss_button3_value.value == 0:
+                layout.ss_led3_value.value = 1
+            layout.ss_led3_value.value = 0
             break
 
         elif layout.ss_button4_value.value == 0:
             ledchoise = 3
 # print("led4")
             bb_sound.play_simon4.value = 1
+            while layout.ss_button4_value.value == 0:
+                layout.ss_led4_value.value = 1
+            layout.ss_led4_value.value = 0
             break
 
         else:
@@ -136,18 +148,12 @@ def main():
                 for i in range(0, len(sequence)):
                     ##                    print (sequence[i])
                     chose_sound(sequence[i])
-                    flash(sequence[i], 0.3)
+                    flash(sequence[i], 0.1)
                     time.sleep(pattern_speed)
                 # Letting the player repeat the sequence
                 for i in range(0, len(sequence)):
-                    while layout.ss_button1_value.value == 0 or layout.ss_button2_value.value == 0 or layout.ss_button3_value.value == 0 or layout.ss_button4_value.value == 0:
-                        time.sleep(0.01)
-                        pass  # stops the program until you release the button again.
                     status = correct_input(sequence[i])
-                    if status == 1:
-                        flash(sequence[i], 0.2)
-                    else:
-                        # LOST
+                    if status != 1:  # thus not correct
                         bb_sound.play_wrong_sound.value = 1
                         print("Simon Says Wrong")
                         flash_all(3)
