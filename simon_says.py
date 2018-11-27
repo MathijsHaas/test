@@ -146,7 +146,6 @@ def main():
                 sequence.append(new_value)
                 # Running through the example sequence
                 for i in range(0, len(sequence)):
-                    ##                    print (sequence[i])
                     chose_sound(sequence[i])
                     flash(sequence[i], 0.1)
                     time.sleep(pattern_speed)
