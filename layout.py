@@ -203,7 +203,7 @@ def main():
         iobus2.write_pin(i, 0)
 
     while True:
-        time.sleep(0.05)
+        time.sleep(0.01)
 
         # ------------------'''DIGITAL INPUTS ON BUS 1 '''--------------------------
 

@@ -2,7 +2,7 @@
 # unclutter -idle 1 &
 # midori -e Fullscreen -a http://localhost:5000 &
 terminal -e command
-sudo amixer set PCM -- 100%
+sudo amixer set PCM -- 80%
 sudo amixer cset numid=3 1
 echo "starting the blackbox"
 cd /home/pi/test
