@@ -56,13 +56,14 @@ def correct_input(value):
 ##    print("value", value)
 
     while time.time() < deadline:
-        time.sleep(0.05)
+        time.sleep(0.02)
         if layout.ss_button1_value.value == 0:
             ledchoise = 0
 # print("led1")
             bb_sound.play_simon1.value = 1  # play the sound
             while layout.ss_button1_value.value == 0:  # keep the light on till button release
                 layout.ss_led1_value.value = 1
+                time.sleep(0.05)
             layout.ss_led1_value.value = 0  # light out after button release
             break  # break the loop to compare the coise to the correct anwser
 
@@ -72,6 +73,7 @@ def correct_input(value):
             bb_sound.play_simon2.value = 1
             while layout.ss_button2_value.value == 0:
                 layout.ss_led2_value.value = 1
+                time.sleep(0.05)
             layout.ss_led2_value.value = 0
             break
 
@@ -81,6 +83,7 @@ def correct_input(value):
             bb_sound.play_simon3.value = 1
             while layout.ss_button3_value.value == 0:
                 layout.ss_led3_value.value = 1
+                time.sleep(0.05)
             layout.ss_led3_value.value = 0
             break
 
@@ -90,6 +93,7 @@ def correct_input(value):
             bb_sound.play_simon4.value = 1
             while layout.ss_button4_value.value == 0:
                 layout.ss_led4_value.value = 1
+                time.sleep(0.05)
             layout.ss_led4_value.value = 0
             break
 
@@ -147,7 +151,7 @@ def main():
                 # Running through the example sequence
                 for i in range(0, len(sequence)):
                     chose_sound(sequence[i])
-                    flash(sequence[i], 0.1)
+                    flash(sequence[i], 0.15)
                     time.sleep(pattern_speed)
                 # Letting the player repeat the sequence
                 for i in range(0, len(sequence)):

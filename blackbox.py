@@ -44,7 +44,7 @@ RGB_bypass = 3271
 simon_says_bypass = 3953
 turning_knobs_bypass = 2466
 sinus_game_bypass = 1116
-color_follow_bypass = 88
+color_follow_bypass = 120
 bypass_count = 0
 
 
@@ -208,8 +208,10 @@ def check_bypass():
     global second_half_finished
 
     bypass = 0
-    margin = 60
+    margin = 80
     count_number = 4  # the amount of times it needs to check if there is a value before passing it to see what it is.
+
+    # print(layout.bypass_value.value)
 
     if layout.bypass_value.value > 100 or layout.bypass_value.value < 4900:
         bypass_count += 1
