@@ -40,4 +40,3 @@ if __name__ == '__main__':
     layout_process.start()
     main()
     layout_process.terminate()
-
