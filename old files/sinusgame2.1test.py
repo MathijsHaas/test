@@ -175,11 +175,9 @@ while running:
     time.sleep(0.02)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
 
     if level < len(levels):
         # Redraw the background
-        surface.fill(background_color)
         surface.blit(background_image, [0, 0])
         drawPlayerWave()
         drawExampleWave()

@@ -1,8 +1,9 @@
 import pygame
 import time
 import math
-
+import layout
 import multiprocessing
+import bb_sound
 
 sinewave_game_status = multiprocessing.Value('i', 1)  # 0 = not started, 1 = started, 2 = won
 
@@ -49,15 +50,23 @@ frequency = 1
 amplitude = 50
 
 
+def mappingValues(value, leftMin, leftMax, rightMin, rightMax):
+    """ mapping a value range to another value range"""
+    leftSpan = leftMax - leftMin                            # Figure out how 'wide' each range is
+    rightSpan = rightMax - rightMin
+    valueScaled = float(value - leftMin) / float(leftSpan)  # Convert the left range into a 0-1 range (float)
+    return rightMin + (valueScaled * rightSpan)             # Convert the 0-1 range into a value in the right range.
+
+
 def control():
     ''' influence the values to play'''
     global amplitude
     global frequency
     global translate
 
-    # translate = sinusknob1_value.value
-    # frequency = sinusknob2_value.value
-    # amplitude = sinusknob3_value.value
+    translate = mappingValues(layout.sinusknob1_value.value, 0, 500, 0, 220)
+    frequency = mappingValues(layout.linusknob2_value.value, 0, 500, 0.1, 20)
+    amplitude = mappingValues(layout.sinusknob3_value.value, 0, 500, -400, 400)
 
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_w and amplitude < 220:
@@ -75,14 +84,14 @@ def control():
 
 
 # punten waarom de golven gecheck worden
-punt1, punt2, punt3, punt4, punt5, punt6 = 50, 100, 300, 500, 600, 700
-examplePunt1, examplePunt2, examplePunt3, examplePunt4, examplePunt5, examplePunt6 = 0, 0, 0, 0, 0, 0
-playerPunt1, playerPunt2, playerPunt3, playerPunt4, playerPunt5, playerPunt6 = 0, 0, 0, 0, 0, 0
+punt1, punt2, punt3, punt4, punt5, punt6, punt7 = 0, 100, 200, 300, 500, 600, 700
+examplePunt1, examplePunt2, examplePunt3, examplePunt4, examplePunt5, examplePunt6, examplePunt7 = 0, 0, 0, 0, 0, 0, 0
+playerPunt1, playerPunt2, playerPunt3, playerPunt4, playerPunt5, playerPunt6, playerPunt7 = 0, 0, 0, 0, 0, 0, 0
 
 
 def drawExampleWave():
     '''draws the example wave that needs to be matched by the player'''
-    global examplePunt1, examplePunt2, examplePunt3, examplePunt4, examplePunt5, examplePunt6
+    global examplePunt1, examplePunt2, examplePunt3, examplePunt4, examplePunt5, examplePunt6, examplePunt7
     global exampleWavePeriod
     for i in range(-2 * canvas_width, canvas_width):
         j = int((canvas_height / 2) + levels[level][0] * math.sin(levels[level][1] * ((float(i) / canvas_width) * (2 * math.pi))))
@@ -98,6 +107,8 @@ def drawExampleWave():
             examplePunt5 = j
         elif i == punt6:
             examplePunt6 = j
+        elif i == punt7:
+            examplePunt7 = j
         surface.set_at(((i + levels[level][2] + exampleWavePeriod), j), wave_color)
     if exampleWavePeriod >= canvas_width / levels[level][1]:
         exampleWavePeriod = 0
@@ -113,7 +124,7 @@ def drawPlayerWave():
     global timing
     global playerWavePeriod
     global translate
-    global playerPunt1, playerPunt2, playerPunt3, playerPunt4, playerPunt5, playerPunt6
+    global playerPunt1, playerPunt2, playerPunt3, playerPunt4, playerPunt5, playerPunt6, playerPunt7
 
     for x in range(-3 * canvas_width, 2 * canvas_width):
         y = int((canvas_height / 2) + amplitude * math.sin(frequency * ((float(x) / canvas_width) * (2 * math.pi))))
@@ -129,6 +140,8 @@ def drawPlayerWave():
             playerPunt5 = y
         elif x == punt6:
             playerPunt6 = y
+        elif x == punt7:
+            playerPunt7 = y
         surface.set_at(((x + translate + playerWavePeriod), y), wave_color)
     if playerWavePeriod >= canvas_width / frequency:
         playerWavePeriod = 0
@@ -144,20 +157,21 @@ def checkSucces():
     check4 = playerPunt4 < examplePunt4 + marge and playerPunt4 > examplePunt4 - marge
     check5 = playerPunt5 < examplePunt5 + marge and playerPunt5 > examplePunt5 - marge
     check6 = playerPunt6 < examplePunt6 + marge and playerPunt6 > examplePunt6 - marge
+    check7 = playerPunt7 < examplePunt7 + marge and playerPunt7 > examplePunt7 - marge
 
-    if check1 and check2 and check3 and check4 and check5 and check6:
+    if check1 and check2 and check3 and check4 and check5 and check6 and check7:
         global checkTimer
         checkTimer += 1
 
         if checkTimer > 30:
             # for an even start of the waves the following reset:
             global level
+            bb_sound.play_good_sound.value = 1
             level += 1
+
             if level == len(levels):
                 sinewave_game_status.value = 2
-            translate = 0
-            playerWavePeriod = 0
-            exampleWavePeriod = 0
+
             return True
     else:
         checkTimer = 0
@@ -172,35 +186,35 @@ def overlay():
 
 
 # Simple main loop
-running = True
-while running:
-   # overlay()  # display shit // maar gaat vooralsnog kapot
+def main():
+    # overlay()  # display shit // maar gaat vooralsnog kapot
+    while True:
+        time.sleep(0.02)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return False
 
-    time.sleep(0.02)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+        if sinewave_game_status.value == 0:     # keep the screen black until the game is started
+            surface.fill(background_color)
 
-    if sinewave_game_status.value == 1:
-        # Redraw the background
-        surface.fill(background_color)
-        surface.blit(background_image, [0, 0])
-        drawPlayerWave()
-        drawExampleWave()
-        control()
-        if checkSucces():
-            print("level won!!")
-            # bb_sound.play_good_sound.value = 1
-            # goedezo-jongon-animatie
-            surface.fill(win_color)
-            screen.blit(surface, (0, 0))
-            pygame.display.flip()
-            time.sleep(1)
+        if sinewave_game_status.value == 1:     # Play the game
+            # Redraw the background
+            surface.blit(background_image, [0, 0])
+            drawPlayerWave()
+            drawExampleWave()
+            control()
+            if checkSucces():
+                print("level won!!")
+                # goedezo-jongon-animatie
+                surface.fill(win_color)
+                screen.blit(surface, (0, 0))
+                pygame.display.flip()
+                time.sleep(1)
 
-    elif sinewave_game_status.value == 2:
-        surface.blit(logo_image, [0, 0])
+        elif sinewave_game_status.value == 2:   # Display the logo once the game is won
+            surface.blit(logo_image, [0, 0])
 
-    # Put the surface we draw on, onto the screen
-    screen.blit(surface, (0, 0))
-    # Show it.
-    pygame.display.flip()
+        # Put the surface we draw on, onto the screen
+        screen.blit(surface, (0, 0))
+        # Show it.
+        pygame.display.flip()

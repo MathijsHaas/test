@@ -16,7 +16,7 @@ import top_buttons
 import plugs_game
 import RGB_game
 import simon_says
-import sinus_game
+import sinusgame
 import color_follow
 
 
@@ -34,7 +34,7 @@ top_buttons_started = False
 plugs_game_started = False
 RGB_game_started = False
 simon_says_started = False
-sinus_game_started = False
+sinusgame_started = False
 color_follow_started = False
 first_half_finished = False
 second_half_finished = False
@@ -201,7 +201,7 @@ def check_bypass():
     global plugs_game_started
     global RGB_game_started
     global simon_says_started
-    global sinus_game_started
+    global sinusgame_started
     global color_follow_started
     global bypass_count
     global first_half_finished
@@ -254,17 +254,16 @@ def check_bypass():
             simon_says_started = True
 
         # bypass simon says to turn on the three top leds
-        if bypass == 3 and first_half_finished == False:
+        if bypass == 3 and first_half_finished is False:
             print("SS bypassed, first half finished")
             top_buttons.RGB_half_status.value = 1
             first_half_finished = True
 
         # bypass the turning knobs and start the sinus game
-        if bypass == 4 and sinus_game_started is False:
+        if bypass == 4 and sinusgame_started is False:
             print ('spy knobs bypassed, sinus started')  # spyknobs becomes 0 when connected correctly
-            sinus_game_process = multiprocessing.Process(target=sinus_game.main)
-            sinus_game_process.start()
-            sinus_game_started = True
+            sinusgame.sinewave_game_status.value = 1
+            sinusgame_started = True
 
         # bypass the sinus game and start the color follow
         if bypass == 5 and color_follow_started is False:
@@ -274,7 +273,7 @@ def check_bypass():
             color_follow_started = True
 
         # bypass the color follow game and turn on the three top leds
-        if bypass == 6 and second_half_finished == False:
+        if bypass == 6 and second_half_finished is False:
             print("color follow bypass, second half finisched")
             top_buttons.sinus_half_status.value = 1
             second_half_finished = True
@@ -290,7 +289,7 @@ def main():
     global plugs_game_started
     global RGB_game_started
     global simon_says_started
-    global sinus_game_started
+    global sinusgame_started
     global color_follow_started
     global first_half_finished
     global second_half_finished
@@ -340,16 +339,15 @@ def main():
             first_half_finished = True
 
         # start the sinus game
-        if layout.big_knobs_value.value == 0 and sinus_game_started is False:
+        if layout.big_knobs_value.value == 0 and sinusgame_started is False:
             print ('spy knobs correctly oriëntated')  # spyknobs becomes 0 when connected correctly
             bb_sound.play_good_sound.value = 1
-            sinus_game_process = multiprocessing.Process(target=sinus_game.main)
-            sinus_game_process.start()
-            print("sinus_game process started")
-            sinus_game_started = True
+            sinusgame.sinewave_game_status.value = 1
+            print("sinusgame process started")
+            sinusgame_started = True
 
-        # start Color follow after the sinus game is won
-        if sinus_game.game_won.value == 1 and color_follow_started is False:
+        # start Color follow after the sinusgame is won
+        if sinusgame.sinewave_game_status.value == 2 and color_follow_started is False:
             color_follow_process = multiprocessing.Process(target=color_follow.main)
             color_follow_process.start()
             print("color_follow process started")
@@ -374,11 +372,10 @@ if __name__ == "__main__":
     layout_process = multiprocessing.Process(target=layout.main)
     ledcontrol_process = multiprocessing.Process(target=ledcontrol.main)
     sound_process = multiprocessing.Process(target=bb_sound.main)
+    sinusgame_process = multiprocessing.Process(target=sinusgame.main)
     layout_process.start()
     time.sleep(1)
     ledcontrol_process.start()
     sound_process.start()
+    sinusgame_process.start()  # to turn the screen black at the start
     main()
-    layout_process.terminate()
-    ledcontrol_process.terminate()
-    sound_process.terminate()
