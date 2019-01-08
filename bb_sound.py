@@ -8,7 +8,7 @@ import top_buttons
 import plugs_game
 import RGB_game
 import simon_says
-import sinus_game
+import sinusgame
 import color_follow
 
 play_background_sound = multiprocessing.Value('i', 0)

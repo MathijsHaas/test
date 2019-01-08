@@ -1,4 +1,6 @@
+import sys, os
 import pygame
+from pygame.locals import *
 import time
 import math
 import layout
@@ -22,9 +24,11 @@ win_color = pygame.Color(0, 150, 0, 0)
 pygame.init()
 # Set the window title
 pygame.display.set_caption("Sine Wave")
+pygame.mouse.set_visible(False)
+
 
 # Make a screen to see
-screen = pygame.display.set_mode((canvas_width, canvas_height))
+screen = pygame.display.set_mode((canvas_width, canvas_height)) #, pygame.FULLSCREEN)
 screen.fill(background_color)
 background_image = pygame.image.load("backgroundSinegame.bmp").convert()
 logo_image = pygame.image.load("logo.png").convert()
@@ -64,23 +68,23 @@ def control():
     global frequency
     global translate
 
-    translate = mappingValues(layout.sinusknob1_value.value, 0, 500, 0, 220)
-    frequency = mappingValues(layout.linusknob2_value.value, 0, 500, 0.1, 20)
-    amplitude = mappingValues(layout.sinusknob3_value.value, 0, 500, -400, 400)
+    translate = mappingValues(layout.sinusknob1_value.value, 0, 500, -400, 400)
+    frequency = mappingValues(layout.sinusknob2_value.value, 0, 500, 0.1, 5)
+    amplitude = mappingValues(layout.sinusknob3_value.value, 0, 500, 0, 220)
 
-    if event.type == pygame.KEYDOWN:
-        if event.key == pygame.K_w and amplitude < 220:
-            amplitude += 10
-        if event.key == pygame.K_s and amplitude > 0:
-            amplitude -= 10
-        if event.key == pygame.K_q and frequency < 20:
-            frequency += 0.05
-        if event.key == pygame.K_a and frequency > 0.1:
-            frequency -= 0.05
-        if event.key == pygame.K_e and translate < 400:
-            translate += 10
-        if event.key == pygame.K_d and translate > -400:
-            translate -= 10
+#    if event.type == pygame.KEYDOWN:
+#        if event.key == pygame.K_w and amplitude < 220:
+#            amplitude += 10
+#        if event.key == pygame.K_s and amplitude > 0:
+#            amplitude -= 10
+#        if event.key == pygame.K_q and frequency < 20:
+#            frequency += 0.05
+#        if event.key == pygame.K_a and frequency > 0.1:
+#            frequency -= 0.05
+#        if event.key == pygame.K_e and translate < 400:
+#            translate += 10
+#        if event.key == pygame.K_d and translate > -400:
+#            translate -= 10
 
 
 # punten waarom de golven gecheck worden
@@ -142,14 +146,14 @@ def drawPlayerWave():
             playerPunt6 = y
         elif x == punt7:
             playerPunt7 = y
-        surface.set_at(((x + translate + playerWavePeriod), y), wave_color)
+        surface.set_at(((int(x + translate + playerWavePeriod)), y), wave_color)
     if playerWavePeriod >= canvas_width / frequency:
         playerWavePeriod = 0
     playerWavePeriod += speed
 
 
 def checkSucces():
-    marge = 2
+    marge = 4
 
     check1 = playerPunt1 < examplePunt1 + marge and playerPunt1 > examplePunt1 - marge
     check2 = playerPunt2 < examplePunt2 + marge and playerPunt2 > examplePunt2 - marge
@@ -163,7 +167,7 @@ def checkSucces():
         global checkTimer
         checkTimer += 1
 
-        if checkTimer > 30:
+        if checkTimer > 10:
             # for an even start of the waves the following reset:
             global level
             bb_sound.play_good_sound.value = 1
@@ -189,10 +193,17 @@ def overlay():
 def main():
     # overlay()  # display shit // maar gaat vooralsnog kapot
     while True:
-        time.sleep(0.02)
+        time.sleep(0.01)
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if (event.type == QUIT):
+                pygame.display.quit()
+                sys.exit(0)
                 return False
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    pygame.display.quit()
+                    sys.exit(0)
+                    return False
 
         if sinewave_game_status.value == 0:     # keep the screen black until the game is started
             surface.fill(background_color)

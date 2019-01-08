@@ -39,12 +39,13 @@ color_follow_started = False
 first_half_finished = False
 second_half_finished = False
 # the voltages needed to be measured to bypass the game (remember the multiprocessing.value is * 1000)
-plug_bypass = 3548
-RGB_bypass = 3271
-simon_says_bypass = 3953
-turning_knobs_bypass = 2466
-sinus_game_bypass = 1116
-color_follow_bypass = 120
+plug_bypass = 3456
+RGB_bypass = 3187
+simon_says_bypass = 3857
+turning_knobs_bypass = 2396
+sinus_game_bypass = 1077
+color_follow_bypass = 88
+
 bypass_count = 0
 
 
@@ -298,7 +299,8 @@ def main():
 
     # this while loop keeps running to manage the game progression
     while True:
-        time.sleep(0.05)
+        time.sleep(0.03)
+        sound() 
         check_bypass()
         sound()  # check and play the sounds
 
