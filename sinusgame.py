@@ -28,10 +28,6 @@ levels = [  # [amplitude, frequency, translate]
     [40, 0.7, 200]
 ]
 
-# display shit
-font = pygame.font.SysFont("comicsansms", 30)
-text = font.render("Hello, World", True, (0, 128, 0))
-
 level = 0
 speed = 5
 translate = 0
@@ -39,7 +35,7 @@ frequency = 1
 amplitude = 50
 
 
-def pygame_init():
+def setup():
     pygame.init()
     # Set the window title
     pygame.display.set_caption("Sine Wave")
@@ -50,7 +46,10 @@ def pygame_init():
     screen.fill(background_color)
     background_image = pygame.image.load("backgroundSinegame.bmp").convert()
     logo_image = pygame.image.load("logo.png").convert()
-
+    
+    # display shit
+    font = pygame.font.SysFont("comicsansms", 30)
+    text = font.render("Hello, World", True, (0, 128, 0))
     # Make a surface to draw on
     surface = pygame.Surface((canvas_width, canvas_height))
 
@@ -191,7 +190,7 @@ def overlay():
 
 # Simple main loop
 def main():
-    pygame_init()
+    setup()
     # overlay()  # display shit // maar gaat vooralsnog kapot
     while True:
         time.sleep(0.01)
