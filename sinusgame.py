@@ -1,4 +1,5 @@
-import sys, os
+import sys
+import os
 import pygame
 from pygame.locals import *
 import time
@@ -21,22 +22,6 @@ background_color = pygame.Color(0, 0, 0, 0)
 win_color = pygame.Color(0, 150, 0, 0)
 
 
-pygame.init()
-# Set the window title
-pygame.display.set_caption("Sine Wave")
-pygame.mouse.set_visible(False)
-
-
-# Make a screen to see
-screen = pygame.display.set_mode((canvas_width, canvas_height)) #, pygame.FULLSCREEN)
-screen.fill(background_color)
-background_image = pygame.image.load("backgroundSinegame.bmp").convert()
-logo_image = pygame.image.load("logo.png").convert()
-
-# Make a surface to draw on
-surface = pygame.Surface((canvas_width, canvas_height))
-
-
 levels = [  # [amplitude, frequency, translate]
     [70, 1, 0],
     [100, 1.8, 80],
@@ -52,6 +37,22 @@ speed = 5
 translate = 0
 frequency = 1
 amplitude = 50
+
+
+def pygame_init():
+    pygame.init()
+    # Set the window title
+    pygame.display.set_caption("Sine Wave")
+    pygame.mouse.set_visible(False)
+
+    # Make a screen to see
+    screen = pygame.display.set_mode((canvas_width, canvas_height))  # , pygame.FULLSCREEN)
+    screen.fill(background_color)
+    background_image = pygame.image.load("backgroundSinegame.bmp").convert()
+    logo_image = pygame.image.load("logo.png").convert()
+
+    # Make a surface to draw on
+    surface = pygame.Surface((canvas_width, canvas_height))
 
 
 def mappingValues(value, leftMin, leftMax, rightMin, rightMax):
@@ -182,15 +183,15 @@ def checkSucces():
 
 
 def overlay():
-    screen.blit(font.render("level:" + str(level), True, (255, 0, 0)), (0, 0))
-    screen.blit(font.render("Amplitude to match:" + str(levels[level][0]) + "  amplitude:" + str(amplitude), True, (255, 0, 0)), (0, 20))
-    screen.blit(font.render("Frequency to match:" + str(levels[level][1]) + "frequency :" + str(frequency), True, (255, 0, 0)), (0, 40))
-    screen.blit(font.render("translate to match:" + str(levels[level][2]) + "  translate:" + str(translate), True, (255, 0, 0)), (0, 60))
-    pygame.display.update()
+    surface.blit(font.render("level:" + str(level), True, (255, 0, 0)), (0, 0))
+    surface.blit(font.render("Amplitude to match:" + str(levels[level][0]) + "  amplitude:" + str(amplitude), True, (255, 0, 0)), (0, 20))
+    surface.blit(font.render("Frequency to match:" + str(levels[level][1]) + "frequency :" + str(frequency), True, (255, 0, 0)), (0, 40))
+    surface.blit(font.render("translate to match:" + str(levels[level][2]) + "  translate:" + str(translate), True, (255, 0, 0)), (0, 60))
 
 
 # Simple main loop
 def main():
+    pygame_init()
     # overlay()  # display shit // maar gaat vooralsnog kapot
     while True:
         time.sleep(0.01)

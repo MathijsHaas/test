@@ -1,4 +1,5 @@
-
+# ik denk dat de sound te laat is omdat de geluiden in de rij komen te staan, en een voor een afgespeeld worden. de duratie van de geluiden moet dus korter, de interval groter, of ze moeten over elkaar heen afgespeeld worden. wellicht met verschillende channels:
+# https://stackoverflow.com/questions/42393916/how-can-i-play-multiple-sounds-at-the-same-time-in-pygame
 
 import time
 import random
