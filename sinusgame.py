@@ -42,15 +42,19 @@ def setup():
     pygame.mouse.set_visible(False)
 
     # Make a screen to see
+    global screen
     screen = pygame.display.set_mode((canvas_width, canvas_height))  # , pygame.FULLSCREEN)
     screen.fill(background_color)
+    global background_image
     background_image = pygame.image.load("backgroundSinegame.bmp").convert()
+    global logo_image
     logo_image = pygame.image.load("logo.png").convert()
     
     # display shit
     font = pygame.font.SysFont("comicsansms", 30)
     text = font.render("Hello, World", True, (0, 128, 0))
     # Make a surface to draw on
+    global surface
     surface = pygame.Surface((canvas_width, canvas_height))
 
 
