@@ -43,7 +43,7 @@ def setup():
 
     # Make a screen to see
     global screen
-    screen = pygame.display.set_mode((canvas_width, canvas_height))  # , pygame.FULLSCREEN)
+    screen = pygame.display.set_mode((canvas_width, canvas_height), pygame.FULLSCREEN)
     screen.fill(background_color)
     global background_image
     background_image = pygame.image.load("backgroundSinegame.bmp").convert()
@@ -197,7 +197,7 @@ def main():
     setup()
     # overlay()  # display shit // maar gaat vooralsnog kapot
     while True:
-        time.sleep(0.01)
+        time.sleep(0.005)
         for event in pygame.event.get():
             if (event.type == QUIT):
                 pygame.display.quit()

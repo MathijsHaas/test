@@ -115,19 +115,19 @@ def sound():
         bb_sound.play_bleep.value = 0
 
     if bb_sound.play_simon1.value == 1:
-        mixer.Channel(1).play(mixer.Sound.play(simon1))
+        mixer.Channel(1).play(simon1)
         bb_sound.play_simon1.value = 0
 
     if bb_sound.play_simon2.value == 1:
-        mixer.Channel(2).play(mixer.Sound.play(simon2))
+        mixer.Channel(2).play(simon2)
         bb_sound.play_simon2.value = 0
 
     if bb_sound.play_simon3.value == 1:
-        mixer.Channel(3).play(mixer.Sound.play(simon3))
+        mixer.Channel(3).play(simon3)
         bb_sound.play_simon3.value = 0
 
     if bb_sound.play_simon4.value == 1:
-        mixer.Channel(4).play(mixer.Sound.play(simon4))
+        mixer.Channel(4).play(simon4)
         bb_sound.play_simon4.value = 0
 
 # ------------- FUNCTIONS FOR IN THE GAME ------------------------------------------------------
