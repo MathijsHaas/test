@@ -30,6 +30,7 @@ levels = [  # [amplitude, frequency, translate]
 
 level = 0
 speed = 5
+marge = 5
 translate = 0
 frequency = 1
 amplitude = 50
@@ -157,7 +158,7 @@ def drawPlayerWave():
 
 
 def checkSucces():
-    marge = 4
+    
 
     check1 = playerPunt1 < examplePunt1 + marge and playerPunt1 > examplePunt1 - marge
     check2 = playerPunt2 < examplePunt2 + marge and playerPunt2 > examplePunt2 - marge
@@ -171,7 +172,7 @@ def checkSucces():
         global checkTimer
         checkTimer += 1
 
-        if checkTimer > 10:
+        if checkTimer > 6:
             # for an even start of the waves the following reset:
             global level
             bb_sound.play_good_sound.value = 1
